@@ -1,0 +1,39 @@
+:root {
+  --fundo: #ffffff;
+  --primaria: #064e3b;
+  --secundaria: #10b981;
+  --terciaria: #34d399;
+  --texto: #22223b;
+  --texto-secundario: #565f5f;
+  --borda: #e2e8f0;
+  --radius: 4px;
+  --transition: 0.7s;
+  --shadow: 1px 1px 4px var(--primaria);
+  --shadow-borda: 2px 1px 6px var(--borda);
+}
+
+body,
+html,
+div#root {
+  overflow-x: hidden;
+  background-color: var(--secundaria);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  width: 100%;
+  height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+div.App {
+  flex: 1 1 auto;
+  width: 95%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
