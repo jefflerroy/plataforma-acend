@@ -1,28 +1,31 @@
 :root {
-  --fundo: #ffffff;
-  --primaria: #064e3b;
-  --secundaria: #10b981;
-  --terciaria: #34d399;
+  --fundo: #f8fafc;
+  --primaria: #022c22;
+  --secundaria: #064e3b;
+  --terciaria: #10b981;
+  --quaternaria: #34d399;
+  --texto-menu: #d1fae599;
   --texto: #22223b;
   --texto-secundario: #565f5f;
   --borda: #e2e8f0;
-  --radius: 4px;
+  --radius: 8px;
   --transition: 0.7s;
   --shadow: 1px 1px 4px var(--primaria);
   --shadow-borda: 2px 1px 6px var(--borda);
 }
 
-body,
+* {
+  box-sizing: border-box;
+}
+
 html,
-div#root {
-  overflow-x: hidden;
-  background-color: var(--secundaria);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0;
+body {
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  background-color: var(--fundo);
+
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -30,10 +33,32 @@ div#root {
   -moz-osx-font-smoothing: grayscale;
 }
 
+div#root {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+
+  display: flex;
+
+  overflow-x: hidden;
+  background-color: var(--fundo);
+}
+
 div.App {
   flex: 1 1 auto;
   width: 95%;
+  margin: 0 auto;
+
   display: flex;
-  align-items: center;
+  flex-direction: column;
+}
+
+div.row {
+  display: flex;
+}
+
+div.column {
+  display: flex;
   flex-direction: column;
 }
