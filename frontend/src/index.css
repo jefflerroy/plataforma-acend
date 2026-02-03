@@ -68,7 +68,7 @@ p, h1, h2, h3{
   margin: 0;
 }
 
-button {
+button:not([type='button']) {
   padding: 15px;
   border: none;
   border-radius: var(--radius);
@@ -79,6 +79,6 @@ button {
   font-weight: 600;
   cursor: pointer;
 }
-button:hover{
+button:not([type='button']):hover{
   background-color: var(--secundaria);
 }

@@ -5,7 +5,7 @@
     margin: 24px;
 }
 
-.hero {
+.inicio .hero {
     position: relative;
     display: flex;
     align-items: center;
@@ -17,7 +17,7 @@
     overflow: hidden;
 }
 
-.hero__content {
+.inicio .hero__content {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -25,19 +25,19 @@
     z-index: 1;
 }
 
-.hero__title {
+.inicio .hero__title {
     margin: 0;
     color: #fff;
 }
 
-.hero__text {
+.inicio .hero__text {
     margin: 0;
     color: var(--texto-menu);
     font-weight: 500;
     line-height: 1.35;
 }
 
-.hero__btn {
+.inicio .hero__btn {
     width: fit-content;
     padding: 10px 16px;
     background-color: var(--terciaria);
@@ -51,21 +51,21 @@
     transition: transform 120ms ease, background-color 120ms ease;
 }
 
-.hero__btn:hover {
+.inicio .hero__btn:hover {
     background-color: var(--quaternaria);
     transform: translateY(-1px);
 }
 
-.hero__btn:active {
+.inicio .hero__btn:active {
     transform: translateY(0);
 }
 
-.hero__btn:focus-visible {
+.inicio .hero__btn:focus-visible {
     outline: 3px solid rgba(99, 102, 241, 0.35);
     outline-offset: 2px;
 }
 
-.hero__icon {
+.inicio .hero__icon {
     position: absolute;
     right: 24px;
     bottom: -18px;
@@ -74,17 +74,17 @@
     pointer-events: none;
 }
 
-.grid {
+.inicio .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 16px;
 }
 
-.grid--2cols {
+.inicio .grid--2cols {
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
 
-.card {
+.inicio .card {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -96,64 +96,64 @@
     text-align: left;
 }
 
-.card--clickable {
+.inicio .card--clickable {
     cursor: pointer;
     transition: border-color 120ms ease, transform 120ms ease;
     background: #fff;
 }
 
-.card--clickable:hover {
+.inicio .card--clickable:hover {
     border-color: var(--quaternaria);
     transform: translateY(-1px);
 }
 
-.card--clickable:active {
+.inicio .card--clickable:active {
     transform: translateY(0);
 }
 
-.card--clickable:focus-visible {
+.inicio .card--clickable:focus-visible {
     outline: 3px solid rgba(99, 102, 241, 0.35);
     outline-offset: 2px;
 }
 
-.card--disabled {
+.inicio .card--disabled {
     cursor: default;
 }
 
-.card__header {
+.inicio .card__header {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     gap: 12px;
 }
 
-.card__h3 {
+.inicio .card__h3 {
     margin: 0;
     font-size: 16px;
     font-weight: 700;
     color: var(--texto);
 }
 
-.card__muted {
+.inicio .card__muted {
     margin: 0;
     font-size: 13px;
     color: #64748b;
     font-weight: 700;
 }
 
-.card__body {
+.inicio .card__body {
     display: flex;
     flex-direction: column;
     gap: 14px;
 }
 
-.card__title {
+.inicio .card__title {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.card__icon {
+.inicio .card__icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -163,38 +163,38 @@
     border-radius: var(--radius);
 }
 
-.card__icon .icon {
+.inicio .card__icon .icon {
     font-size: 26px;
 }
 
-.card__kicker {
+.inicio .card__kicker {
     margin: 0;
     font-weight: 700;
     color: var(--texto);
     font-size: 12px;
 }
 
-.card__h2 {
+.inicio .card__h2 {
     margin: 0;
     font-size: 24px;
     font-weight: 600;
     color: var(--texto);
 }
 
-.card__info {
+.inicio .card__info {
     margin: 0;
     font-weight: 500;
     color: #64748b;
     font-size: 13px;
 }
 
-.stack {
+.inicio .stack {
     display: flex;
     flex-direction: column;
     gap: 14px;
 }
 
-.tip {
+.inicio .tip {
     margin: 0;
     background-color: var(--texto-menu);
     padding: 16px;
@@ -205,7 +205,7 @@
     color: var(--primaria);
 }
 
-.linkBtn {
+.inicio .linkBtn {
     background: transparent;
     border: none;
     text-align: center;
@@ -214,11 +214,11 @@
     cursor: pointer;
 }
 
-.linkBtn:hover {
+.inicio .linkBtn:hover {
     text-decoration: underline;
 }
 
-.linkBtn:focus-visible {
+.inicio .linkBtn:focus-visible {
     outline: 3px solid rgba(99, 102, 241, 0.35);
     outline-offset: 2px;
     border-radius: 8px;
@@ -229,16 +229,16 @@
         margin: 16px;
     }
 
-    .hero {
+    .inicio .hero {
         padding: 24px;
     }
 
-    .hero__btn {
+    .inicio .hero__btn {
         width: 100%;
         text-align: center;
     }
 
-    .hero__icon {
+    .inicio .hero__icon {
         right: 12px;
         font-size: 170px;
     }
@@ -247,7 +247,7 @@
 @media (prefers-reduced-motion: reduce) {
 
     .hero__btn,
-    .card--clickable {
+    .inicio .card--clickable {
         transition: none;
     }
 }
