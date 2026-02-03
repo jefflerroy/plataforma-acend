@@ -4,14 +4,15 @@
   --secundaria: #064e3b;
   --terciaria: #10b981;
   --quaternaria: #34d399;
+  --azul: #3b82f6;
+  --laranja: #f97316;
+  --roxo: #a855f7;
   --texto-menu: #d1fae599;
-  --texto: #22223b;
+  --texto: #525c69;
   --texto-secundario: #565f5f;
   --borda: #e2e8f0;
-  --radius: 8px;
-  --transition: 0.7s;
-  --shadow: 1px 1px 4px var(--primaria);
-  --shadow-borda: 2px 1px 6px var(--borda);
+  --radius: 10px;
+  --shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 #0000000d;
 }
 
 * {
@@ -61,4 +62,23 @@ div.row {
 div.column {
   display: flex;
   flex-direction: column;
+}
+
+p, h1, h2, h3{
+  margin: 0;
+}
+
+button {
+  padding: 15px;
+  border: none;
+  border-radius: var(--radius);
+
+  background-color: var(--terciaria);
+  color: white;
+
+  font-weight: 600;
+  cursor: pointer;
+}
+button:hover{
+  background-color: var(--secundaria);
 }

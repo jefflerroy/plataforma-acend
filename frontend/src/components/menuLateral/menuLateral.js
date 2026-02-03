@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { ImSpoonKnife } from "react-icons/im";
 import { LuLayoutDashboard, LuCalendar  } from "react-icons/lu";
 import { FaArrowTrendUp } from "react-icons/fa6";
-import { GoPeople } from "react-icons/go";
 import { MdOutlineChatBubbleOutline, MdOutlinePeopleAlt } from "react-icons/md";
 
 import logoPequena from '../../assets/logoPequena.png'
 import perfil from '../../assets/ronaldinho.png'
+import { useNavigate } from 'react-router-dom';
 
 function ButtonMenu({ icon, text, ariaPressed = false, onClick }) {
     return (
@@ -19,6 +19,14 @@ function ButtonMenu({ icon, text, ariaPressed = false, onClick }) {
   }
 
 export function MenuLateral() {
+    const [menu, setMenu] = useState('')
+    const navigate = useNavigate();
+
+    const navegarMenu = (menu) => {
+        navigate(menu)
+        setMenu(menu);        
+    }
+
     return (
         <div className='menu-lateral'>
             <div className='row' id='logo'>
@@ -31,31 +39,44 @@ export function MenuLateral() {
             <ButtonMenu 
                 icon={<LuLayoutDashboard className='icon'/>}
                 text='Início'
-                ariaPressed={true}
+                ariaPressed={menu === 'inicio'}
+                onClick={() => navegarMenu('inicio')}
             />
             <ButtonMenu 
                 icon={<ImSpoonKnife className='icon'/>}
-                text='Minha Dieta'                
+                text='Minha Dieta'             
+                ariaPressed={menu === 'minha-dieta'}   
+                onClick={() => navegarMenu('minha-dieta')}
             />
             <ButtonMenu 
                 icon={<FaArrowTrendUp className='icon'/>}
-                text='Método Ascend'                
+                text='Método Ascend'           
+                ariaPressed={menu === 'metodo-ascend'}     
+                onClick={() => navegarMenu('metodo-ascend')}
             />
             <ButtonMenu 
                 icon={<MdOutlinePeopleAlt className='icon'/>}
-                text='Comunidade'                
+                text='Comunidade'              
+                ariaPressed={menu === 'comunidade'}  
+                onClick={() => navegarMenu('comunidade')}
             />
             <ButtonMenu 
                 icon={<LuCalendar className='icon'/>}
-                text='Minha Agenda'                
+                text='Minha Agenda'            
+                ariaPressed={menu === 'minha-agenda'}    
+                onClick={() => navegarMenu('minha-agenda')}
             />
             <ButtonMenu 
                 icon={<FaArrowTrendUp className='icon'/>}
                 text='Evolução'                
+                ariaPressed={menu === 'evolucao'}
+                onClick={() => navegarMenu('evolucao')}
             />
             <ButtonMenu 
                 icon={<MdOutlineChatBubbleOutline className='icon'/>}
-                text='Dúvidas IA'                
+                text='Dúvidas IA'              
+                ariaPressed={menu === 'duvidas-ia'}  
+                onClick={() => navegarMenu('duvidas-ia')}
             />
             <div className='row' id='inferior'>
                 <img alt='perfil' className='perfil' src={perfil} />

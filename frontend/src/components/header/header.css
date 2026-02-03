@@ -1,0 +1,49 @@
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 5px 30px;
+
+    background-color: white;
+    border-bottom: 1px solid var(--borda);
+}
+
+header p.nome{
+    font-weight: 700;
+}
+
+header div.buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+header div.buttons div.divisor{
+    height: 30px;
+    border-left: 1px solid var(--borda);
+}
+
+header div.buttons button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 5px;
+
+    background-color: transparent;
+    border: none;
+    border-radius: var(--radius);
+
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--texto);
+
+    cursor: pointer;
+}
+
+header div.buttons button:hover{
+    color: var(--primaria);
+    background-color: var(--texto-menu);
+}

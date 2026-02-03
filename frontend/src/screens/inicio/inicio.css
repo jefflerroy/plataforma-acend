@@ -1,0 +1,253 @@
+.inicio {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 24px;
+}
+
+.hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px;
+    background-color: var(--secundaria);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.hero__content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 700px;
+    z-index: 1;
+}
+
+.hero__title {
+    margin: 0;
+    color: #fff;
+}
+
+.hero__text {
+    margin: 0;
+    color: var(--texto-menu);
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+.hero__btn {
+    width: fit-content;
+    padding: 10px 16px;
+    background-color: var(--terciaria);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 120ms ease, background-color 120ms ease;
+}
+
+.hero__btn:hover {
+    background-color: var(--quaternaria);
+    transform: translateY(-1px);
+}
+
+.hero__btn:active {
+    transform: translateY(0);
+}
+
+.hero__btn:focus-visible {
+    outline: 3px solid rgba(99, 102, 241, 0.35);
+    outline-offset: 2px;
+}
+
+.hero__icon {
+    position: absolute;
+    right: 24px;
+    bottom: -18px;
+    font-size: 220px;
+    color: rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.grid--2cols {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #fff;
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    text-align: left;
+}
+
+.card--clickable {
+    cursor: pointer;
+    transition: border-color 120ms ease, transform 120ms ease;
+    background: #fff;
+}
+
+.card--clickable:hover {
+    border-color: var(--quaternaria);
+    transform: translateY(-1px);
+}
+
+.card--clickable:active {
+    transform: translateY(0);
+}
+
+.card--clickable:focus-visible {
+    outline: 3px solid rgba(99, 102, 241, 0.35);
+    outline-offset: 2px;
+}
+
+.card--disabled {
+    cursor: default;
+}
+
+.card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.card__h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--texto);
+}
+
+.card__muted {
+    margin: 0;
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 700;
+}
+
+.card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.card__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background-color: var(--fundo);
+    border-radius: var(--radius);
+}
+
+.card__icon .icon {
+    font-size: 26px;
+}
+
+.card__kicker {
+    margin: 0;
+    font-weight: 700;
+    color: var(--texto);
+    font-size: 12px;
+}
+
+.card__h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--texto);
+}
+
+.card__info {
+    margin: 0;
+    font-weight: 500;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.tip {
+    margin: 0;
+    background-color: var(--texto-menu);
+    padding: 16px;
+    border-radius: var(--radius);
+    line-height: 1.45;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--primaria);
+}
+
+.linkBtn {
+    background: transparent;
+    border: none;
+    text-align: center;
+    color: var(--terciaria);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.linkBtn:hover {
+    text-decoration: underline;
+}
+
+.linkBtn:focus-visible {
+    outline: 3px solid rgba(99, 102, 241, 0.35);
+    outline-offset: 2px;
+    border-radius: 8px;
+}
+
+@media (max-width: 640px) {
+    .inicio {
+        margin: 16px;
+    }
+
+    .hero {
+        padding: 24px;
+    }
+
+    .hero__btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .hero__icon {
+        right: 12px;
+        font-size: 170px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .hero__btn,
+    .card--clickable {
+        transition: none;
+    }
+}
