@@ -7,11 +7,13 @@
   --azul: #3b82f6;
   --laranja: #f97316;
   --roxo: #a855f7;
+  --vermelho: #bd2323;
+  --vermelho-fundo: #bd232318;
   --texto-menu: #d1fae599;
   --texto: #525c69;
-  --texto-secundario: #565f5f;
+  --texto-secundario: #94a3b8;
   --borda: #e2e8f0;
-  --radius: 10px;
+  --radius: 15px;
   --shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 #0000000d;
 }
 
@@ -64,7 +66,7 @@ div.column {
   flex-direction: column;
 }
 
-p, h1, h2, h3{
+p, h1, h2, h3, h4{
   margin: 0;
 }
 
@@ -81,4 +83,19 @@ button:not([type='button']) {
 }
 button:not([type='button']):hover{
   background-color: var(--secundaria);
+}
+
+input{
+  width: 100%;
+
+  border: none;
+  outline: none;
+  padding: 15px;
+
+  background-color: var(--fundo);
+
+  border-radius: var(--radius);
+
+  font-size: 14px;
+  font-weight: 600;  
 }

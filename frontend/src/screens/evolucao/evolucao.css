@@ -1,0 +1,57 @@
+.evolucao{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    padding: 30px;
+    gap: 25px;
+}
+
+.evolucao .row {
+    gap: 20px;
+}
+
+
+.evolucao .container{
+    display: flex;    
+    flex-direction: column;
+    padding: 20px;
+    width: 100%;    
+
+    background-color: white;
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+}
+
+.evolucao .grafico {
+    height: 300px;
+}
+
+.evolucao .info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.evolucao .info span {
+    padding: 5px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.evolucao svg{
+    margin-right: 5px;
+}
+
+.evolucao #dados label{
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--texto-secundario);
+}
+.evolucao #dados p{
+    font-size: 13px;
+    color: var(--texto);
+}

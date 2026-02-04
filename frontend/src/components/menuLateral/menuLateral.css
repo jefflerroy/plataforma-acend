@@ -1,4 +1,4 @@
-div.menu-lateral{
+div.menu-lateral {
     display: flex;
     flex-direction: column;
     background-color: var(--primaria);
@@ -8,12 +8,12 @@ div.menu-lateral{
     gap: 10px;
 }
 
-div.menu-lateral div#logo{
+div.menu-lateral div#logo {
     gap: 12px;
     margin-bottom: 20px;
 }
 
-div.menu-lateral div#logo img.logo-pequena{    
+div.menu-lateral div#logo img.logo-pequena {
     background-color: var(--terciaria);
     border-radius: var(--radius);
     padding: 8px;
@@ -21,20 +21,22 @@ div.menu-lateral div#logo img.logo-pequena{
     height: 50px;
 }
 
-div.menu-lateral div#logo-titulo{
+div.menu-lateral div#logo-titulo {
     justify-content: center;
 }
 
-div.menu-lateral div#logo-titulo p{
+div.menu-lateral div#logo-titulo p {
     margin: 0;
 }
-div.menu-lateral div#logo-titulo p.logo-titulo{
+
+div.menu-lateral div#logo-titulo p.logo-titulo {
     font-weight: 700;
     font-size: 20px;
     margin: 0;
     color: white;
 }
-div.menu-lateral div#logo-titulo p.logo-subtitulo{
+
+div.menu-lateral div#logo-titulo p.logo-subtitulo {
     font-weight: 500;
     font-size: 10px;
     margin: 0;
@@ -42,16 +44,16 @@ div.menu-lateral div#logo-titulo p.logo-subtitulo{
     color: var(--quaternaria);
 }
 
-div.menu-lateral button.menu{
+div.menu-lateral button.menu {
     display: flex;
     align-items: center;
     gap: 15px;
     padding: 12px;
-    
+
     font-size: 100%;
     font-weight: 500;
     letter-spacing: 1px;
-    text-align: left;    
+    text-align: left;
 
     color: var(--texto-menu);
     background-color: transparent;
@@ -62,27 +64,29 @@ div.menu-lateral button.menu{
     cursor: pointer;
     transition: 0.3s;
 }
-div.menu-lateral button.menu[aria-pressed="true"]{
+
+div.menu-lateral button.menu[aria-pressed="true"] {
     color: var(--quaternaria);
     background-color: var(--secundaria);
     border-left: 4px solid var(--quaternaria);
 }
-div.menu-lateral button.menu:hover{
+
+div.menu-lateral button.menu:hover {
     color: white;
     background-color: var(--secundaria);
 }
 
-div.menu-lateral button.menu .icon{
+div.menu-lateral button.menu .icon {
     font-size: 25px;
 }
 
-div#inferior{
+div#inferior {
     border-top: 1px solid var(--secundaria);
-    margin-top: auto;
     padding-top: 20px;
     gap: 10px;
 }
-div#inferior img.perfil{
+
+div#inferior img.perfil {
     width: 50px;
     height: 50px;
     border-radius: 1000px;

@@ -47,3 +47,8 @@ header div.buttons button:hover{
     color: var(--primaria);
     background-color: var(--texto-menu);
 }
+
+header div.buttons .sair:hover{
+    color: var(--vermelho);
+    background-color: var(--vermelho-fundo);    
+}

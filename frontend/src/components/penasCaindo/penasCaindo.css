@@ -1,0 +1,42 @@
+.penas {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: transparent;
+    pointer-events: none;
+}
+
+.pena {
+    position: absolute;
+    top: -12%;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    animation: cair var(--dur) linear infinite;
+    animation-delay: var(--del);
+    opacity: 1;
+    mix-blend-mode: normal;
+}
+
+
+@keyframes cair {
+    0% {
+        transform: translate3d(0, -20%, 0) rotate(0deg);
+    }
+
+    25% {
+        transform: translate3d(calc(var(--drift) * 0.35), 30vh, 0) rotate(calc(var(--rot) * 0.35));
+    }
+
+    50% {
+        transform: translate3d(calc(var(--drift) * -0.15), 60vh, 0) rotate(calc(var(--rot) * 0.7));
+    }
+
+    75% {
+        transform: translate3d(calc(var(--drift) * 0.6), 90vh, 0) rotate(calc(var(--rot) * 0.9));
+    }
+
+    100% {
+        transform: translate3d(calc(var(--drift) * -0.25), 120vh, 0) rotate(var(--rot));
+    }
+}

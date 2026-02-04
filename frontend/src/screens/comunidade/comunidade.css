@@ -1,0 +1,122 @@
+.comunidade {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px;
+}
+.comunidade .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 575px;
+    gap: 25px;
+}
+
+.comunidade .publicar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    padding: 20px;
+    
+    background-color: white;
+    
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+}
+.comunidade .publicar .perfil{
+    border-radius: 9999px;
+}
+.comunidade .publicar .postar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 13px;
+}
+
+.comunidade .post {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
+    width: 100%;
+    gap: 5px;
+    
+    background-color: white;    
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+}
+.comunidade .post .cabecalho{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 20px
+    
+}
+.comunidade .post .cabecalho .info{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.comunidade .post .cabecalho .info img{
+    border-radius: 9999px;
+}
+.comunidade .post span{
+    font-size: 15px;
+    font-weight: 700;
+}
+.comunidade .post .cabecalho .opcoes{
+    color: var(--texto);
+    cursor: pointer;
+}
+.comunidade .post img.postagem{
+    width: 100%;
+}
+.comunidade .post .acoes{
+    display: flex;    
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 15px;
+    
+}
+.comunidade .post .acoes .interacao{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.comunidade .post .acoes svg{
+    cursor: pointer;
+}
+
+.comunidade .post .dados {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    padding: 0px 15px;
+}
+.comunidade .post .dados label {
+    color: var(--texto-secundario);
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.comunidade .post .comentario {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 15px;
+    gap: 10px;
+
+    background-color: white;
+    border-radius: var(--radius);
+}
