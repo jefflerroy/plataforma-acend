@@ -1,0 +1,33 @@
+.pacientes{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+.pacientes .lista{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 30px;
+    gap: 20px;
+    
+    background-color: white;
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);    
+}
+
+.pacientes .lista .icon{
+    background-color: var(--terciaria);
+    color: white;
+    padding: 5px;
+    font-size: 28px;
+    border-radius: var(--radius);    
+    cursor: pointer;
+    transition: 0.3s;
+}
+.pacientes .lista .icon:hover{
+    background-color: var(--secundaria);
+}

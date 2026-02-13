@@ -11,7 +11,7 @@ const limiter = rateLimit({
 const LoginController = require('./controllers/LoginController');
 const SitemapController = require('./controllers/SitemapController');
 
-routes.post('/api/loginUsuario', limiter, LoginController.loginUsuario);
+routes.post('/api/loginUsuario', limiter, LoginController.login);
 
 routes.get('/api/sitemap.txt', SitemapController.sitemap)
 

@@ -8,6 +8,8 @@ import { MinhaAgenda } from './screens/minha-agenda/minha-agenda';
 import { Evolucao } from './screens/evolucao/evolucao';
 import { DuvidasIa } from './screens/duvidas-ia/duvidas-ia';
 import { Login } from './screens/login/login';
+import { Exames } from './screens/exames/exames';
+import { Pacientes } from './screens/pacientes/pacientes';
 
 function LayoutComMenu() {
   return (
@@ -29,6 +31,8 @@ function App() {
         <Route element={<LayoutComMenu />}>
           <Route path="/inicio" element={<Inicio />} />
           <Route path="/minha-dieta" element={<MinhaDieta />} />
+          <Route path="/pacientes" element={<Pacientes />} />
+          <Route path="/exames" element={<Exames />} />
           <Route path="/metodo-ascend" element={<MetodoAscend />} />
           <Route path="/comunidade" element={<Comunidade />} />
           <Route path="/minha-agenda" element={<MinhaAgenda />} />

@@ -6,7 +6,7 @@ module.exports = {
     host: 'localhost',
     username: 'postgres',
     password: PRIVATE_KEY,
-    database: 'acend',
+    database: 'ascend',
     define: {        
         timestamps: true,
         underscored: true 

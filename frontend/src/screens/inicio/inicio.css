@@ -87,6 +87,7 @@
 .inicio .card {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 10px;
     background-color: #fff;
     border: 1px solid var(--borda);

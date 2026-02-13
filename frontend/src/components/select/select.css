@@ -1,0 +1,34 @@
+.select-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.select-container label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--texto-secundario);
+}
+
+.select-container select {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+
+    background-color: var(--fundo);
+    color: var(--texto);
+
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.select-container select:focus {
+    outline: none;
+}
+
+.select-container select option {
+    font-weight: 500;
+}

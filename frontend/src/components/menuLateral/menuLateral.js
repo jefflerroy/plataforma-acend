@@ -4,6 +4,7 @@ import { ImSpoonKnife } from "react-icons/im";
 import { LuLayoutDashboard, LuCalendar  } from "react-icons/lu";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { MdOutlineChatBubbleOutline, MdOutlinePeopleAlt } from "react-icons/md";
+import { FaRegFileAlt } from "react-icons/fa";
 
 import logoPequena from '../../assets/logoPequena.png'
 import perfil from '../../assets/ronaldinho.png'
@@ -47,6 +48,18 @@ export function MenuLateral() {
                 text='Minha Dieta'             
                 ariaPressed={menu === 'minha-dieta'}   
                 onClick={() => navegarMenu('minha-dieta')}
+            />
+            <ButtonMenu 
+                icon={<MdOutlinePeopleAlt className='icon'/>}
+                text='Pacientes'             
+                ariaPressed={menu === 'pacientes'}   
+                onClick={() => navegarMenu('pacientes')}
+            />
+            <ButtonMenu 
+                icon={<FaRegFileAlt className='icon'/>}
+                text='Exames'             
+                ariaPressed={menu === 'exames'}   
+                onClick={() => navegarMenu('exames')}
             />
             <ButtonMenu 
                 icon={<FaArrowTrendUp className='icon'/>}

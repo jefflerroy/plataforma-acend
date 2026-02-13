@@ -1,6 +1,7 @@
 :root {
   --fundo: #f8fafc;
   --primaria: #022c22;
+  --primaria-fundo: #022c222d;
   --secundaria: #064e3b;
   --terciaria: #10b981;
   --quaternaria: #34d399;
@@ -66,7 +67,11 @@ div.column {
   flex-direction: column;
 }
 
-p, h1, h2, h3, h4{
+p,
+h1,
+h2,
+h3,
+h4 {
   margin: 0;
 }
 
@@ -81,11 +86,12 @@ button:not([type='button']) {
   font-weight: 600;
   cursor: pointer;
 }
-button:not([type='button']):hover{
+
+button:not([type='button']):hover {
   background-color: var(--secundaria);
 }
 
-input{
+input {
   width: 100%;
 
   border: none;
@@ -97,5 +103,45 @@ input{
   border-radius: var(--radius);
 
   font-size: 14px;
-  font-weight: 600;  
+  font-weight: 600;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+table th {
+  font-weight: 600;
+}
+
+table th,
+table td {
+  text-align: center;
+  padding: 12px;
+}
+
+table tbody tr {
+  border-bottom: 1px solid var(--borda);
+}
+
+table tbody tr:nth-child(odd) {
+  background-color: var(--fundo);
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+table tbody tr:hover {
+  background-color: var(--primaria-fundo);
+  transition: background-color 0.2s ease;
+}
+
+table tbody tr:last-child {
+  border-bottom: none;
 }
