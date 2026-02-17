@@ -75,6 +75,11 @@ h4 {
   margin: 0;
 }
 
+p.erro {
+  color: var(--vermelho);
+  font-size: 13px;
+}
+
 button:not([type='button']) {
   padding: 15px;
   border: none;

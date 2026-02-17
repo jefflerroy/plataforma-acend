@@ -1,5 +1,7 @@
 'use strict';
 
+const bcryptjs = require('bcryptjs');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -83,6 +85,19 @@ module.exports = {
         allowNull: false,
       },
     });
+
+    const senhaCriptografada = await bcryptjs.hash('Ascend@2025Metodo', 10);
+
+    await queryInterface.bulkInsert('usuario', [
+      {
+        tipo: 'admin',
+        nome: 'Administrador',
+        email: 'admin@admin.com',
+        senha: senhaCriptografada,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+    ]);
   },
 
   async down(queryInterface, Sequelize) {

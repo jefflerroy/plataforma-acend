@@ -1,6 +1,6 @@
 
-const { Agendamento } = require('../models/Agendamento');
-const { Usuario } = require('../models/Usuario');
+const Agendamento = require('../models/Agendamento');
+const Usuario = require('../models/Usuario');
 
 module.exports = {
     async create(req, res) {

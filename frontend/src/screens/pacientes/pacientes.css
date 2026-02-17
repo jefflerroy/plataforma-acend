@@ -5,6 +5,10 @@
     padding: 30px;
 }
 
+.pacientes button {
+    width: 100%;
+}
+
 .pacientes .lista{
     display: flex;
     flex-direction: column;

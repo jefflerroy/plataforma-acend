@@ -1,4 +1,4 @@
-const { Refeicao } = require('../models/Refeicao');
+const Refeicao = require('../models/Refeicao');
 
 module.exports = {
     async create(req, res) {

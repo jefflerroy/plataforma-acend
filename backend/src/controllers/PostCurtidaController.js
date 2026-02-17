@@ -1,4 +1,4 @@
-const { PostCurtida } = require('../models/PostCurtida');
+const PostCurtida = require('../models/PostCurtida');
 
 module.exports = {
     async create(req, res) {

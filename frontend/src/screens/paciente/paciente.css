@@ -1,0 +1,37 @@
+.paciente {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 30px;
+}
+
+.paciente form {
+    width: 100%;
+}
+
+.paciente .row{
+    width: 100%;
+    gap: 10px;
+}
+
+.paciente .grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 30px;
+    width: 100%;
+
+    background-color: white;
+    
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+
+}
+
+.paciente .grid button{
+    width: 100%;
+}

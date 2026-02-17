@@ -1,5 +1,5 @@
-const { Dieta } = require('../models/Dieta')
-const { Refeicao } = require('../models/Refeicao')
+const Dieta = require('../models/Dieta')
+const Refeicao = require('../models/Refeicao')
 
 module.exports = {
     async create(req, res) {

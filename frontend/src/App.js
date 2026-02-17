@@ -10,6 +10,7 @@ import { DuvidasIa } from './screens/duvidas-ia/duvidas-ia';
 import { Login } from './screens/login/login';
 import { Exames } from './screens/exames/exames';
 import { Pacientes } from './screens/pacientes/pacientes';
+import { Paciente } from './screens/paciente/paciente';
 
 function LayoutComMenu() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/inicio" element={<Inicio />} />
           <Route path="/minha-dieta" element={<MinhaDieta />} />
           <Route path="/pacientes" element={<Pacientes />} />
+          <Route path="/paciente/:id" element={<Paciente />} />
           <Route path="/exames" element={<Exames />} />
           <Route path="/metodo-ascend" element={<MetodoAscend />} />
           <Route path="/comunidade" element={<Comunidade />} />

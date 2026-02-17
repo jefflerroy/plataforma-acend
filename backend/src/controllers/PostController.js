@@ -1,7 +1,7 @@
-const { Post } = require('../models/Post');
-const { PostCurtida } = require('../models/PostCurtida');
-const { PostComentario } = require('../models/PostComentario');
-const { Usuario } = require('../models/Usuario');
+const Post = require('../models/Post');
+const PostCurtida = require('../models/PostCurtida');
+const PostComentario = require('../models/PostComentario');
+const Usuario = require('../models/Usuario');
 
 module.exports = {
     async create(req, res) {

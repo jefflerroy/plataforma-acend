@@ -15,12 +15,28 @@ const io = new Server(server, {
     transports: ['websocket']
 });
 
+io.use((socket, next) => {
+    const token = socket.handshake.auth?.token;
+
+    if (!token) {
+        return next(new Error('Token não informado'));
+    }
+
+    try {
+        const decoded = auth.verifyToken(token);
+        socket.user = decoded;
+        next();
+    } catch (err) {
+        next(new Error('Token inválido'));
+    }
+});
+
 app.use((req, res, next) => {
     req.io = io;
     next();
 });
 
-if(app.get('env') === 'development'){
+if (app.get('env') === 'development') {
     app.use(cors());
 } else {
     app.use(cors({

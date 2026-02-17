@@ -1,15 +1,8 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { Usuario } = require('../models/Usuario');
+const Usuario = require('../models/Usuario');
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
-
-function sanitize(usuario) {
-    const data = usuario?.toJSON ? usuario.toJSON() : usuario;
-    if (!data) return null;
-    delete data.senha;
-    return data;
-}
 
 module.exports = {
     async login(req, res) {
@@ -49,9 +42,10 @@ module.exports = {
 
             return res.json({
                 token,
-                usuario: sanitize(usuario),
+                usuario: payload
             });
         } catch (err) {
+            console.log(err);            
             return res.status(400).json({ error: err.message });
         }
     },

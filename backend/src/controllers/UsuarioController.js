@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const { Usuario } = require('../models/Usuario');
+const Usuario = require('../models/Usuario');
 
 function sanitize(usuario) {
     const data = usuario?.toJSON ? usuario.toJSON() : usuario;
@@ -8,9 +8,21 @@ function sanitize(usuario) {
     return data;
 }
 
+function isAdmin(req) {
+    return req.user?.tipo === 'admin';
+}
+
+function isSelf(req, id) {
+    return Number(req.user?.id) === Number(id);
+}
+
 module.exports = {
     async create(req, res) {
         try {
+            if (!isAdmin(req)) {
+                return res.status(403).json({ error: 'Acesso negado.' });
+            }
+
             const { senha, ...rest } = req.body;
 
             let senhaCriptografada = null;
@@ -35,8 +47,34 @@ module.exports = {
         }
     },
 
+    async createPaciente(req, res) {
+        try {
+            const { ...rest } = req.body;
+
+            let senhaCriptografada = await bcrypt.hash('ascend', 10);
+
+            const usuario = await Usuario.create({
+                ...rest,
+                senha: senhaCriptografada,
+            });
+
+            req.io?.emit('usuario:created', {
+                id: usuario.id,
+                data: sanitize(usuario),
+            });
+
+            return res.json(sanitize(usuario));
+        } catch (err) {
+            return res.status(400).json({ error: err.message });
+        }
+    },
+
     async list(req, res) {
         try {
+            if (!isAdmin(req)) {
+                return res.status(403).json({ error: 'Acesso negado.' });
+            }
+
             const where = {};
             if (req.query.tipo) where.tipo = req.query.tipo;
             if (req.query.email) where.email = req.query.email;
@@ -53,10 +91,33 @@ module.exports = {
         }
     },
 
+    async listPacientes(req, res) {
+        try {
+            if (!isAdmin(req)) {
+                return res.status(403).json({ error: 'Acesso negado.' });
+            }
+
+            const usuarios = await Usuario.findAll({
+                where: {
+                    tipo: 'paciente'
+                },
+                order: [['id', 'DESC']],
+            });
+
+            return res.json(usuarios.map(sanitize));
+        } catch (err) {
+            return res.status(400).json({ error: err.message });
+        }
+    },
+
     async get(req, res) {
         try {
             const usuario = await Usuario.findByPk(req.params.id);
             if (!usuario) return res.status(404).json({ error: 'Usuário não encontrado' });
+
+            if (!isAdmin(req) && !isSelf(req, usuario.id)) {
+                return res.status(403).json({ error: 'Acesso negado.' });
+            }
 
             return res.json(sanitize(usuario));
         } catch (err) {
@@ -67,13 +128,48 @@ module.exports = {
     async update(req, res) {
         try {
             const usuario = await Usuario.findByPk(req.params.id);
-            if (!usuario) return res.status(404).json({ error: 'Usuário não encontrado' });
+            if (!usuario) {
+                return res.status(404).json({ error: 'Usuário não encontrado' });
+            }
 
-            const { senha, ...rest } = req.body;
+            if (!isAdmin(req) && !isSelf(req, usuario.id)) {
+                return res.status(403).json({ error: 'Acesso negado.' });
+            }
+
+            const { senha, senhaAntiga, tipo, ...rest } = req.body;
 
             const dadosAtualizacao = { ...rest };
 
+            if (tipo && isAdmin(req)) {
+                dadosAtualizacao.tipo = tipo;
+            }
+
             if (senha) {
+                const usuarioLogado = req.user;
+
+                const podeAlterarSemSenhaAntiga =
+                    usuarioLogado.tipo === 'admin' ||
+                    usuarioLogado.tipo === 'medico';
+
+                if (!podeAlterarSemSenhaAntiga) {
+                    if (!senhaAntiga) {
+                        return res.status(400).json({
+                            error: 'Informe a senha antiga para alterar a senha.'
+                        });
+                    }
+
+                    const senhaCorreta = await bcrypt.compare(
+                        senhaAntiga,
+                        usuario.senha
+                    );
+
+                    if (!senhaCorreta) {
+                        return res.status(400).json({
+                            error: 'Senha antiga incorreta.'
+                        });
+                    }
+                }
+
                 dadosAtualizacao.senha = await bcrypt.hash(senha, 10);
             }
 
@@ -85,15 +181,24 @@ module.exports = {
             });
 
             return res.json(sanitize(usuario));
+
         } catch (err) {
             return res.status(400).json({ error: err.message });
         }
     },
-
+    
     async delete(req, res) {
         try {
             const usuario = await Usuario.findByPk(req.params.id);
             if (!usuario) return res.status(404).json({ error: 'Usuário não encontrado' });
+
+            if (!isAdmin(req)) {
+                return res.status(403).json({ error: 'Acesso negado.' });
+            }
+
+            if (isSelf(req, usuario.id)) {
+                return res.status(400).json({ error: 'Você não pode deletar seu próprio usuário.' });
+            }
 
             const id = usuario.id;
             await usuario.destroy();
