@@ -11,15 +11,11 @@ class Agendamento extends Model {
         data: DataTypes.DATEONLY,
         hora: DataTypes.TIME,
         local: DataTypes.STRING,
-        observacao: DataTypes.TEXT,
-
-        created_at: { type: DataTypes.DATE, allowNull: false, field: 'created_at' },
-        updated_at: { type: DataTypes.DATE, allowNull: false, field: 'updated_at' },
+        observacao: DataTypes.TEXT
       },
       {
         sequelize,
         tableName: 'agendamento',
-        timestamps: false,
       }
     );
   }

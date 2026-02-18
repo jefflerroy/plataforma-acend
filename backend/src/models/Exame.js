@@ -11,15 +11,11 @@ class Exame extends Model {
         caminho: DataTypes.STRING,
         mime_type: DataTypes.STRING,
         tamanho_bytes: DataTypes.INTEGER,
-        hash_sha256: DataTypes.STRING,
-
-        created_at: { type: DataTypes.DATE, allowNull: false, field: 'created_at' },
-        updated_at: { type: DataTypes.DATE, allowNull: false, field: 'updated_at' },
+        hash_sha256: DataTypes.STRING
       },
       {
         sequelize,
         tableName: 'exame',
-        timestamps: false,
       }
     );
   }

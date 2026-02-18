@@ -51,6 +51,12 @@ export function MenuLateral() {
             roles: ['admin', 'medico']
         },
         {
+            text: 'Dietas',
+            rota: 'dietas',
+            icon: <ImSpoonKnife className='icon' />,
+            roles: ['admin', 'medico']
+        },
+        {
             text: 'Exames',
             rota: 'exames',
             icon: <FaRegFileAlt className='icon' />,

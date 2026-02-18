@@ -19,15 +19,11 @@ class Usuario extends Model {
         bairro: DataTypes.STRING,
         cidade: DataTypes.STRING,
         estado: DataTypes.STRING,
-        foto: DataTypes.TEXT,
-
-        created_at: { type: DataTypes.DATE, allowNull: false, field: 'created_at' },
-        updated_at: { type: DataTypes.DATE, allowNull: false, field: 'updated_at' },
+        foto: DataTypes.TEXT
       },
       {
         sequelize,
         tableName: 'usuario',
-        timestamps: false,
       }
     );
   }

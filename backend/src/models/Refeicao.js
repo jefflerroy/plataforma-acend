@@ -11,15 +11,11 @@ class Refeicao extends Model {
         proteinas: DataTypes.INTEGER,
         carboidratos: DataTypes.INTEGER,
         gorduras: DataTypes.INTEGER,
-        calorias: DataTypes.INTEGER,
-
-        created_at: { type: DataTypes.DATE, allowNull: false, field: 'created_at' },
-        updated_at: { type: DataTypes.DATE, allowNull: false, field: 'updated_at' },
+        calorias: DataTypes.INTEGER
       },
       {
         sequelize,
         tableName: 'refeicao',
-        timestamps: false,
       }
     );
   }

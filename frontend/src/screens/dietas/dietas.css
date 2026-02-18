@@ -1,0 +1,118 @@
+.dietas {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+.dietas button {
+    width: 100%;
+}
+
+.dietas form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.dietas .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.dietas form .refeicoes {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+.dietas form button{
+    width: fit-content;
+}
+
+.dietas form .refeicoes .refeicoes-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.dietas form .refeicoes .refeicao-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+
+    padding: 10px;
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+}
+
+.dietas .dropdown-refeicoes {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.dietas .dropdown-refeicoes .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.dietas .dropdown-refeicoes .refeicao-dropdown-item {
+    flex: 0 0 230px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+}
+
+
+.dietas .lista {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 30px;
+    gap: 20px;
+
+    background-color: white;
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+}
+
+.dietas .lista .icon {
+    background-color: var(--terciaria);
+    color: white;
+    padding: 5px;
+    font-size: 28px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.dietas .lista .icon:hover {
+    background-color: var(--secundaria);
+}

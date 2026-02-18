@@ -80,7 +80,7 @@ p.erro {
   font-size: 13px;
 }
 
-button:not([type='button']) {
+button {
   padding: 15px;
   border: none;
   border-radius: var(--radius);
@@ -92,23 +92,25 @@ button:not([type='button']) {
   cursor: pointer;
 }
 
-button:not([type='button']):hover {
+button:hover {
   background-color: var(--secundaria);
 }
+button.cancel {
+  background-color: transparent;
+  border: 1px solid var(--terciaria);
+  color: var(--terciaria);
+}
+button.cancel:hover {
+  background-color: transparent;
+  border: 1px solid var(--secundaria);
+  color: var(--secundaria);
+}
 
-input {
+.divisor-horizontal{
   width: 100%;
-
-  border: none;
-  outline: none;
-  padding: 15px;
-
-  background-color: var(--fundo);
-
-  border-radius: var(--radius);
-
-  font-size: 14px;
-  font-weight: 600;
+  border-bottom: 1px solid var(--borda);
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 table {

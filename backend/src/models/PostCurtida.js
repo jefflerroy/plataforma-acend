@@ -5,15 +5,11 @@ class PostCurtida extends Model {
     super.init(
       {
         post_id: DataTypes.INTEGER,
-        usuario_id: DataTypes.INTEGER,
-
-        created_at: { type: DataTypes.DATE, allowNull: false, field: 'created_at' },
-        updated_at: { type: DataTypes.DATE, allowNull: false, field: 'updated_at' },
+        usuario_id: DataTypes.INTEGER
       },
       {
         sequelize,
         tableName: 'post_curtida',
-        timestamps: false,
       }
     );
   }

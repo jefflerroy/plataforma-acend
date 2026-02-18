@@ -6,15 +6,11 @@ class PostComentario extends Model {
       {
         post_id: DataTypes.INTEGER,
         usuario_id: DataTypes.INTEGER,
-        comentario: DataTypes.TEXT,
-
-        created_at: { type: DataTypes.DATE, allowNull: false, field: 'created_at' },
-        updated_at: { type: DataTypes.DATE, allowNull: false, field: 'updated_at' },
+        comentario: DataTypes.TEXT
       },
       {
         sequelize,
         tableName: 'post_comentario',
-        timestamps: false,
       }
     );
   }

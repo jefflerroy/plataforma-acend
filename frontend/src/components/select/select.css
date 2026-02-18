@@ -6,22 +6,24 @@
 }
 
 .select-container label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--texto-secundario);
+    font-size: 13px;
+    letter-spacing: 1px;
 }
 
 .select-container select {
     width: 100%;
+
+    border: none;
+    outline: none;
     padding: 15px;
-    border: 1px solid var(--borda);
-    border-radius: var(--radius);
 
     background-color: var(--fundo);
-    color: var(--texto);
+
+    border-radius: var(--radius);
 
     font-size: 14px;
     font-weight: 600;
+
     cursor: pointer;
 }
 

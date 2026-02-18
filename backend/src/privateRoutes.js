@@ -14,11 +14,12 @@ const PostComentarioController = require('./controllers/PostComentarioController
 const privateRoutes = express.Router();
 
 privateRoutes.get('/api/usuarios', auth.onlyAdmin, UsuarioController.list);
+privateRoutes.get('/api/me', UsuarioController.me);
 privateRoutes.get('/api/pacientes', auth.onlyAdminOrMedico, UsuarioController.listPacientes);
 privateRoutes.get('/api/usuarios/:id', auth.onlyAdmin, UsuarioController.get);
 privateRoutes.post('/api/usuarios', auth.onlyAdmin, UsuarioController.create);
 privateRoutes.post('/api/pacientes', auth.onlyAdminOrMedico, UsuarioController.createPaciente);
-privateRoutes.put('/api/usuarios/:id', auth.onlyAdmin, UsuarioController.update);
+privateRoutes.put('/api/usuarios/:id', UsuarioController.update);
 privateRoutes.delete('/api/usuarios/:id', auth.onlyAdmin, UsuarioController.delete);
 
 privateRoutes.get('/api/dietas', DietaController.list);
@@ -38,6 +39,7 @@ privateRoutes.get('/api/dietas-usuarios/:id', DietaUsuarioController.get);
 privateRoutes.post('/api/dietas-usuarios', DietaUsuarioController.create);
 privateRoutes.put('/api/dietas-usuarios/:id', DietaUsuarioController.update);
 privateRoutes.delete('/api/dietas-usuarios/:id', DietaUsuarioController.delete);
+privateRoutes.get('/api/minha-dieta', DietaUsuarioController.minhaDieta);
 
 privateRoutes.get('/api/exames', ExameController.list);
 privateRoutes.get('/api/exames/:id', ExameController.get);

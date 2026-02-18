@@ -13,13 +13,9 @@ export function Header(props) {
         <header>
             <p className='nome'>{props.nome}</p>
             <div className='buttons'>
-                <button>
-                    <IoSync/>
-                    Sincronizar
-                </button>
                 <div className='divisor'/>
-                <button>
-                    <IoPersonCircleOutline/>
+                <button onClick={() => navigate('/meu-perfil')}>
+                    <IoPersonCircleOutline />
                     Meu Perfil
                 </button>
                 <button className='sair' onClick={() => navigate('/')}>

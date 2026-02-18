@@ -5,15 +5,11 @@ class Dieta extends Model {
     super.init(
       {
         titulo: DataTypes.STRING,
-        observacao: DataTypes.STRING,
-
-        created_at: { type: DataTypes.DATE, allowNull: false, field: 'created_at' },
-        updated_at: { type: DataTypes.DATE, allowNull: false, field: 'updated_at' },
+        observacao: DataTypes.STRING
       },
       {
         sequelize,
         tableName: 'dieta',
-        timestamps: false,
       }
     );
   }

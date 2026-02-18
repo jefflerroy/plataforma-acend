@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import { Inicio } from './screens/inicio/inicio';
 import { MenuLateral } from './components/menuLateral/menuLateral';
 import { MinhaDieta } from './screens/minha-dieta/minha-dieta';
@@ -11,6 +12,8 @@ import { Login } from './screens/login/login';
 import { Exames } from './screens/exames/exames';
 import { Pacientes } from './screens/pacientes/pacientes';
 import { Paciente } from './screens/paciente/paciente';
+import { Dietas } from './screens/dietas/dietas';
+import { MeuPerfil } from './screens/meu-perfil/meu-perfil';
 
 function LayoutComMenu() {
   return (
@@ -26,12 +29,22 @@ function LayoutComMenu() {
 function App() {
   return (
     <BrowserRouter>
+      <ToastContainer
+        position="top-center"
+        autoClose={4000}
+        closeButton={false}
+        pauseOnHover={false}
+        pauseOnFocusLoss={false}
+
+      />
       <Routes>
         <Route path="/" element={<Login />} />
 
         <Route element={<LayoutComMenu />}>
           <Route path="/inicio" element={<Inicio />} />
           <Route path="/minha-dieta" element={<MinhaDieta />} />
+          <Route path="/meu-perfil" element={<MeuPerfil />} />
+          <Route path="/dietas" element={<Dietas />} />
           <Route path="/pacientes" element={<Pacientes />} />
           <Route path="/paciente/:id" element={<Paciente />} />
           <Route path="/exames" element={<Exames />} />

@@ -1,6 +1,6 @@
 import "./pacientes.css";
 import { Header } from "../../components/header/header";
-import { MdFileDownload } from "react-icons/md";
+import { MdLogin } from "react-icons/md";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
@@ -60,13 +60,13 @@ export function Pacientes() {
               </thead>
               <tbody>
                 {pacientesFiltrados.map((usuario) => (
-                  <tr key={usuario.id}>
+                  <tr key={usuario.id} onClick={() => navigate(`/paciente/${usuario.id}`)} style={{ cursor: 'pointer' }}>
                     <td>{usuario.nome}</td>
                     <td>
                       {new Date(usuario.createdAt).toLocaleDateString("pt-BR")}
                     </td>
                     <td>
-                      <MdFileDownload className="icon" />
+                      <MdLogin />
                     </td>
                   </tr>
                 ))}

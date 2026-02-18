@@ -6,6 +6,7 @@ import { LuCalendar } from "react-icons/lu";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { MdOutlinePeopleAlt } from "react-icons/md";
 import { BarraSolida } from "../../components/barraSolida/barraSolida";
+import { useNavigate } from "react-router-dom";
 
 function Card({ icon, titulo, h2, info, onClick, disabled = false }) {
   const clickable = typeof onClick === "function" && !disabled;
@@ -41,6 +42,8 @@ function SectionCard({ title, rightText, children }) {
 }
 
 export function Inicio() {
+  const navigate = useNavigate();
+
   const cardsTopo = [
     {
       id: "refeicao",
@@ -85,11 +88,11 @@ export function Inicio() {
       <div className="inicio">
         <section className="hero">
           <div className="hero__content">
-            <h1 className="hero__title">Bem-vindo, Ronaldinho</h1>
+            <h1 className="hero__title">Bem-vindo, {localStorage.getItem('nome')}</h1>
             <p className="hero__text">
               Seu progresso no Método Ascend está excelente. Faltam apenas 3kg para sua meta de fase 1.
             </p>
-            <button className="hero__btn" type="button" onClick={() => console.log("jornada")}>
+            <button className="hero__btn" type="button" onClick={() => navigate('/metodo-ascend')}>
               Ver Minha Jornada
             </button>
           </div>

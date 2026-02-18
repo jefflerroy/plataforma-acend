@@ -5,15 +5,11 @@ class DietaUsuario extends Model {
     super.init(
       {
         paciente_id: DataTypes.INTEGER,
-        dieta_id: DataTypes.INTEGER,
-
-        created_at: { type: DataTypes.DATE, allowNull: false, field: 'created_at' },
-        updated_at: { type: DataTypes.DATE, allowNull: false, field: 'updated_at' },
+        dieta_id: DataTypes.INTEGER
       },
       {
         sequelize,
         tableName: 'dieta_usuario',
-        timestamps: false,
       }
     );
   }

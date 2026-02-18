@@ -1,11 +1,36 @@
-.input{
+.input {
     display: flex;
     flex-direction: column;
     justify-content: center;
     width: 100%;
 }
 
-.input label{
+.input label {
     font-size: 13px;
     letter-spacing: 1px;
+}
+
+input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+    padding: 15px;
+
+    background-color: var(--fundo);
+
+    border-radius: var(--radius);
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }

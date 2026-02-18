@@ -8,15 +8,11 @@ class Post extends Model {
         legenda: DataTypes.TEXT,
         imagem: DataTypes.STRING,
         total_curtidas: DataTypes.INTEGER,
-        total_comentarios: DataTypes.INTEGER,
-
-        created_at: { type: DataTypes.DATE, allowNull: false, field: 'created_at' },
-        updated_at: { type: DataTypes.DATE, allowNull: false, field: 'updated_at' },
+        total_comentarios: DataTypes.INTEGER
       },
       {
         sequelize,
         tableName: 'post',
-        timestamps: false,
       }
     );
   }

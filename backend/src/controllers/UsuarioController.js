@@ -125,6 +125,26 @@ module.exports = {
         }
     },
 
+    async me(req, res) {
+        try {
+            const usuarioId = req.user?.id;
+
+            if (!usuarioId) {
+                return res.status(401).json({ error: 'Usuário não autenticado.' });
+            }
+
+            const usuario = await Usuario.findByPk(usuarioId);
+
+            if (!usuario) {
+                return res.status(404).json({ error: 'Usuário não encontrado.' });
+            }
+
+            return res.json(sanitize(usuario));
+        } catch (err) {
+            return res.status(400).json({ error: err.message });
+        }
+    },    
+
     async update(req, res) {
         try {
             const usuario = await Usuario.findByPk(req.params.id);
@@ -186,7 +206,7 @@ module.exports = {
             return res.status(400).json({ error: err.message });
         }
     },
-    
+
     async delete(req, res) {
         try {
             const usuario = await Usuario.findByPk(req.params.id);

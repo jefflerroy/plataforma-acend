@@ -1,6 +1,7 @@
 const DietaUsuario = require('../models/DietaUsuario');
 const Dieta = require('../models/Dieta')
 const Usuario = require('../models/Usuario')
+const Refeicao = require('../models/Refeicao')
 
 module.exports = {
     async create(req, res) {
@@ -13,6 +14,39 @@ module.exports = {
         }
     },
 
+    async minhaDieta(req, res) {
+        try {
+            const paciente_id = req.user.id;
+    
+            const vinculo = await DietaUsuario.findOne({
+                where: { paciente_id },
+                include: [
+                    {
+                        model: Dieta,
+                        as: 'dieta',
+                        include: [
+                            {
+                                model: Refeicao,
+                                as: 'refeicoes',
+                                separate: true,
+                                order: [['horario', 'ASC']]
+                            }
+                        ]
+                    }
+                ],
+                order: [['id', 'DESC']]
+            });
+    
+            if (!vinculo) {
+                return res.status(404).json({ error: 'Nenhuma dieta encontrada para este usuário' });
+            }
+    
+            return res.json(vinculo);
+        } catch (err) {
+            return res.status(400).json({ error: err.message });
+        }
+    },    
+
     async list(req, res) {
         try {
             const where = {};
@@ -23,7 +57,18 @@ module.exports = {
                 where,
                 include: [
                     { model: Usuario, as: 'paciente' },
-                    { model: Dieta, as: 'dieta' },
+                    {
+                        model: Dieta,
+                        as: 'dieta',
+                        include: [
+                            {
+                                model: Refeicao,
+                                as: 'refeicoes',
+                                separate: true,
+                                order: [['horario', 'ASC']]
+                            }
+                        ]
+                    }
                 ],
                 order: [['id', 'DESC']],
             });
