@@ -1,11 +1,11 @@
-import "./pacientes.css";
+import "./usuarios.css";
 import { Header } from "../../components/header/header";
 import { MdLogin } from "react-icons/md";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
-export function Pacientes() {
+export function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [busca, setBusca] = useState("");
   const [loading, setLoading] = useState(true);
@@ -14,7 +14,7 @@ export function Pacientes() {
   useEffect(() => {
     async function carregarUsuarios() {
       try {
-        const response = await api.get("/pacientes");
+        const response = await api.get("/usuarios");        
 
         setUsuarios(response.data);
       } catch (error) {
@@ -27,16 +27,16 @@ export function Pacientes() {
     carregarUsuarios();
   }, []);
   
-  const pacientesFiltrados = usuarios.filter((usuario) =>
+  const usuariosFiltrados = usuarios.filter((usuario) =>
     usuario.nome.toLowerCase().includes(busca.toLowerCase())
   );
 
   return (
     <>
-      <Header nome="Pacientes" />
-      <div className="pacientes">
+      <Header nome="Usuarios" />
+      <div className="usuarios">
         <div className="lista">
-          <button onClick={() => navigate('/paciente/novo')}>Cadastrar</button>
+          <button onClick={() => navigate('/usuario/novo')}>Cadastrar</button>
           <input
             placeholder="Pesquisar"
             value={busca}
@@ -50,17 +50,15 @@ export function Pacientes() {
               <thead>
                 <tr>
                   <th>Nome</th>
-                  <th>Data</th>
+                  <th>Tipo</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                {pacientesFiltrados.map((usuario) => (
-                  <tr key={usuario.id} onClick={() => navigate(`/paciente/${usuario.id}`)} style={{ cursor: 'pointer' }}>
+                {usuariosFiltrados.map((usuario) => (
+                  <tr key={usuario.id} onClick={() => navigate(`/usuario/${usuario.id}`)} style={{ cursor: 'pointer' }}>
                     <td>{usuario.nome}</td>
-                    <td>
-                      {new Date(usuario.createdAt).toLocaleDateString("pt-BR")}
-                    </td>
+                    <td>{usuario.tipo === "admin" ? "Administrador" : "Médico/Nutricionista"}</td>
                     <td>
                       <MdLogin />
                     </td>

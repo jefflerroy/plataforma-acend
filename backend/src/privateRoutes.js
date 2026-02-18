@@ -61,6 +61,7 @@ privateRoutes.delete('/api/posts/:id', PostController.delete);
 privateRoutes.post('/api/posts/like', PostController.like);
 privateRoutes.post('/api/posts/unlike', PostController.unlike);
 privateRoutes.post('/api/posts/comment', PostController.comment);
+privateRoutes.get('/api/posts-total', PostController.totalHoje);
 
 privateRoutes.get('/api/posts-curtidas', PostCurtidaController.list);
 privateRoutes.get('/api/posts-curtidas/:id', PostCurtidaController.get);

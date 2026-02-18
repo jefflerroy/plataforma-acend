@@ -5,8 +5,8 @@ class Post extends Model {
     super.init(
       {
         usuario_id: DataTypes.INTEGER,
-        legenda: DataTypes.TEXT,
-        imagem: DataTypes.STRING,
+        legenda: DataTypes.STRING,
+        imagem: DataTypes.TEXT,
         total_curtidas: DataTypes.INTEGER,
         total_comentarios: DataTypes.INTEGER
       },

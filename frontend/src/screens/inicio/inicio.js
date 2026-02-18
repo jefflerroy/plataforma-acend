@@ -7,6 +7,8 @@ import { FaArrowTrendUp } from "react-icons/fa6";
 import { MdOutlinePeopleAlt } from "react-icons/md";
 import { BarraSolida } from "../../components/barraSolida/barraSolida";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../../services/api";
 
 function Card({ icon, titulo, h2, info, onClick, disabled = false }) {
   const clickable = typeof onClick === "function" && !disabled;
@@ -43,15 +45,114 @@ function SectionCard({ title, rightText, children }) {
 
 export function Inicio() {
   const navigate = useNavigate();
+  const [dieta, setDieta] = useState(null);
+  const [proximaRefeicao, setProximaRefeicao] = useState(null);
+  const [macronutrientes, setMacronutrientes] = useState(null);
+  const [totalPosts, setTotalPosts] = useState(null);
+  const [openId, setOpenId] = useState(null);
+
+  useEffect(() => {
+    async function loadDieta() {
+      try {
+        const response = await api.get("/minha-dieta");
+        let dieta = response.data.dieta;
+        setDieta(dieta);
+        setProximaRefeicao(proximaRefeicaoDieta(dieta))
+        setMacronutrientes(calcularTotais(dieta))
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    async function totalPosts() {
+      try {
+        const response = await api.get("/posts-total");
+        setTotalPosts(response.data.total)
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    loadDieta();
+    totalPosts();
+  }, []);
+
+  function proximaRefeicaoDieta(dieta) {
+    const agora = new Date();
+    const horaAtual = agora.getHours();
+    const minutoAtual = agora.getMinutes();
+
+    const refeicoesOrdenadas = dieta.refeicoes
+      .slice()
+      .sort((a, b) => {
+        const [hA, mA] = a.horario.split(':').map(Number);
+        const [hB, mB] = b.horario.split(':').map(Number);
+        return hA - hB || mA - mB;
+      });
+
+    for (const refeicao of refeicoesOrdenadas) {
+      const [h, m] = refeicao.horario.split(':').map(Number);
+      if (horaAtual < h || (horaAtual === h && minutoAtual < m)) {
+        return refeicao;
+      }
+    }
+
+    return refeicoesOrdenadas[0];
+  }
+
+  function calcularTotais(dieta) {
+    const agora = new Date();
+    const horaAtual = agora.getHours();
+    const minutoAtual = agora.getMinutes();
+
+    let totalProteinas = 0;
+    let totalCarboidratos = 0;
+    let totalGorduras = 0;
+    let totalCalorias = 0;
+
+    let consumidoProteinas = 0;
+    let consumidoCarboidratos = 0;
+    let consumidoGorduras = 0;
+    let consumidoCalorias = 0;
+
+    for (const refeicao of dieta.refeicoes) {
+      totalProteinas += refeicao.proteinas;
+      totalCarboidratos += refeicao.carboidratos;
+      totalGorduras += refeicao.gorduras;
+      totalCalorias += refeicao.calorias;
+
+      const [h, m] = refeicao.horario.split(':').map(Number);
+      if (horaAtual > h || (horaAtual === h && minutoAtual >= m)) {
+        consumidoProteinas += refeicao.proteinas;
+        consumidoCarboidratos += refeicao.carboidratos;
+        consumidoGorduras += refeicao.gorduras;
+        consumidoCalorias += refeicao.calorias;
+      }
+    }
+
+    return {
+      total: {
+        proteinas: totalProteinas,
+        carboidratos: totalCarboidratos,
+        gorduras: totalGorduras,
+        calorias: totalCalorias
+      },
+      consumido: {
+        proteinas: consumidoProteinas,
+        carboidratos: consumidoCarboidratos,
+        gorduras: consumidoGorduras,
+        calorias: consumidoCalorias
+      }
+    };
+  }
 
   const cardsTopo = [
     {
       id: "refeicao",
       icon: <ImSpoonKnife className="icon" style={{ color: "var(--laranja)" }} />,
       titulo: "PRÓXIMA REFEIÇÃO",
-      h2: "Almoço",
-      info: "12:30 - 580kcal",
-      onClick: () => console.log("refeicao"),
+      h2: proximaRefeicao?.refeicao,
+      info: `${proximaRefeicao?.horario} - ${proximaRefeicao?.calorias}kcal`,
+      onClick: () => navigate('/minha-dieta'),
     },
     {
       id: "consulta",
@@ -73,9 +174,9 @@ export function Inicio() {
       id: "comunidade",
       icon: <MdOutlinePeopleAlt className="icon" style={{ color: "var(--roxo)" }} />,
       titulo: "COMUNIDADE",
-      h2: "12",
+      h2: totalPosts,
       info: "Novos posts hoje",
-      onClick: () => console.log("comunidade"),
+      onClick: () => navigate('/comunidade'),
     },
   ];
 
@@ -108,10 +209,10 @@ export function Inicio() {
         <section className="grid grid--2cols">
           <SectionCard title="Resumo de Macronutrientes" rightText="Hoje">
             <div className="stack">
-              <BarraSolida atual={140} max={180} label="Proteínas" />
-              <BarraSolida atual={90} max={120} label="Carboidratos" color="var(--azul)" />
-              <BarraSolida atual={45} max={65} label="Gorduras" color="var(--laranja)" />
-              <BarraSolida atual={1850} max={2200} label="Calorias" color="var(--roxo)" />
+              <BarraSolida atual={macronutrientes?.consumido.proteinas} max={macronutrientes?.total.proteinas} label="Proteínas" />
+              <BarraSolida atual={macronutrientes?.consumido.carboidratos} max={macronutrientes?.total.carboidratos} label="Carboidratos" color="var(--azul)" />
+              <BarraSolida atual={macronutrientes?.consumido.gorduras} max={macronutrientes?.total.gorduras} label="Gorduras" color="var(--laranja)" />
+              <BarraSolida atual={macronutrientes?.consumido.calorias} max={macronutrientes?.total.calorias} label="Calorias" color="var(--roxo)" />
             </div>
           </SectionCard>
 

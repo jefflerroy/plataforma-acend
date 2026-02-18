@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const Post = require('../models/Post');
 const PostCurtida = require('../models/PostCurtida');
 const PostComentario = require('../models/PostComentario');
@@ -21,11 +22,52 @@ module.exports = {
 
     async list(req, res) {
         try {
+            const usuarioLogadoId = req.user.id;
+
             const posts = await Post.findAll({
-                include: [{ model: Usuario, as: 'usuario' }],
-                order: [['created_at', 'DESC']],
+                include: [
+                    { model: Usuario, as: 'usuario' },
+                    {
+                        model: PostCurtida,
+                        as: 'curtidas',
+                        attributes: ['usuario_id'],
+                    }
+                ],
+                order: [['createdAt', 'DESC']],
             });
-            return res.json(posts);
+
+            const postsComCurtido = posts.map(post => {
+                const curtido = post.curtidas.some(c => c.usuario_id === usuarioLogadoId);
+                return {
+                    ...post.toJSON(),
+                    curtido
+                };
+            });
+
+            return res.json(postsComCurtido);
+        } catch (err) {
+            return res.status(400).json({ error: err.message });
+        }
+    },
+
+    async totalHoje(req, res) {
+        try {
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+
+            const amanha = new Date(hoje);
+            amanha.setDate(hoje.getDate() + 1);
+
+            const total = await Post.count({
+                where: {
+                    created_at: {
+                        [Op.gte]: hoje,
+                        [Op.lt]: amanha,
+                    },
+                },
+            });
+
+            return res.json({ total });
         } catch (err) {
             return res.status(400).json({ error: err.message });
         }

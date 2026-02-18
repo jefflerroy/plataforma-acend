@@ -14,6 +14,8 @@ import { Pacientes } from './screens/pacientes/pacientes';
 import { Paciente } from './screens/paciente/paciente';
 import { Dietas } from './screens/dietas/dietas';
 import { MeuPerfil } from './screens/meu-perfil/meu-perfil';
+import { Usuarios } from './screens/usuarios/usuarios';
+import { Usuario } from './screens/usuario/usuario';
 
 function LayoutComMenu() {
   return (
@@ -45,6 +47,8 @@ function App() {
           <Route path="/minha-dieta" element={<MinhaDieta />} />
           <Route path="/meu-perfil" element={<MeuPerfil />} />
           <Route path="/dietas" element={<Dietas />} />
+          <Route path="/usuarios" element={<Usuarios />} />
+          <Route path="/usuario/:id" element={<Usuario />} />
           <Route path="/pacientes" element={<Pacientes />} />
           <Route path="/paciente/:id" element={<Paciente />} />
           <Route path="/exames" element={<Exames />} />

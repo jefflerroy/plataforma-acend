@@ -105,6 +105,10 @@ button.cancel:hover {
   border: 1px solid var(--secundaria);
   color: var(--secundaria);
 }
+button.delete {
+  background-color: var(--vermelho);
+  color: white;
+}
 
 .divisor-horizontal{
   width: 100%;

@@ -1,5 +1,5 @@
 import './menuLateral.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ImSpoonKnife } from "react-icons/im";
 import { LuLayoutDashboard, LuCalendar } from "react-icons/lu";
 import { FaArrowTrendUp } from "react-icons/fa6";
@@ -7,8 +7,10 @@ import { MdOutlineChatBubbleOutline, MdOutlinePeopleAlt } from "react-icons/md";
 import { FaRegFileAlt } from "react-icons/fa";
 
 import logoPequena from '../../assets/logoPequena.png'
-import perfil from '../../assets/ronaldinho.png'
+import anonimo from '../../assets/anonimo.png'
 import { useNavigate } from 'react-router-dom';
+import api from '../../services/api';
+import { socket } from '../../services/socket';
 
 function ButtonMenu({ icon, text, ariaPressed = false, onClick }) {
     return (
@@ -22,15 +24,45 @@ function ButtonMenu({ icon, text, ariaPressed = false, onClick }) {
 export function MenuLateral() {
     const navigate = useNavigate();
     const [menu, setMenu] = useState('');
+    const [nome, setNome] = useState('');
+    const [tipo, setTipo] = useState('');
+    const [foto, setFoto] = useState('');
+    const [userId, setUserId] = useState(null);
 
-    const nome = localStorage.getItem('nome');
-    const tipo = localStorage.getItem('tipo');
+    useEffect(() => {
+        async function loadUser() {
+            try {
+                const response = await api.get("/me");
+                const data = response.data;
+                setUserId(data.id);
+                setNome(data.nome);
+                setTipo(data.tipo)
+                setFoto(data.foto)
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        loadUser();
+
+        socket.on('usuario:updated', ({ id, data }) => {
+            if (id === userId) { 
+                setNome(data.nome);
+                setTipo(data.tipo);
+                setFoto(data.foto);
+            }
+        });
+
+        return () => {
+            socket.off('usuario:updated');
+        };
+    }, [userId]);
 
     const navegarMenu = (rota) => {
         navigate(rota);
         setMenu(rota);
     };
-    
+
     const menus = [
         {
             text: 'Início',
@@ -43,6 +75,12 @@ export function MenuLateral() {
             rota: 'minha-dieta',
             icon: <ImSpoonKnife className='icon' />,
             roles: ['paciente']
+        },
+        {
+            text: 'Usuários',
+            rota: 'usuarios',
+            icon: <MdOutlinePeopleAlt className='icon' />,
+            roles: ['admin']
         },
         {
             text: 'Pacientes',
@@ -72,7 +110,7 @@ export function MenuLateral() {
             text: 'Comunidade',
             rota: 'comunidade',
             icon: <MdOutlinePeopleAlt className='icon' />,
-            roles: ['paciente']
+            roles: ['admin', 'medico', 'paciente']
         },
         {
             text: 'Minha Agenda',
@@ -118,7 +156,7 @@ export function MenuLateral() {
             }
 
             <div className='row' id='inferior'>
-                <img alt='perfil' className='perfil' src={perfil} />
+                <img alt='perfil' className='perfil' src={foto || anonimo} />
                 <div className='column' id='logo-titulo'>
                     <p className='logo-titulo'>{nome}</p>
                     <p className='logo-subtitulo'>{tipo?.toUpperCase()}</p>

@@ -1,0 +1,100 @@
+.usuario {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 30px;
+}
+
+.usuario form {
+    width: 100%;
+}
+
+.usuario .row{
+    width: 100%;
+    gap: 10px;
+}
+
+.usuario .grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 30px;
+    width: 100%;
+
+    background-color: white;
+    
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+
+}
+
+.usuario .grid button{
+    width: 100%;
+}
+
+.usuario .modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    width: 40%;
+}
+.usuario .modal .dietas-list {
+    padding: 0;
+    display: grid;
+    flex-direction: column;
+    height: 200px;
+    overflow: auto;
+    gap: 5px;
+
+}
+.usuario .modal .dietas-list .dieta {
+    width: 100%;
+    height: fit-content;
+    padding: 10px;
+    padding-left: 15px;
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+.usuario .modal .dietas-list .dieta:hover {
+    background-color: var(--primaria-fundo);
+}
+.usuario .modal .dietas-list .dieta#ativo{
+    background-color: var(--primaria-fundo);
+}
+
+.usuario .dieta-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.usuario .dieta-box .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.usuario .dieta-box .refeicao-dropdown-item {
+    flex: 0 0 230px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    gap: 5px;
+
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+}

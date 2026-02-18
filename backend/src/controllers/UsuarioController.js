@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const Usuario = require('../models/Usuario');
+const { Op } = require('sequelize');
 
 function sanitize(usuario) {
     const data = usuario?.toJSON ? usuario.toJSON() : usuario;
@@ -23,13 +24,9 @@ module.exports = {
                 return res.status(403).json({ error: 'Acesso negado.' });
             }
 
-            const { senha, ...rest } = req.body;
+            const { ...rest } = req.body;
 
-            let senhaCriptografada = null;
-
-            if (senha) {
-                senhaCriptografada = await bcrypt.hash(senha, 10);
-            }
+            let senhaCriptografada = await bcrypt.hash('ascend', 10);
 
             const usuario = await Usuario.create({
                 ...rest,
@@ -81,7 +78,11 @@ module.exports = {
             if (req.query.cpf) where.cpf = req.query.cpf;
 
             const usuarios = await Usuario.findAll({
-                where,
+                where: {
+                    tipo: {
+                        [Op.in]: ['admin', 'medico']
+                    }
+                },
                 order: [['id', 'DESC']],
             });
 
@@ -143,7 +144,7 @@ module.exports = {
         } catch (err) {
             return res.status(400).json({ error: err.message });
         }
-    },    
+    },
 
     async update(req, res) {
         try {

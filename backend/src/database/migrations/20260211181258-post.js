@@ -22,12 +22,12 @@ module.exports = {
       },
 
       legenda: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
         allowNull: true,
       },
 
       imagem: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: true,
       },
 

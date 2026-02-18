@@ -10,6 +10,7 @@ export function MeuPerfil() {
   const [form, setForm] = useState({
     nome: "",
     email: "",
+    foto: "",
     cpf: "",
     data_nascimento: "",
     sexo: "",
@@ -151,6 +152,32 @@ export function MeuPerfil() {
     }
   }
 
+  function imageToBase64Perfil(file, tamanho = 50, qualidade = 0.7) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = tamanho;
+          canvas.height = tamanho;
+          const ctx = canvas.getContext('2d');
+
+          const menor = Math.min(img.width, img.height);
+          const sx = (img.width - menor) / 2;
+          const sy = (img.height - menor) / 2;
+
+          ctx.drawImage(img, sx, sy, menor, menor, 0, 0, tamanho, tamanho);
+          const base64 = canvas.toDataURL('image/jpeg', qualidade);
+          resolve(base64);
+        };
+        img.onerror = reject;
+        img.src = reader.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
 
   return (
     <>
@@ -166,6 +193,23 @@ export function MeuPerfil() {
               <div className="row">
                 <Input label="Nome" placeholder="Nome" name="nome" value={form.nome} onChange={handleChange} required />
                 <Input label="Email" placeholder="Email" name="email" type="email" value={form.email} onChange={handleChange} required />
+                <Input
+                  label="Foto do perfil"
+                  placeholder="Foto do perfil"
+                  name="foto_do_perfil"
+                  type="file"
+                  onChange={async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    try {
+                      const base64 = await imageToBase64Perfil(file);
+                      setForm((prev) => ({ ...prev, foto: base64 }));
+                    } catch (err) {
+                      console.error("Erro ao processar imagem:", err);
+                    }
+                  }}
+                />
               </div>
 
               <div className="row">
