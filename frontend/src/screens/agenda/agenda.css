@@ -99,6 +99,7 @@
 }
 .agenda .container .horarios-disponiveis .grid-horarios .card-horario{
     padding: 5px 10px;
+    color: var(--primaria);
     border: 1px solid var(--terciaria);
     border-radius: var(--radius);
     cursor: pointer;

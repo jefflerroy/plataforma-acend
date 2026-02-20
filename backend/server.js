@@ -5,6 +5,8 @@ const routes = require('./src/routes');
 const cors = require('cors');
 const privateRoutes = require('./src/privateRoutes');
 const auth = require('./src/auth/auth');
+const cron = require("node-cron");
+const { atualizarAgendamentosConcluidos } = require("./src/controllers/AgendamentoController");
 require('./src/database');
 
 const app = express();
@@ -50,3 +52,7 @@ app.use(routes);
 app.use('*', auth.tokenValited);
 app.use(privateRoutes);
 server.listen(3333);
+
+cron.schedule("* * * * *", async () => {
+    await atualizarAgendamentosConcluidos();
+});

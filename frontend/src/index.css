@@ -60,6 +60,7 @@ div.App {
 
 div.row {
   display: flex;
+  gap: 10px;
 }
 
 div.column {

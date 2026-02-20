@@ -50,6 +50,7 @@ export function Inicio() {
   const [macronutrientes, setMacronutrientes] = useState(null);
   const [totalPosts, setTotalPosts] = useState(null);
   const [openId, setOpenId] = useState(null);
+  const [proximaConsulta, setProximaConsulta] = useState(null);
 
   useEffect(() => {
     async function loadDieta() {
@@ -71,9 +72,24 @@ export function Inicio() {
         console.error(err);
       }
     }
+    async function loadProximaConsulta() {
+      try {
+        const pacienteId = localStorage.getItem("id");
+
+        const response = await api.get("/agendamentos-proxima", {
+          params: { paciente_id: pacienteId }
+        });
+
+        setProximaConsulta(response.data);
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
 
     loadDieta();
     totalPosts();
+    loadProximaConsulta();
   }, []);
 
   function proximaRefeicaoDieta(dieta) {
@@ -158,9 +174,16 @@ export function Inicio() {
       id: "consulta",
       icon: <LuCalendar className="icon" style={{ color: "var(--azul)" }} />,
       titulo: "PRÓXIMA CONSULTA",
-      h2: "14 Mar",
-      info: "15:00 - Dr. Mendes",
-      onClick: () => console.log("consulta"),
+      h2: proximaConsulta
+        ? new Date(proximaConsulta.data).toLocaleDateString("pt-BR", {
+          day: "2-digit",
+          month: "short"
+        })
+        : "Nenhuma",
+      info: proximaConsulta
+        ? `${proximaConsulta.hora.slice(0, 5)} - ${proximaConsulta.profissional?.nome}`
+        : "Nenhuma consulta marcada",
+      onClick: () => navigate('/minha-agenda'),
     },
     {
       id: "massa",

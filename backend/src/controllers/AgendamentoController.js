@@ -4,6 +4,7 @@ const Usuario = require('../models/Usuario');
 const HorarioFuncionamento = require('../models/HorarioFuncionamento');
 const BloqueioAgenda = require('../models/BloqueioAgenda');
 const Configuracoes = require('../models/Configuracoes');
+const connection = require("../database");
 
 function gerarIntervalos(inicio, fim, duracao) {
     const horarios = [];
@@ -20,9 +21,53 @@ function gerarIntervalos(inicio, fim, duracao) {
 
 module.exports = {
 
+    async atualizarAgendamentosConcluidos() {
+        await connection.query(`
+          UPDATE "agendamento"
+          SET status = 'Concluído'
+          WHERE status = 'Agendado'
+          AND (data::timestamp + hora::time) < NOW()
+        `);
+    },
+
+    async proximaConsultaPaciente(req, res) {
+        try {
+            const { paciente_id } = req.query;
+    
+            if (!paciente_id) {
+                return res.status(400).json({ error: "paciente_id é obrigatório" });
+            }
+    
+            const agora = new Date();
+    
+            const proxima = await Agendamento.findOne({
+                where: {
+                    paciente_id,
+                    status: 'Agendado',
+                    [Op.or]: [
+                        { data: { [Op.gt]: agora.toISOString().split('T')[0] } },
+                        {
+                            data: agora.toISOString().split('T')[0],
+                            hora: { [Op.gt]: agora.toTimeString().slice(0, 5) }
+                        }
+                    ]
+                },
+                include: [
+                    { model: Usuario, as: 'profissional' }
+                ],
+                order: [['data', 'ASC'], ['hora', 'ASC']]
+            });
+    
+            return res.json(proxima);
+    
+        } catch (err) {
+            return res.status(400).json({ error: err.message });
+        }
+    },    
+
     async disponiveis(req, res) {
         try {
-            const { profissional_id, data } = req.query;            
+            const { profissional_id, data } = req.query;
 
             const config = await Configuracoes.findOne();
 
@@ -42,11 +87,11 @@ module.exports = {
                     ativo: true
                 }
             });
-            
+
             if (!horario) return res.json([]);
             console.log('teste');
             console.log(horario.intervalo_atendimento);
-            
+
             const duracao = horario.intervalo_atendimento;
 
             let horarios = gerarIntervalos(
@@ -93,7 +138,7 @@ module.exports = {
 
         } catch (err) {
             console.log(err);
-            
+
             return res.status(400).json({ error: err.message });
         }
     },

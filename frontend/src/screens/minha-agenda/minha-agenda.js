@@ -1,138 +1,275 @@
 import "./minha-agenda.css";
 import { Header } from "../../components/header/header";
+import { useEffect, useState } from "react";
+import api from "../../services/api";
+import { Select } from "../../components/select/select";
+import { Input } from "../../components/input/input";
+import { toast } from "react-toastify";
 
 export function MinhaAgenda() {
+
+  const pacienteId = Number(localStorage.getItem("id"));
+  const whatsappNumero = "557592641500";
+
+  const [agendamentos, setAgendamentos] = useState([]);
+  const [profissionais, setProfissionais] = useState([]);
+  const [horariosDisponiveis, setHorariosDisponiveis] = useState([]);
+  const [cadastrar, setCadastrar] = useState(false);
+
+  const [form, setForm] = useState({
+    profissional_id: "",
+    tipo: "",
+    data: "",
+    hora: "",
+    local: "",
+    observacao: ""
+  });
+
+  useEffect(() => {
+    carregarAgendamentos();
+    carregarProfissionais();
+  }, []);
+
+  useEffect(() => {
+    carregarHorarios();
+  }, [form.profissional_id, form.data]);
+
+  async function carregarAgendamentos() {
+    try {
+      const response = await api.get("/agendamentos", {
+        params: { paciente_id: pacienteId }
+      });
+      setAgendamentos(response.data);
+    } catch {
+      console.error("Erro ao carregar agendamentos");
+    }
+  }
+
+  async function carregarProfissionais() {
+    try {
+      const response = await api.get("/profissionais");
+      setProfissionais(response.data);
+    } catch {
+      console.error("Erro ao carregar profissionais");
+    }
+  }
+
+  async function carregarHorarios() {
+    if (!form.profissional_id || !form.data) {
+      setHorariosDisponiveis([]);
+      return;
+    }
+
+    try {
+      const response = await api.get("/agendamentos-disponiveis", {
+        params: {
+          profissional_id: form.profissional_id,
+          data: form.data
+        }
+      });
+
+      setHorariosDisponiveis(response.data);
+    } catch {
+      setHorariosDisponiveis([]);
+    }
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    try {
+      await api.post("/agendamentos", {
+        ...form,
+        paciente_id: pacienteId,
+        status: "Agendado"
+      });
+
+      toast.success("Agendamento criado com sucesso");
+      setCadastrar(false);
+      setForm({
+        profissional_id: "",
+        tipo: "",
+        data: "",
+        hora: "",
+        local: "",
+        observacao: ""
+      });
+      carregarAgendamentos();
+    } catch (err) {
+      toast.error("Erro ao criar agendamento");
+    }
+  }
+
+  function abrirWhatsApp(ag) {
+    const mensagem = `Olá, gostaria de reagendar minha consulta do dia ${ag.data} às ${ag.hora.slice(0, 5)} com ${ag.profissional?.nome}.`;
+    const url = `https://wa.me/${whatsappNumero}?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, "_blank");
+  }
+
+  function formatarData(data) {
+    const date = new Date(data + "T00:00:00");
+    const meses = [
+      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+    return {
+      mes: meses[date.getMonth()],
+      dia: date.getDate()
+    };
+  }
+
+  const futuros = agendamentos.filter(a => a.status !== "Concluído");
+  const historico = agendamentos.filter(a => a.status === "Concluído");
+
   return (
     <>
       <Header nome="Minha Agenda" />
+
       <div className="minha-agenda">
         <div className="container">
+
           <div className="cabecalho">
             <div>
               <h2>Minha Agenda</h2>
               <p>Gerencie suas consultas e exames Ascend.</p>
             </div>
 
-            <button>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
+            <button onClick={() => setCadastrar(!cadastrar)}>
               Novo Agendamento
             </button>
           </div>
 
-          <div className="agendamento">
-            <div className="dados">
-              <div className="data">
-                <span className="mes">Março</span>
-                <span className="dia">14</span>
+          {cadastrar && (
+            <form className="novo-agendamento" onSubmit={handleSubmit}>
+
+              <div className="row">
+                <Select
+                  label="Profissional"
+                  value={form.profissional_id}
+                  onChange={(value) =>
+                    setForm(prev => ({ ...prev, profissional_id: Number(value) }))
+                  }
+                  options={[
+                    { value: "", label: "Selecione um profissional" },
+                    ...profissionais.map(p => ({
+                      value: p.id,
+                      label: p.nome
+                    }))
+                  ]}
+                />
+
+                <Input
+                  type="date"
+                  label="Data"
+                  name="data"
+                  value={form.data}
+                  onChange={(e) =>
+                    setForm(prev => ({ ...prev, data: e.target.value }))
+                  }
+                />
               </div>
 
-              <div className="info">
-                <div className="status">
-                  <span>Consulta</span>
-                  <span>Confirmado</span>
+              {horariosDisponiveis.length > 0 && (
+                <div className="horarios-disponiveis">
+                  {horariosDisponiveis.map(h => (
+                    <div
+                      key={h}
+                      className={`card-horario ${form.hora === h ? "selected" : ""}`}
+                      onClick={() =>
+                        setForm(prev => ({ ...prev, hora: h }))
+                      }
+                    >
+                      {h}
+                    </div>
+                  ))}
                 </div>
-                <h3>Dr. Fernando Mendes</h3>
-                <div className="local">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                  </svg>
-                  <span>15:00</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path
-                      d="M20 10c0 4.993-5.539 10.193-7.399 11.799
-                     a1 1 0 0 1-1.202 0
-                     C9.539 20.193 4 14.993 4 10
-                     a8 8 0 0 1 16 0"
-                    ></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  <span>Clínica Ascend - Jardins</span>
+              )}
+
+              <div className="row">
+                <Select
+                  label="Tipo"
+                  value={form.tipo}
+                  onChange={(value) =>
+                    setForm(prev => ({ ...prev, tipo: value }))
+                  }
+                  options={[
+                    { value: "", label: "Selecione um tipo" },
+                    { value: "Consulta", label: "Consulta" },
+                    { value: "Exame", label: "Exame" }
+                  ]}
+                />
+
+                <Input
+                  label="Local"
+                  name="local"
+                  value={form.local}
+                  onChange={(e) =>
+                    setForm(prev => ({ ...prev, local: e.target.value }))
+                  }
+                />
+              </div>
+
+              <Input
+                label="Observação"
+                name="observacao"
+                value={form.observacao}
+                onChange={(e) =>
+                  setForm(prev => ({ ...prev, observacao: e.target.value }))
+                }
+              />
+
+              <button disabled={!form.hora}>
+                Salvar
+              </button>
+            </form>
+          )}
+
+          {futuros.map((ag) => {
+            const { mes, dia } = formatarData(ag.data);
+
+            return (
+              <div className="agendamento" key={ag.id}>
+                <div className="dados">
+                  <div className="data">
+                    <span className="mes">{mes}</span>
+                    <span className="dia">{dia}</span>
+                  </div>
+
+                  <div className="info">
+                    <div className="status">
+                      <span>{ag.tipo}</span>
+                      <span>{ag.status}</span>
+                    </div>
+                    <h3>{ag.profissional?.nome}</h3>
+                    <div className="local">
+                      <span>{ag.hora.slice(0, 5)}</span>
+                      <span>{ag.local || "Clínica Ascend"}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="acoes">
+                  <button onClick={() => abrirWhatsApp(ag)}>
+                    Reagendar
+                  </button>
                 </div>
               </div>
-            </div>
+            );
+          })}
 
-            <div className="acoes">
-              <button>Reagendar</button>
-
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <circle cx="12" cy="12" r="1"></circle>
-                <circle cx="12" cy="5" r="1"></circle>
-                <circle cx="12" cy="19" r="1"></circle>
-              </svg>
+          {historico.length > 0 && (
+            <div className="historico">
+              <h4>Histórico</h4>
+              {historico.map((ag) => (
+                <p key={ag.id}>
+                  {ag.data} - {ag.tipo} com {ag.profissional?.nome}
+                </p>
+              ))}
             </div>
-          </div>
-          <div className="historico">
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M8 2v4"></path>
-                <path d="M16 2v4"></path>
-                <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-                <path d="M3 10h18"></path>
-              </svg>
-            </div>
+          )}
 
-            <h4>Nenhuma consulta anterior registrada</h4>
-            <p>
-              Suas consultas concluídas aparecerão aqui para fácil consulta de histórico.
-            </p>
-          </div>
         </div>
       </div>
-
     </>
   );
 }

@@ -7,6 +7,7 @@ import { socket } from "../../services/socket";
 import { Input } from "../../components/input/input";
 import { Select } from "../../components/select/select";
 import { IoSearch } from "react-icons/io5";
+import { Modal } from "../../components/modal/modal";
 
 export function Agenda() {
 
@@ -25,6 +26,8 @@ export function Agenda() {
   const [buscaPaciente, setBuscaPaciente] = useState("");
   const [pacientesModal, setPacientesModal] = useState([]);
   const [pacienteSelecionado, setPacienteSelecionado] = useState(null);
+  const [modalExcluirAberto, setModalExcluirAberto] = useState(false);
+  const [agendamentoParaExcluir, setAgendamentoParaExcluir] = useState(null);
 
 
   const [form, setForm] = useState({
@@ -201,6 +204,35 @@ export function Agenda() {
     }
   }
 
+  function confirmarExclusao(id) {
+    setAgendamentoParaExcluir(id);
+    setModalExcluirAberto(true);
+  }
+
+
+  async function handleConfirmarExclusao() {
+    try {
+      await api.delete(`/agendamentos/${agendamentoParaExcluir}`);
+
+      setAgendamentos(prev =>
+        prev.filter(a => a.id !== agendamentoParaExcluir)
+      );
+
+      toast.success("Agendamento removido com sucesso");
+
+      setModalExcluirAberto(false);
+      setAgendamentoParaExcluir(null);
+
+      if (editandoId === agendamentoParaExcluir) {
+        resetForm();
+      }
+
+    } catch {
+      toast.error("Erro ao remover agendamento");
+    }
+  }
+
+
   function handleEditar(ag) {
     setForm({
       paciente_id: ag.paciente_id,
@@ -358,6 +390,17 @@ export function Agenda() {
                 </button>
               </div>
 
+              {
+                editandoId &&
+                <button
+                  type="button"
+                  className="delete"
+                  onClick={() => confirmarExclusao(editandoId)}
+                >
+                  Excluir
+                </button>
+
+              }
             </form>
           ) : (
             <button onClick={() => setCadastrar(true)}>
@@ -473,6 +516,19 @@ export function Agenda() {
           </div>
         </div>
       )}
+      <Modal
+        isOpen={modalExcluirAberto}
+        title="Excluir agendamento"
+        message="Tem certeza que deseja excluir este agendamento? Essa ação não pode ser desfeita."
+        confirmText="Excluir"
+        cancelText="Cancelar"
+        onCancel={() => {
+          setModalExcluirAberto(false);
+          setAgendamentoParaExcluir(null);
+        }}
+        onConfirm={handleConfirmarExclusao}
+      />
+
     </>
   );
 }
