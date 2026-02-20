@@ -37,7 +37,9 @@ export function Login() {
         window.socket.connect();
       }
 
-      navigate("/inicio");
+
+
+      navigate(`/${usuario.tipo === 'paciente' ? 'inicio' : 'agenda'}`);
     } catch (err) {
       setErro(err.response?.data?.error || "Erro ao realizar login.");
     } finally {

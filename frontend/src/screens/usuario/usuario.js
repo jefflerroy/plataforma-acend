@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../services/api";
+import { socket } from "../../services/socket";
 import { Input } from "../../components/input/input";
 import { Select } from "../../components/select/select";
 import { Modal } from "../../components/modal/modal";
@@ -36,6 +37,27 @@ export function Usuario() {
     tipo: ""
   });
 
+  const [horarios, setHorarios] = useState([]);
+  const [novoHorario, setNovoHorario] = useState({
+    id: null,
+    dia_semana: '',
+    hora_inicio: '',
+    intervalo_inicio: '',
+    intervalo_fim: '',
+    hora_fim: '',
+    intervalo_atendimento: '',
+    ativo: true
+  });
+
+  const [bloqueios, setBloqueios] = useState([]);
+  const [novoBloqueio, setNovoBloqueio] = useState({
+    id: null,
+    data_inicio: '',
+    data_fim: '',
+    motivo: ''
+  });
+
+
   useEffect(() => {
     async function carregarDados() {
       try {
@@ -47,6 +69,16 @@ export function Usuario() {
             ...data,
             data_nascimento: formatarDataISO(data.data_nascimento)
           });
+
+          if (data.tipo === 'medico') {
+            const responseHorarios = await api.get(`/horarios/${id}`);
+            setHorarios(responseHorarios.data);
+
+            const responseBloqueios = await api.get(`/bloqueios`);
+            const filtrados = responseBloqueios.data.filter(b => String(b.usuario_id) === String(id));
+            setBloqueios(filtrados);
+          }
+
         }
       } catch {
         toast.error("Erro ao carregar dados");
@@ -58,12 +90,91 @@ export function Usuario() {
     carregarDados();
   }, [id, isEdicao]);
 
+  useEffect(() => {
+    function onCreated(data) {
+      if (String(data.data.usuario_id) !== String(id)) return;
+
+      setHorarios(prev => {
+        const index = prev.findIndex(h => h.id === data.id);
+
+        if (index !== -1) {
+          const atualizados = [...prev];
+          atualizados[index] = data.data;
+          return atualizados;
+        }
+
+        return [...prev, data.data];
+      });
+    }
+
+    function onUpdated(data) {
+      if (String(data.data.usuario_id) !== String(id)) return;
+
+      setHorarios(prev =>
+        prev.map(h => h.id === data.id ? data.data : h)
+      );
+    }
+
+    function onDeleted(data) {
+      setHorarios(prev =>
+        prev.filter(h => h.id !== data.id)
+      );
+    }
+
+    function onBloqueioCreated(data) {
+      if (String(data.data.usuario_id) !== String(id)) return;
+
+      setBloqueios(prev => {
+        const index = prev.findIndex(b => b.id === data.id);
+        if (index !== -1) {
+          const atualizados = [...prev];
+          atualizados[index] = data.data;
+          return atualizados;
+        }
+        return [...prev, data.data];
+      });
+    }
+
+    function onBloqueioUpdated(data) {
+      if (String(data.data.usuario_id) !== String(id)) return;
+
+      setBloqueios(prev =>
+        prev.map(b => b.id === data.id ? data.data : b)
+      );
+    }
+
+    function onBloqueioDeleted(data) {
+      setBloqueios(prev =>
+        prev.filter(b => b.id !== data.id)
+      );
+    }
+
+    socket.on("horario:created", onCreated);
+    socket.on("horario:updated", onUpdated);
+    socket.on("horario:deleted", onDeleted);
+    socket.on("bloqueio:created", onBloqueioCreated);
+    socket.on("bloqueio:updated", onBloqueioUpdated);
+    socket.on("bloqueio:deleted", onBloqueioDeleted);
+
+
+    return () => {
+      socket.off("horario:created", onCreated);
+      socket.off("horario:updated", onUpdated);
+      socket.off("horario:deleted", onDeleted);
+      socket.off("bloqueio:created", onBloqueioCreated);
+      socket.off("bloqueio:updated", onBloqueioUpdated);
+      socket.off("bloqueio:deleted", onBloqueioDeleted);
+
+    };
+  }, [id]);
+
+
   async function handleExcluir() {
     try {
       await api.delete(`/usuarios/${id}`);
       toast.success("Usuario excluído com sucesso");
       navigate('/usuarios')
-    } catch (error){
+    } catch (error) {
       toast.error(error.response?.data?.error || "Erro ao excluir usuario");
     }
   }
@@ -175,6 +286,168 @@ export function Usuario() {
     }));
   };
 
+  async function salvarHorario() {
+    if (!novoHorario.dia_semana || !novoHorario.hora_inicio || !novoHorario.intervalo_inicio || !novoHorario.intervalo_fim || !novoHorario.hora_fim) {
+      toast.error("Preencha todos os campos do horário");
+      return;
+    }
+
+    try {
+      if (novoHorario.id) {
+        const response = await api.put(`/horarios/${novoHorario.id}`, novoHorario);
+
+        setHorarios(prev =>
+          prev.map(h => h.id === response.data.id ? response.data : h)
+        );
+
+        toast.success("Horário atualizado com sucesso");
+      } else {
+        const response = await api.post(`/horarios`, {
+          ...novoHorario,
+          usuario_id: id
+        });
+
+        setHorarios(prev => {
+          const index = prev.findIndex(h => h.id === response.data.id);
+
+          if (index !== -1) {
+            const atualizados = [...prev];
+            atualizados[index] = response.data;
+            return atualizados;
+          }
+
+          return [...prev, response.data];
+        });
+
+        toast.success("Horário criado com sucesso");
+      }
+
+      setNovoHorario({
+        id: null,
+        dia_semana: '',
+        hora_inicio: '',
+        intervalo_inicio: '',
+        intervalo_fim: '',
+        hora_fim: '',
+        intervalo_atendimento: '',
+        ativo: true
+      });
+
+    } catch (error) {
+      toast.error("Erro ao salvar horário");
+    }
+  }
+
+  async function excluirHorario(idHorario) {
+    try {
+      await api.delete(`/horarios/${idHorario}`);
+      setHorarios(prev => prev.filter(h => h.id !== idHorario));
+
+      toast.success("Horário removido com sucesso");
+    } catch {
+      toast.error("Erro ao remover horário");
+    }
+  }
+
+
+  function editarHorario(horario) {
+    setNovoHorario({
+      id: horario.id,
+      dia_semana: horario.dia_semana,
+      hora_inicio: horario.hora_inicio,
+      intervalo_inicio: horario.intervalo_inicio,
+      intervalo_fim: horario.intervalo_fim,
+      hora_fim: horario.hora_fim,
+      intervalo_atendimento: horario.intervalo_atendimento ?? '',
+      ativo: horario.ativo
+    });
+  }
+
+
+  function formatarDia(dia) {
+    const dias = {
+      0: "Domingo",
+      1: "Segunda",
+      2: "Terça",
+      3: "Quarta",
+      4: "Quinta",
+      5: "Sexta",
+      6: "Sábado"
+    };
+
+    return dias[dia] || "";
+  }
+
+  async function salvarBloqueio() {
+    if (!novoBloqueio.data_inicio || !novoBloqueio.data_fim) {
+      toast.error("Informe data início e fim");
+      return;
+    }
+
+    const inicio = new Date(novoBloqueio.data_inicio);
+    const fim = new Date(novoBloqueio.data_fim);
+
+    if (fim <= inicio) {
+      toast.error("A data final não pode ser menor ou igual à data inicial");
+      return;
+    }
+
+    try {
+      if (novoBloqueio.id) {
+        await api.put(`/bloqueios/${novoBloqueio.id}`, novoBloqueio);
+        toast.success("Bloqueio atualizado com sucesso");
+      } else {
+        await api.post(`/bloqueios`, {
+          ...novoBloqueio,
+          usuario_id: id
+        });
+        toast.success("Bloqueio criado com sucesso");
+      }
+
+      setNovoBloqueio({
+        id: null,
+        data_inicio: '',
+        data_fim: '',
+        motivo: ''
+      });
+
+    } catch {
+      toast.error("Erro ao salvar bloqueio");
+    }
+  }
+
+
+  async function excluirBloqueio(idBloqueio) {
+    try {
+      await api.delete(`/bloqueios/${idBloqueio}`);
+      setBloqueios(prev => prev.filter(b => b.id !== idBloqueio));
+
+      toast.success("Bloqueio removido com sucesso");
+    } catch {
+      toast.error("Erro ao remover bloqueio");
+    }
+  }
+
+  function editarBloqueio(bloqueio) {
+    setNovoBloqueio({
+      id: bloqueio.id,
+      data_inicio: formatarParaInput(bloqueio.data_inicio),
+      data_fim: formatarParaInput(bloqueio.data_fim),
+      motivo: bloqueio.motivo || ''
+    });
+  }
+
+  function formatarParaInput(data) {
+    const d = new Date(data);
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, '0');
+    const dia = String(d.getDate()).padStart(2, '0');
+    const hora = String(d.getHours()).padStart(2, '0');
+    const minuto = String(d.getMinutes()).padStart(2, '0');
+
+    return `${ano}-${mes}-${dia}T${hora}:${minuto}`;
+  }
+
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -212,12 +485,14 @@ export function Usuario() {
           <div className="grid">
 
             <h4>Dados</h4>
-
             <div className="row">
               <Input label="Nome" placeholder="Nome" name="nome" value={form.nome} onChange={handleChange} required />
               <Input label="Email" placeholder="Email" name="email" type="email" value={form.email} onChange={handleChange} required />
             </div>
 
+            <div className="row">
+
+            </div>
             <div className="row">
               <Input
                 label="CPF"
@@ -297,6 +572,192 @@ export function Usuario() {
               <Input label="Cidade" placeholder="Cidade" name="cidade" value={form.cidade} onChange={handleChange} />
               <Input label="Estado" placeholder="Estado" name="estado" value={form.estado} onChange={handleChange} />
             </div>
+
+            <div className="divisor-horizontal" />
+
+            {isEdicao && form.tipo === "medico" && (
+              <>
+                <h4>Horários de Atendimento</h4>
+
+                <div className="row">
+                  <Select
+                    label="Dia da semana"
+                    value={novoHorario.dia_semana}
+                    onChange={(value) =>
+                      setNovoHorario(prev => ({
+                        ...prev,
+                        dia_semana: value
+                      }))
+                    }
+                    options={[
+                      { value: '', label: 'Selecione' },
+                      { value: 1, label: 'Segunda' },
+                      { value: 2, label: 'Terça' },
+                      { value: 3, label: 'Quarta' },
+                      { value: 4, label: 'Quinta' },
+                      { value: 5, label: 'Sexta' },
+                      { value: 6, label: 'Sábado' },
+                      { value: 0, label: 'Domingo' },
+                    ]}
+                  />
+                  <Input
+                    type="number"
+                    label="Intervalo entre horários(min)"
+                    placeholder="Intervalo entre horários(min)"
+                    value={Number(novoHorario.intervalo_atendimento)}
+                    onChange={(e) =>
+                      setNovoHorario(prev => ({
+                        ...prev,
+                        intervalo_atendimento: e.target.value
+                      }))
+                    }
+                  />
+                </div>
+                <div className="row">
+                  <Input
+                    label="Hora início"
+                    type="time"
+                    value={novoHorario.hora_inicio}
+                    onChange={(e) =>
+                      setNovoHorario(prev => ({
+                        ...prev,
+                        hora_inicio: e.target.value
+                      }))
+                    }
+                  />
+
+                  <Input
+                    label="Intervalo início"
+                    type="time"
+                    value={novoHorario.intervalo_inicio}
+                    onChange={(e) =>
+                      setNovoHorario(prev => ({
+                        ...prev,
+                        intervalo_inicio: e.target.value
+                      }))
+                    }
+                  />
+
+                  <Input
+                    label="Intervalo fim"
+                    type="time"
+                    value={novoHorario.intervalo_fim}
+                    onChange={(e) =>
+                      setNovoHorario(prev => ({
+                        ...prev,
+                        intervalo_fim: e.target.value
+                      }))
+                    }
+                  />
+
+                  <Input
+                    label="Hora fim"
+                    type="time"
+                    value={novoHorario.hora_fim}
+                    onChange={(e) =>
+                      setNovoHorario(prev => ({
+                        ...prev,
+                        hora_fim: e.target.value
+                      }))
+                    }
+                  />
+
+                </div>
+                <button type="button" onClick={salvarHorario}>
+                  {novoHorario.id ? "Atualizar" : "Adicionar"}
+                </button>
+
+                <div className="horarios">
+                  {horarios.map(h => (
+                    <div key={h.id} className="horario">
+                      <span>
+                        {formatarDia(h.dia_semana)} - {h.hora_inicio.slice(0, 5)}h às {h.hora_fim.slice(0, 5)}h
+                      </span>
+
+                      <div className="row">
+                        <button type="button" onClick={() => editarHorario(h)}>
+                          Editar
+                        </button>
+
+                        <button type="button" className="delete" onClick={() => excluirHorario(h.id)}>
+                          Excluir
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+
+
+            <div className="divisor-horizontal" />
+
+            <h4>Bloqueios de Agenda</h4>
+
+            <div className="row">
+              <Input
+                label="Data início"
+                type="datetime-local"
+                value={novoBloqueio.data_inicio}
+                onChange={(e) =>
+                  setNovoBloqueio(prev => ({
+                    ...prev,
+                    data_inicio: e.target.value
+                  }))
+                }
+              />
+
+              <Input
+                label="Data fim"
+                type="datetime-local"
+                min={novoBloqueio.data_inicio}
+                value={novoBloqueio.data_fim}
+                onChange={(e) =>
+                  setNovoBloqueio(prev => ({
+                    ...prev,
+                    data_fim: e.target.value
+                  }))
+                }
+              />
+
+              <Input
+                label="Motivo"
+                value={novoBloqueio.motivo}
+                onChange={(e) =>
+                  setNovoBloqueio(prev => ({
+                    ...prev,
+                    motivo: e.target.value
+                  }))
+                }
+              />
+
+              <button type="button" onClick={salvarBloqueio}>
+                {novoBloqueio.id ? "Atualizar" : "Adicionar"}
+              </button>
+            </div>
+
+            <div className="horarios">
+              {bloqueios.map(b => (
+                <div key={b.id} className="bloqueio">
+                  <span>
+                    {new Date(b.data_inicio).toLocaleString()} até {new Date(b.data_fim).toLocaleString()}
+                    {b.motivo && ` - ${b.motivo}`}
+                  </span>
+
+                  <div className="row">
+                    <button type="button" onClick={() => editarBloqueio(b)}>
+                      Editar
+                    </button>
+
+                    <button type="button" className="delete" onClick={() => excluirBloqueio(b.id)}>
+                      Excluir
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="divisor-horizontal" />
 
             <div className="row">
               <button type="button" className="cancel" disabled={salvando} onClick={() => navigate('/usuarios')}>

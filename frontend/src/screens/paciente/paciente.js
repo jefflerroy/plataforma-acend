@@ -390,7 +390,7 @@ export function Paciente() {
         </form>
         {modalAberto && (
           <div className="modal-overlay" onClick={() => setModalAberto(false)}>
-            <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-select" onClick={(e) => e.stopPropagation()}>
               <h3>Selecionar dieta</h3>
 
               <input
@@ -400,11 +400,11 @@ export function Paciente() {
                 onChange={(e) => setBuscaModal(e.target.value)}
               />
 
-              <div className="dietas-list">
+              <div className="list">
                 {dietasModal.map((dieta) => (
                   <div
                     key={dieta.id}
-                    className="dieta"
+                    className="item"
                     onClick={() => setDietaSelecionada(dieta)}
                     id={dietaSelecionada?.id === dieta.id ? "ativo" : ""}
                     style={{ cursor: "pointer" }}

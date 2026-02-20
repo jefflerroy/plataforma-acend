@@ -16,6 +16,8 @@ import { Dietas } from './screens/dietas/dietas';
 import { MeuPerfil } from './screens/meu-perfil/meu-perfil';
 import { Usuarios } from './screens/usuarios/usuarios';
 import { Usuario } from './screens/usuario/usuario';
+import { Configuracoes } from './screens/configuracoes/configuracoes';
+import { Agenda } from './screens/agenda/agenda';
 
 function LayoutComMenu() {
   return (
@@ -44,6 +46,8 @@ function App() {
 
         <Route element={<LayoutComMenu />}>
           <Route path="/inicio" element={<Inicio />} />
+          <Route path="/agenda" element={<Agenda />} />
+          <Route path="/configuracoes" element={<Configuracoes />} />
           <Route path="/minha-dieta" element={<MinhaDieta />} />
           <Route path="/meu-perfil" element={<MeuPerfil />} />
           <Route path="/dietas" element={<Dietas />} />

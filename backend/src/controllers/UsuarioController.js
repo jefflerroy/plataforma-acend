@@ -94,13 +94,24 @@ module.exports = {
 
     async listPacientes(req, res) {
         try {
-            if (!isAdmin(req)) {
-                return res.status(403).json({ error: 'Acesso negado.' });
-            }
-
             const usuarios = await Usuario.findAll({
                 where: {
                     tipo: 'paciente'
+                },
+                order: [['id', 'DESC']],
+            });
+
+            return res.json(usuarios.map(sanitize));
+        } catch (err) {
+            return res.status(400).json({ error: err.message });
+        }
+    },
+
+    async listProfissionais(req, res) {
+        try {
+            const usuarios = await Usuario.findAll({
+                where: {
+                    tipo: 'medico'
                 },
                 order: [['id', 'DESC']],
             });

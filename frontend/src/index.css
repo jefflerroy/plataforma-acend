@@ -95,22 +95,25 @@ button {
 button:hover {
   background-color: var(--secundaria);
 }
+
 button.cancel {
   background-color: transparent;
   border: 1px solid var(--terciaria);
   color: var(--terciaria);
 }
+
 button.cancel:hover {
   background-color: transparent;
   border: 1px solid var(--secundaria);
   color: var(--secundaria);
 }
+
 button.delete {
   background-color: var(--vermelho);
   color: white;
 }
 
-.divisor-horizontal{
+.divisor-horizontal {
   width: 100%;
   border-bottom: 1px solid var(--borda);
   margin-top: 5px;
@@ -155,4 +158,44 @@ table tbody tr:hover {
 
 table tbody tr:last-child {
   border-bottom: none;
+}
+
+.modal-select {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  
+  background: white;
+  padding: 30px;
+  border-radius: var(--radius);  
+  gap: 10px;
+  width: 40%;
+  max-width: 90%;
+}
+
+.modal-select .list {
+  padding: 0;
+  display: grid;
+  flex-direction: column;
+  height: 200px;
+  overflow: auto;
+  gap: 5px;
+
+}
+
+.modal-select .list .item {
+  width: 100%;
+  height: fit-content;
+  padding: 10px;
+  padding-left: 15px;
+  border: 1px solid var(--borda);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.modal-select .list .item:hover {
+  background-color: var(--primaria-fundo);
+}
+
+.modal-select .list .item#ativo {
+  background-color: var(--primaria-fundo);
 }

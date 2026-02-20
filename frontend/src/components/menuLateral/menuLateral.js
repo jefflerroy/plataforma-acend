@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { ImSpoonKnife } from "react-icons/im";
 import { LuLayoutDashboard, LuCalendar } from "react-icons/lu";
 import { FaArrowTrendUp } from "react-icons/fa6";
-import { MdOutlineChatBubbleOutline, MdOutlinePeopleAlt } from "react-icons/md";
+import { MdOutlineChatBubbleOutline, MdOutlinePeopleAlt, MdOutlineSettings } from "react-icons/md";
 import { FaRegFileAlt } from "react-icons/fa";
 
 import logoPequena from '../../assets/logoPequena.png'
@@ -71,6 +71,12 @@ export function MenuLateral() {
             roles: ['paciente']
         },
         {
+            text: 'Agenda',
+            rota: 'agenda',
+            icon: <LuCalendar className='icon' />,
+            roles: ['admin', 'medico']
+        },
+        {
             text: 'Minha Dieta',
             rota: 'minha-dieta',
             icon: <ImSpoonKnife className='icon' />,
@@ -81,7 +87,7 @@ export function MenuLateral() {
             rota: 'usuarios',
             icon: <MdOutlinePeopleAlt className='icon' />,
             roles: ['admin']
-        },
+        },        
         {
             text: 'Pacientes',
             rota: 'pacientes',
@@ -129,6 +135,12 @@ export function MenuLateral() {
             rota: 'duvidas-ia',
             icon: <MdOutlineChatBubbleOutline className='icon' />,
             roles: ['paciente']
+        },
+        {
+            text: 'Configurações',
+            rota: 'configuracoes',
+            icon: <MdOutlineSettings className='icon' />,
+            roles: ['admin']
         },
     ];
 
