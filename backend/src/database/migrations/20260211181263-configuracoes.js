@@ -1,6 +1,5 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('configuracoes', {
@@ -19,13 +18,14 @@ module.exports = {
       },
 
       bloquear_agendamentos: {
-        type: Sequelize.DATE,
+        type: Sequelize.BOOLEAN,
         allowNull: false,
+        defaultValue: false
       },
 
       chatpgt_key: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
 
       whatsapp_agendamentos: {
@@ -43,6 +43,17 @@ module.exports = {
         allowNull: false,
       },
     });
+
+    await queryInterface.bulkInsert('configuracoes', [
+      {
+        unico: true,
+        bloquear_agendamentos: false,
+        chatpgt_key: null,
+        whatsapp_agendamentos: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+    ]);
   },
 
   async down(queryInterface) {

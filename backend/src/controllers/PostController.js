@@ -38,10 +38,7 @@ module.exports = {
 
             const postsComCurtido = posts.map(post => {
                 const curtido = post.curtidas.some(c => c.usuario_id === usuarioLogadoId);
-                return {
-                    ...post.toJSON(),
-                    curtido
-                };
+                return { ...post.toJSON(), curtido };
             });
 
             return res.json(postsComCurtido);
@@ -84,6 +81,7 @@ module.exports = {
                         include: [{ model: Usuario, as: 'usuario' }],
                     },
                 ],
+                order: [[{ model: PostComentario, as: 'comentarios' }, 'id', 'DESC']],
             });
 
             if (!post) return res.status(404).json({ error: 'Post não encontrado' });
@@ -115,6 +113,13 @@ module.exports = {
         try {
             const post = await Post.findByPk(req.params.id);
             if (!post) return res.status(404).json({ error: 'Post não encontrado' });
+
+            const usuarioId = req.user.id;
+            const isAdmin = req.user.tipo === 'admin';
+
+            if (!isAdmin && post.usuario_id !== usuarioId) {
+                return res.status(403).json({ error: 'Sem permissão' });
+            }
 
             const id = post.id;
             await post.destroy();
@@ -182,18 +187,58 @@ module.exports = {
             const novo = await PostComentario.create({ post_id, usuario_id, comentario });
             await Post.increment('total_comentarios', { by: 1, where: { id: post_id } });
 
+            const completo = await PostComentario.findByPk(novo.id, {
+                include: [{ model: Usuario, as: 'usuario' }],
+            });
+
             const post = await Post.findByPk(post_id, {
                 attributes: ['id', 'total_curtidas', 'total_comentarios'],
             });
 
+            req.io?.emit('post_comentario:created', { id: completo.id, data: completo });
             req.io?.emit('post:commented', {
                 post_id,
                 usuario_id,
-                comentario: novo,
+                comentario: completo,
                 total_comentarios: post?.total_comentarios ?? null,
             });
 
-            return res.json({ ok: true, comentario: novo, post });
+            return res.json({ ok: true, comentario: completo, post });
+        } catch (err) {
+            return res.status(400).json({ error: err.message });
+        }
+    },
+
+    async deleteComment(req, res) {
+        try {
+            const comentario = await PostComentario.findByPk(req.params.id);
+            if (!comentario) return res.status(404).json({ error: 'Comentário não encontrado' });
+
+            const usuarioId = req.user.id;
+            const isAdmin = req.user.tipo === 'admin';
+
+            if (!isAdmin && comentario.usuario_id !== usuarioId) {
+                return res.status(403).json({ error: 'Sem permissão' });
+            }
+
+            const postId = comentario.post_id;
+            const id = comentario.id;
+
+            await comentario.destroy();
+            await Post.decrement('total_comentarios', { by: 1, where: { id: postId } });
+
+            const post = await Post.findByPk(postId, {
+                attributes: ['id', 'total_comentarios'],
+            });
+
+            req.io?.emit('post_comentario:deleted', { id, post_id: postId });
+            req.io?.emit('post:commentDeleted', {
+                post_id: postId,
+                total_comentarios: post?.total_comentarios ?? null,
+                comentario_id: id,
+            });
+
+            return res.json({ ok: true });
         } catch (err) {
             return res.status(400).json({ error: err.message });
         }

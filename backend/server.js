@@ -53,6 +53,6 @@ app.use('*', auth.tokenValited);
 app.use(privateRoutes);
 server.listen(3333);
 
-cron.schedule("* * * * *", async () => {
-    await atualizarAgendamentosConcluidos();
-});
+// cron.schedule("* * * * *", async () => {
+//     await atualizarAgendamentosConcluidos();
+// });

@@ -5,16 +5,20 @@ import api from "../../services/api";
 import { Select } from "../../components/select/select";
 import { Input } from "../../components/input/input";
 import { toast } from "react-toastify";
+import { socket } from "../../services/socket";
 
 export function MinhaAgenda() {
-
   const pacienteId = Number(localStorage.getItem("id"));
-  const whatsappNumero = "557592641500";
 
   const [agendamentos, setAgendamentos] = useState([]);
   const [profissionais, setProfissionais] = useState([]);
   const [horariosDisponiveis, setHorariosDisponiveis] = useState([]);
   const [cadastrar, setCadastrar] = useState(false);
+
+  const [config, setConfig] = useState({
+    bloquear_agendamentos: false,
+    whatsapp_agendamentos: null,
+  });
 
   const [form, setForm] = useState({
     profissional_id: "",
@@ -22,10 +26,11 @@ export function MinhaAgenda() {
     data: "",
     hora: "",
     local: "",
-    observacao: ""
+    observacao: "",
   });
 
   useEffect(() => {
+    carregarConfig();
     carregarAgendamentos();
     carregarProfissionais();
   }, []);
@@ -34,10 +39,81 @@ export function MinhaAgenda() {
     carregarHorarios();
   }, [form.profissional_id, form.data]);
 
+  useEffect(() => {
+    const onConfigUpdated = (data) => {
+      setConfig({
+        bloquear_agendamentos: !!data.bloquear_agendamentos,
+        whatsapp_agendamentos: data.whatsapp_agendamentos || null,
+      });
+
+      if (!!data.bloquear_agendamentos) {
+        setCadastrar(false);
+        setForm({
+          profissional_id: "",
+          tipo: "",
+          data: "",
+          hora: "",
+          local: "",
+          observacao: "",
+        });
+      }
+    };
+
+    const onAgendamentoCreated = (ag) => {
+      if (Number(ag.paciente_id) !== pacienteId) return;
+      setAgendamentos((prev) => [ag, ...prev]);
+    };
+
+    const onAgendamentoUpdated = (ag) => {
+      if (Number(ag.paciente_id) !== pacienteId) return;
+      setAgendamentos((prev) => prev.map((x) => (x.id === ag.id ? ag : x)));
+    };
+
+    const onAgendamentoDeleted = (payload) => {
+      const id = payload?.id ?? payload;
+      setAgendamentos((prev) => prev.filter((x) => x.id !== id));
+    };
+
+    socket.on("configuracoes:updated", onConfigUpdated);
+    socket.on("agendamentos:created", onAgendamentoCreated);
+    socket.on("agendamentos:updated", onAgendamentoUpdated);
+    socket.on("agendamentos:deleted", onAgendamentoDeleted);
+
+    return () => {
+      socket.off("configuracoes:updated", onConfigUpdated);
+      socket.off("agendamentos:created", onAgendamentoCreated);
+      socket.off("agendamentos:updated", onAgendamentoUpdated);
+      socket.off("agendamentos:deleted", onAgendamentoDeleted);
+    };
+  }, [pacienteId]);
+
+  function formatarDataBR(data) {
+    const date = new Date(data + "T00:00:00");
+    const dia = String(date.getDate()).padStart(2, "0");
+    const mes = String(date.getMonth() + 1).padStart(2, "0");
+    const ano = date.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+  }
+
+  async function carregarConfig() {
+    try {
+      const { data } = await api.get("/configuracoes/paciente");
+      setConfig({
+        bloquear_agendamentos: !!data.bloquear_agendamentos,
+        whatsapp_agendamentos: data.whatsapp_agendamentos || null,
+      });
+    } catch {
+      setConfig({
+        bloquear_agendamentos: false,
+        whatsapp_agendamentos: null,
+      });
+    }
+  }
+
   async function carregarAgendamentos() {
     try {
       const response = await api.get("/agendamentos", {
-        params: { paciente_id: pacienteId }
+        params: { paciente_id: pacienteId },
       });
       setAgendamentos(response.data);
     } catch {
@@ -64,8 +140,8 @@ export function MinhaAgenda() {
       const response = await api.get("/agendamentos-disponiveis", {
         params: {
           profissional_id: form.profissional_id,
-          data: form.data
-        }
+          data: form.data,
+        },
       });
 
       setHorariosDisponiveis(response.data);
@@ -81,7 +157,7 @@ export function MinhaAgenda() {
       await api.post("/agendamentos", {
         ...form,
         paciente_id: pacienteId,
-        status: "Agendado"
+        status: "Agendado",
       });
 
       toast.success("Agendamento criado com sucesso");
@@ -92,34 +168,52 @@ export function MinhaAgenda() {
         data: "",
         hora: "",
         local: "",
-        observacao: ""
+        observacao: "",
       });
       carregarAgendamentos();
-    } catch (err) {
+    } catch {
       toast.error("Erro ao criar agendamento");
     }
   }
 
   function abrirWhatsApp(ag) {
-    const mensagem = `Olá, gostaria de reagendar minha consulta do dia ${ag.data} às ${ag.hora.slice(0, 5)} com ${ag.profissional?.nome}.`;
-    const url = `https://wa.me/${whatsappNumero}?text=${encodeURIComponent(mensagem)}`;
+    const numero = String(config.whatsapp_agendamentos || "").replace(/\D/g, "");
+    if (!numero) {
+      toast.error("WhatsApp para agendamentos não configurado");
+      return;
+    }
+
+    const mensagem = `Olá, gostaria de reagendar minha consulta do dia ${formatarDataBR(
+      ag.data
+    )} às ${ag.hora.slice(0, 5)} com ${ag.profissional?.nome}.`;
+    const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
     window.open(url, "_blank");
   }
 
   function formatarData(data) {
     const date = new Date(data + "T00:00:00");
     const meses = [
-      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro",
     ];
     return {
       mes: meses[date.getMonth()],
-      dia: date.getDate()
+      dia: date.getDate(),
     };
   }
 
-  const futuros = agendamentos.filter(a => a.status !== "Concluído");
-  const historico = agendamentos.filter(a => a.status === "Concluído");
+  const futuros = agendamentos.filter((a) => a.status !== "Concluído");
+  const historico = agendamentos.filter((a) => a.status === "Concluído");
 
   return (
     <>
@@ -127,34 +221,37 @@ export function MinhaAgenda() {
 
       <div className="minha-agenda">
         <div className="container">
-
           <div className="cabecalho">
             <div>
               <h2>Minha Agenda</h2>
               <p>Gerencie suas consultas e exames Ascend.</p>
             </div>
 
-            <button onClick={() => setCadastrar(!cadastrar)}>
-              Novo Agendamento
-            </button>
+            {!config.bloquear_agendamentos && (
+              <button onClick={() => setCadastrar(!cadastrar)}>
+                Novo Agendamento
+              </button>
+            )}
           </div>
 
-          {cadastrar && (
+          {cadastrar && !config.bloquear_agendamentos && (
             <form className="novo-agendamento" onSubmit={handleSubmit}>
-
               <div className="row">
                 <Select
                   label="Profissional"
                   value={form.profissional_id}
                   onChange={(value) =>
-                    setForm(prev => ({ ...prev, profissional_id: Number(value) }))
+                    setForm((prev) => ({
+                      ...prev,
+                      profissional_id: Number(value),
+                    }))
                   }
                   options={[
                     { value: "", label: "Selecione um profissional" },
-                    ...profissionais.map(p => ({
+                    ...profissionais.map((p) => ({
                       value: p.id,
-                      label: p.nome
-                    }))
+                      label: p.nome,
+                    })),
                   ]}
                 />
 
@@ -164,20 +261,19 @@ export function MinhaAgenda() {
                   name="data"
                   value={form.data}
                   onChange={(e) =>
-                    setForm(prev => ({ ...prev, data: e.target.value }))
+                    setForm((prev) => ({ ...prev, data: e.target.value }))
                   }
                 />
               </div>
 
               {horariosDisponiveis.length > 0 && (
                 <div className="horarios-disponiveis">
-                  {horariosDisponiveis.map(h => (
+                  {horariosDisponiveis.map((h) => (
                     <div
                       key={h}
-                      className={`card-horario ${form.hora === h ? "selected" : ""}`}
-                      onClick={() =>
-                        setForm(prev => ({ ...prev, hora: h }))
-                      }
+                      className={`card-horario ${form.hora === h ? "selected" : ""
+                        }`}
+                      onClick={() => setForm((prev) => ({ ...prev, hora: h }))}
                     >
                       {h}
                     </div>
@@ -190,12 +286,12 @@ export function MinhaAgenda() {
                   label="Tipo"
                   value={form.tipo}
                   onChange={(value) =>
-                    setForm(prev => ({ ...prev, tipo: value }))
+                    setForm((prev) => ({ ...prev, tipo: value }))
                   }
                   options={[
                     { value: "", label: "Selecione um tipo" },
                     { value: "Consulta", label: "Consulta" },
-                    { value: "Exame", label: "Exame" }
+                    { value: "Exame", label: "Exame" },
                   ]}
                 />
 
@@ -204,7 +300,7 @@ export function MinhaAgenda() {
                   name="local"
                   value={form.local}
                   onChange={(e) =>
-                    setForm(prev => ({ ...prev, local: e.target.value }))
+                    setForm((prev) => ({ ...prev, local: e.target.value }))
                   }
                 />
               </div>
@@ -214,13 +310,11 @@ export function MinhaAgenda() {
                 name="observacao"
                 value={form.observacao}
                 onChange={(e) =>
-                  setForm(prev => ({ ...prev, observacao: e.target.value }))
+                  setForm((prev) => ({ ...prev, observacao: e.target.value }))
                 }
               />
 
-              <button disabled={!form.hora}>
-                Salvar
-              </button>
+              <button disabled={!form.hora}>Salvar</button>
             </form>
           )}
 
@@ -249,9 +343,7 @@ export function MinhaAgenda() {
                 </div>
 
                 <div className="acoes">
-                  <button onClick={() => abrirWhatsApp(ag)}>
-                    Reagendar
-                  </button>
+                  <button onClick={() => abrirWhatsApp(ag)}>Reagendar</button>
                 </div>
               </div>
             );
@@ -262,12 +354,12 @@ export function MinhaAgenda() {
               <h4>Histórico</h4>
               {historico.map((ag) => (
                 <p key={ag.id}>
-                  {ag.data} - {ag.tipo} com {ag.profissional?.nome}
+                  {formatarDataBR(ag.data)} - {ag.tipo} com{" "}
+                  {ag.profissional?.nome}
                 </p>
               ))}
             </div>
           )}
-
         </div>
       </div>
     </>

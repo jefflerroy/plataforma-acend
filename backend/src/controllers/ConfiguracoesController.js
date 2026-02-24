@@ -20,6 +20,24 @@ module.exports = {
         }
     },
 
+    async getPaciente(req, res) {
+        try {
+            const config = await Configuracoes.findOne({
+                attributes: {
+                    exclude: ['unico', 'chatpgt_key']
+                }
+            });
+
+            if (!config) {
+                return res.status(404).json({ error: 'Configurações não encontradas.' });
+            }
+
+            return res.json(config);
+        } catch (err) {
+            return res.status(400).json({ error: err.message });
+        }
+    },
+
     async update(req, res) {
         try {
             if (!isAdmin(req)) {

@@ -32,7 +32,7 @@
     width: 100%;
     gap: 10px;
 }
-.comunidade .publicar .perfil{
+.comunidade .perfil{
     width: 50px;
     height: 50px;
     border-radius: 9999px;
@@ -109,7 +109,7 @@
     flex-direction: column;
     justify-content: center;
     gap: 5px;
-    padding: 0px 15px 15px 15px;
+    padding: 0px 15px 10px 15px;
     width: 100%;
 }
 .comunidade .post .dados label {
@@ -120,14 +120,47 @@
     letter-spacing: 1px;
 }
 
-.comunidade .post .comentario {
+.comunidade .post .comentarios {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 15px;
+    flex-direction: column;
+    padding: 0px 15px 15px 15px;
     gap: 10px;
+    
+    width: 100%;
+}
+.comunidade .iconDelete {
+    color: var(--vermelho);
+    padding: 2px;
+    font-size: 20px;
+    cursor: pointer;
+}
 
-    background-color: white;
-    border-radius: var(--radius);
+.comunidade .post .comentarios .comentarios-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+.comunidade .post .comentarios .comentarios-lista .comentario{
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+}
+.comunidade .post .comentarios .comentarios-lista .comentario .comentario-texto{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.comunidade .post .comentarios .comentarios-lista .perfil{
+    width: 30px;
+    height: 30px;
+}
+.comunidade .post .comentarios .comentario-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }

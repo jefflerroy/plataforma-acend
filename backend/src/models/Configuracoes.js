@@ -5,7 +5,7 @@ class Configuracoes extends Model {
         super.init(
             {
                 unico: DataTypes.BOOLEAN,
-                bloquear_agendamentos: DataTypes.DATE,
+                bloquear_agendamentos: DataTypes.BOOLEAN,
                 chatpgt_key: DataTypes.STRING,
                 whatsapp_agendamentos: DataTypes.STRING
             },
@@ -17,7 +17,6 @@ class Configuracoes extends Model {
     }
 
     static associate(models) { }
-
 }
 
 module.exports = Configuracoes;

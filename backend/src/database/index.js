@@ -13,6 +13,7 @@ const PostComentario = require('../models/PostComentario');
 const HorarioFuncionamento = require('../models/HorarioFuncionamento');
 const BloqueioAgenda = require('../models/BloqueioAgenda');
 const Configuracoes = require('../models/Configuracoes');
+const Evolucao = require('../models/Evolucao');
 
 const connection = new Sequelize(dbConfig);
 
@@ -28,6 +29,7 @@ PostComentario.init(connection);
 HorarioFuncionamento.init(connection);
 BloqueioAgenda.init(connection);
 Configuracoes.init(connection);
+Evolucao.init(connection);
 
 Usuario.associate(connection.models);
 Dieta.associate(connection.models);
@@ -41,5 +43,6 @@ PostComentario.associate(connection.models);
 HorarioFuncionamento.associate(connection.models);
 BloqueioAgenda.associate(connection.models);
 Configuracoes.associate(connection.models);
+Evolucao.associate(connection.models);
 
 module.exports = connection;

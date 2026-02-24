@@ -1,5 +1,6 @@
 const express = require('express');
-
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() });
 const auth = require('./auth/auth');
 const UsuarioController = require('./controllers/UsuarioController');
 const DietaController = require('./controllers/DietaController');
@@ -13,6 +14,7 @@ const PostComentarioController = require('./controllers/PostComentarioController
 const HorarioFuncionamentoController = require('./controllers/HorarioFuncionamentoController');
 const BloqueioAgendaController = require('./controllers/BloqueioAgendaController');
 const ConfiguracoesController = require('./controllers/ConfiguracoesController');
+const EvolucaoController = require('./controllers/EvolucaoController');
 
 const privateRoutes = express.Router();
 
@@ -66,6 +68,7 @@ privateRoutes.post('/api/posts', PostController.create);
 privateRoutes.post('/api/posts/like', PostController.like);
 privateRoutes.post('/api/posts/unlike', PostController.unlike);
 privateRoutes.post('/api/posts/comment', PostController.comment);
+privateRoutes.delete('/api/posts/comment/:id', PostController.deleteComment);
 privateRoutes.put('/api/posts/:id', PostController.update);
 privateRoutes.delete('/api/posts/:id', PostController.delete);
 
@@ -94,6 +97,16 @@ privateRoutes.put('/api/bloqueios/:id', auth.onlyAdmin, BloqueioAgendaController
 privateRoutes.delete('/api/bloqueios/:id', auth.onlyAdmin, BloqueioAgendaController.delete);
 
 privateRoutes.get('/api/configuracoes', auth.onlyAdmin, ConfiguracoesController.get);
+privateRoutes.get('/api/configuracoes/paciente', ConfiguracoesController.getPaciente);
 privateRoutes.put('/api/configuracoes', auth.onlyAdmin, ConfiguracoesController.update);
+
+privateRoutes.get('/api/evolucoes', auth.onlyAdmin, EvolucaoController.list);
+privateRoutes.get('/api/evolucoes/:id', EvolucaoController.get);
+privateRoutes.get('/api/minhas-evolucoes', EvolucaoController.listPaciente);
+privateRoutes.post('/api/evolucoes', auth.onlyAdmin, EvolucaoController.create);
+privateRoutes.post('/api/evolucoes/paciente', EvolucaoController.createPaciente);
+privateRoutes.put('/api/evolucoes/:id', auth.onlyAdmin, EvolucaoController.update);
+privateRoutes.delete('/api/evolucoes/:id', auth.onlyAdmin, EvolucaoController.delete);
+privateRoutes.post('/api/evolucoes/bioimpedancia', upload.single('file'), EvolucaoController.extrairBioimpedancia);
 
 module.exports = privateRoutes;
