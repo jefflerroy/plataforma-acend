@@ -23,7 +23,7 @@ module.exports = {
         defaultValue: false
       },
 
-      chatpgt_key: {
+      chatgpt_key: {
         type: Sequelize.STRING,
         allowNull: true,
       },

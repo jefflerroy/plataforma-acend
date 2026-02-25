@@ -573,10 +573,10 @@ export function Usuario() {
               <Input label="Estado" placeholder="Estado" name="estado" value={form.estado} onChange={handleChange} />
             </div>
 
-            <div className="divisor-horizontal" />
 
             {isEdicao && form.tipo === "medico" && (
               <>
+                <div className="divisor-horizontal" />
                 <h4>Horários de Atendimento</h4>
 
                 <div className="row">
@@ -689,75 +689,79 @@ export function Usuario() {
               </>
             )}
 
+            {isEdicao && form.tipo === "medico" && (
 
-            <div className="divisor-horizontal" />
+              <>
+                <div className="divisor-horizontal" />
 
-            <h4>Bloqueios de Agenda</h4>
+                <h4>Bloqueios de Agenda</h4>
 
-            <div className="row">
-              <Input
-                label="Data início"
-                type="datetime-local"
-                value={novoBloqueio.data_inicio}
-                onChange={(e) =>
-                  setNovoBloqueio(prev => ({
-                    ...prev,
-                    data_inicio: e.target.value
-                  }))
-                }
-              />
+                <div className="row">
+                  <Input
+                    label="Data início"
+                    type="datetime-local"
+                    value={novoBloqueio.data_inicio}
+                    onChange={(e) =>
+                      setNovoBloqueio(prev => ({
+                        ...prev,
+                        data_inicio: e.target.value
+                      }))
+                    }
+                  />
 
-              <Input
-                label="Data fim"
-                type="datetime-local"
-                min={novoBloqueio.data_inicio}
-                value={novoBloqueio.data_fim}
-                onChange={(e) =>
-                  setNovoBloqueio(prev => ({
-                    ...prev,
-                    data_fim: e.target.value
-                  }))
-                }
-              />
+                  <Input
+                    label="Data fim"
+                    type="datetime-local"
+                    min={novoBloqueio.data_inicio}
+                    value={novoBloqueio.data_fim}
+                    onChange={(e) =>
+                      setNovoBloqueio(prev => ({
+                        ...prev,
+                        data_fim: e.target.value
+                      }))
+                    }
+                  />
 
-              <Input
-                label="Motivo"
-                value={novoBloqueio.motivo}
-                onChange={(e) =>
-                  setNovoBloqueio(prev => ({
-                    ...prev,
-                    motivo: e.target.value
-                  }))
-                }
-              />
+                  <Input
+                    label="Motivo"
+                    value={novoBloqueio.motivo}
+                    onChange={(e) =>
+                      setNovoBloqueio(prev => ({
+                        ...prev,
+                        motivo: e.target.value
+                      }))
+                    }
+                  />
 
-              <button type="button" onClick={salvarBloqueio}>
-                {novoBloqueio.id ? "Atualizar" : "Adicionar"}
-              </button>
-            </div>
-
-            <div className="horarios">
-              {bloqueios.map(b => (
-                <div key={b.id} className="bloqueio">
-                  <span>
-                    {new Date(b.data_inicio).toLocaleString()} até {new Date(b.data_fim).toLocaleString()}
-                    {b.motivo && ` - ${b.motivo}`}
-                  </span>
-
-                  <div className="row">
-                    <button type="button" onClick={() => editarBloqueio(b)}>
-                      Editar
-                    </button>
-
-                    <button type="button" className="delete" onClick={() => excluirBloqueio(b.id)}>
-                      Excluir
-                    </button>
-                  </div>
+                  <button type="button" onClick={salvarBloqueio}>
+                    {novoBloqueio.id ? "Atualizar" : "Adicionar"}
+                  </button>
                 </div>
-              ))}
-            </div>
 
-            <div className="divisor-horizontal" />
+                <div className="horarios">
+                  {bloqueios.map(b => (
+                    <div key={b.id} className="bloqueio">
+                      <span>
+                        {new Date(b.data_inicio).toLocaleString()} até {new Date(b.data_fim).toLocaleString()}
+                        {b.motivo && ` - ${b.motivo}`}
+                      </span>
+
+                      <div className="row">
+                        <button type="button" onClick={() => editarBloqueio(b)}>
+                          Editar
+                        </button>
+
+                        <button type="button" className="delete" onClick={() => excluirBloqueio(b.id)}>
+                          Excluir
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="divisor-horizontal" />
+              </>
+            )}
+
 
             <div className="row">
               <button type="button" className="cancel" disabled={salvando} onClick={() => navigate('/usuarios')}>

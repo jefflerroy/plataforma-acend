@@ -337,41 +337,48 @@ export function Paciente() {
               <Input label="Estado" placeholder="Estado" name="estado" value={form.estado} onChange={handleChange} />
             </div>
 
-            <div className="divisor-horizontal"/>
+            {
+              isEdicao && (
+                <>
+                  <div className="divisor-horizontal" />
 
-            <h4>Dieta ativa</h4>
+                  <h4>Dieta ativa</h4>
 
-            {dietaAtiva ? (
-              <div className="dieta-box">
-                <h4>{dietaAtiva.titulo}</h4>
+                  {dietaAtiva ? (
+                    <div className="dieta-box">
+                      <h4>{dietaAtiva.titulo}</h4>
 
-                <div className="row">
-                  {dietaAtiva.refeicoes?.map((ref, index) => (
-                    <div key={index} className="refeicao-dropdown-item">
-                      <strong>{ref.horario} - {ref.refeicao}</strong>
-                      <small>{ref.descricao}</small>
-                      <small>
-                        P: {ref.proteinas} | C: {ref.carboidratos} | G: {ref.gorduras} | Kcal: {ref.calorias}
-                      </small>
+                      <div className="row">
+                        {dietaAtiva.refeicoes?.map((ref, index) => (
+                          <div key={index} className="refeicao-dropdown-item">
+                            <strong>{ref.horario} - {ref.refeicao}</strong>
+                            <small>{ref.descricao}</small>
+                            <small>
+                              P: {ref.proteinas} | C: {ref.carboidratos} | G: {ref.gorduras} | Kcal: {ref.calorias}
+                            </small>
+                          </div>
+                        ))}
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => setModalAberto(true)}
+                      >
+                        Alterar dieta
+                      </button>
                     </div>
-                  ))}
-                </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setModalAberto(true)}
+                    >
+                      Vincular dieta
+                    </button>
+                  )}
+                </>
+              )
+            }
 
-                <button
-                  type="button"
-                  onClick={() => setModalAberto(true)}
-                >
-                  Alterar dieta
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setModalAberto(true)}
-              >
-                Vincular dieta
-              </button>
-            )}
 
             <div className="row">
               <button type="button" className="cancel" disabled={salvando} onClick={() => navigate('/pacientes')}>

@@ -92,3 +92,27 @@ div#inferior img.perfil {
     border-radius: 1000px;
     border: 2px solid var(--secundaria);
 }
+
+@media (max-width: 1000px) {
+    .menu-lateral {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100dvh;
+        z-index: 10000;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        background: var(--background-color);
+    }
+
+    .menu-lateral.menu-lateral--open {
+        transform: translateX(0);
+    }
+
+    .menu-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 9999;
+    }
+}

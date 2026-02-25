@@ -7,6 +7,7 @@
     gap: 10px;
     padding: 30px;
 }
+
 .agenda .container {
     display: flex;
     flex-direction: column;
@@ -16,35 +17,37 @@
     width: 100%;
 
     background-color: white;
-    
+
     border: 1px solid var(--borda);
     border-radius: var(--radius);
 }
 
-.agenda .container .board{
+.agenda .container .board {
     display: flex;
     justify-content: space-between;
     align-items: stretch;
     gap: 20px;
     width: 100%;
 }
-.agenda .container .board button{
+
+.agenda .container .board button {
     height: fit-content;
 
 }
 
-.agenda .container .board .dia{
+.agenda .container .board .dia {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
     padding: 10px;
     gap: 10px;
-    
+
     border: 1px solid var(--borda);
     border-radius: var(--radius);
 }
-.agenda .container .board .dia .card{    
+
+.agenda .container .board .dia .card {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -54,57 +57,137 @@
     background-color: var(--texto-menu);
     border-radius: var(--radius);
 }
-.agenda .container .board .dia .card .conteudo{
+
+.agenda .container .board .dia .card .conteudo {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}    
+}
 
-.agenda .container .board .dia .card .conteudo *{
+.agenda .container .board .dia .card .conteudo * {
     font-size: 13px;
-}    
+}
 
-.agenda .container .board .dia .card .conteudo p{
+.agenda .container .board .dia .card .conteudo p {
     font-weight: 500;
-}    
+}
 
 .agenda .container form {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-.agenda .container form .row{   
-    width: 100%; 
+
+.agenda .container form .row {
+    width: 100%;
     gap: 10px;
 }
-.agenda .container form .row button{   
-    width: 100%; 
+
+.agenda .container form .row button {
+    width: 100%;
 }
 
-.agenda .container .horarios-disponiveis{
+.agenda .container .horarios-disponiveis {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;    
+    width: 100%;
     gap: 10px;
 }
-.agenda .container .horarios-disponiveis .grid-horarios{
+
+.agenda .container .horarios-disponiveis .grid-horarios {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    width: 100%;    
+    width: 100%;
     gap: 10px;
 }
-.agenda .container .horarios-disponiveis .grid-horarios .card-horario{
+
+.agenda .container .horarios-disponiveis .grid-horarios .card-horario {
     padding: 5px 10px;
     color: var(--primaria);
     border: 1px solid var(--terciaria);
     border-radius: var(--radius);
     cursor: pointer;
 }
-.agenda .container .horarios-disponiveis .grid-horarios .selected{
+
+.agenda .container .horarios-disponiveis .grid-horarios .selected {
     background-color: var(--terciaria);
     color: white;
+}
+
+@media (max-width: 1000px) {
+    .agenda {
+        padding: 15px;
+    }
+
+    .agenda .container {
+        padding: 15px;
+    }
+
+    .agenda .container .board {
+        flex-direction: column;
+        overflow-x: auto;
+        gap: 12px;
+        padding-bottom: 6px;
+    }
+
+    .agenda .container .board>button {
+    }
+
+    .agenda .container .board .dia {
+        min-width: 280px;
+        flex: 0 0 auto;
+        align-items: stretch;
+    }
+
+    .agenda .container .board .dia h3 {
+        text-align: left;
+        width: 100%;
+    }
+
+    .agenda .container .board .dia .card .conteudo {
+        gap: 10px;
+    }
+
+    .agenda .container .board .dia .card .conteudo p {
+        flex: 0 0 auto;
+    }
+
+    .agenda .container .board .dia .card .conteudo small {
+        flex: 1 1 auto;
+        text-align: right;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 60%;
+    }
+
+    .agenda .container form .row {
+        flex-direction: column;
+    }
+
+    .agenda .container .horarios-disponiveis {
+        align-items: flex-start;
+    }
+
+    .agenda .container .horarios-disponiveis .grid-horarios {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 520px) {
+    .agenda {
+        padding: 12px;
+    }
+
+    .agenda .container {
+        padding: 12px;
+    }
+
+    .agenda .container .board .dia {
+        min-width: 260px;
+    }
 }

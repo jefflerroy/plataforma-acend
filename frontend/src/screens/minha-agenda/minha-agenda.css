@@ -1,6 +1,6 @@
 .minha-agenda {
-    display: flex;    
-    justify-content: center;    
+    display: flex;
+    justify-content: center;
     padding: 25px;
 }
 
@@ -42,24 +42,27 @@
     align-items: center;
     gap: 20px;
 }
-.minha-agenda .agendamento .dados .data{
+
+.minha-agenda .agendamento .dados .data {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 10px 15px;
-    
+
     background-color: var(--texto-menu);
     border-radius: var(--radius);
 }
-.minha-agenda .agendamento .dados .data .mes{
+
+.minha-agenda .agendamento .dados .data .mes {
     font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
     color: var(--secundaria);
     letter-spacing: 1px;
 }
-.minha-agenda .agendamento .dados .data .dia{
+
+.minha-agenda .agendamento .dados .data .dia {
     font-size: 26px;
     font-weight: 700;
     text-transform: uppercase;
@@ -73,17 +76,18 @@
     gap: 5px;
 }
 
-.minha-agenda .agendamento .dados .info .status{
+.minha-agenda .agendamento .dados .info .status {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-.minha-agenda .agendamento .dados .info .status span{
+
+.minha-agenda .agendamento .dados .info .status span {
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    
+
     color: var(--secundaria);
     background-color: var(--texto-menu);
     padding: 2px 10px;
@@ -95,10 +99,12 @@
     align-items: center;
     gap: 5px;
 }
-.minha-agenda .agendamento .dados .local svg{
+
+.minha-agenda .agendamento .dados .local svg {
     color: var(--terciaria);
 }
-.minha-agenda .agendamento .dados .local span{
+
+.minha-agenda .agendamento .dados .local span {
     font-size: 13px;
     font-weight: 600;
     color: var(--texto);
@@ -110,7 +116,8 @@
     align-items: center;
     gap: 25px;
 }
-.minha-agenda .agendamento .acoes svg{
+
+.minha-agenda .agendamento .acoes svg {
     cursor: pointer;
 }
 
@@ -121,23 +128,26 @@
     align-items: center;
     padding: 30px;
     gap: 10px;
-    
+
     border: 2px dashed var(--borda);
     border-radius: var(--radius);
 }
-.minha-agenda .historico div{
+
+.minha-agenda .historico div {
     padding: 10px;
     background-color: var(--borda);
     border-radius: 9999px;
 }
-.minha-agenda .historico svg{
-    color: var(--texto);        
-}
 
-.minha-agenda .historico h4{
+.minha-agenda .historico svg {
     color: var(--texto);
 }
-.minha-agenda .historico p{
+
+.minha-agenda .historico h4 {
+    color: var(--texto);
+}
+
+.minha-agenda .historico p {
     color: var(--texto-secundario);
 }
 
@@ -145,29 +155,129 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: white;    
+    background-color: white;
     padding: 15px;
     gap: 10px;
     border: 1px solid var(--borda);
     border-radius: var(--radius);
 }
 
-.minha-agenda .novo-agendamento .horarios-disponiveis{
+.minha-agenda .novo-agendamento .horarios-disponiveis {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    width: 100%;    
+    width: 100%;
     gap: 10px;
 }
-.minha-agenda .novo-agendamento .horarios-disponiveis  .card-horario{
+
+.minha-agenda .novo-agendamento .horarios-disponiveis .card-horario {
     padding: 5px 10px;
     color: var(--primaria);
     border: 1px solid var(--terciaria);
     border-radius: var(--radius);
     cursor: pointer;
 }
-.minha-agenda .novo-agendamento .horarios-disponiveis  .selected{
+
+.minha-agenda .novo-agendamento .horarios-disponiveis .selected {
     background-color: var(--terciaria);
     color: white;
+}
+
+@media (max-width: 1000px) {
+    .minha-agenda {
+        padding: 15px;
+    }
+
+    .minha-agenda .container {
+        width: 100%;
+        max-width: 660px;
+        gap: 15px;
+    }
+
+    .minha-agenda .cabecalho {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .minha-agenda .cabecalho button {
+        width: 100%;
+    }
+
+    .minha-agenda .agendamento {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .minha-agenda .agendamento .dados {
+        justify-content: flex-start;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .minha-agenda .agendamento .dados .data {
+        padding: 10px 12px;
+        flex: 0 0 auto;
+    }
+
+    .minha-agenda .agendamento .dados .data .dia {
+        font-size: 22px;
+    }
+
+    .minha-agenda .agendamento .dados .info {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .minha-agenda .agendamento .dados .info h3 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .minha-agenda .agendamento .dados .info .status {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .minha-agenda .agendamento .acoes {
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .minha-agenda .agendamento .acoes button {
+        width: 100%;
+    }
+
+    .minha-agenda .historico {
+        padding: 18px;
+        gap: 8px;
+    }
+
+    .minha-agenda .novo-agendamento {
+        padding: 12px;
+    }
+
+    .minha-agenda .novo-agendamento .row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .minha-agenda .novo-agendamento .horarios-disponiveis {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 520px) {
+    .minha-agenda .agendamento .dados {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .minha-agenda .agendamento .acoes button {
+        width: 100%;
+    }
 }

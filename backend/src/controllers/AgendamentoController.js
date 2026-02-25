@@ -33,13 +33,13 @@ module.exports = {
     async proximaConsultaPaciente(req, res) {
         try {
             const { paciente_id } = req.query;
-    
+
             if (!paciente_id) {
                 return res.status(400).json({ error: "paciente_id é obrigatório" });
             }
-    
+
             const agora = new Date();
-    
+
             const proxima = await Agendamento.findOne({
                 where: {
                     paciente_id,
@@ -57,13 +57,13 @@ module.exports = {
                 ],
                 order: [['data', 'ASC'], ['hora', 'ASC']]
             });
-    
+
             return res.json(proxima);
-    
+
         } catch (err) {
             return res.status(400).json({ error: err.message });
         }
-    },    
+    },
 
     async disponiveis(req, res) {
         try {
@@ -89,8 +89,6 @@ module.exports = {
             });
 
             if (!horario) return res.json([]);
-            console.log('teste');
-            console.log(horario.intervalo_atendimento);
 
             const duracao = horario.intervalo_atendimento;
 
@@ -104,6 +102,25 @@ module.exports = {
                 horarios = horarios.filter(h =>
                     !(h >= horario.intervalo_inicio && h < horario.intervalo_fim)
                 );
+            }
+
+            const agora = new Date();
+            const hojeISO = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+            const dataReq = new Date(`${data}T00:00:00`);
+            const ehHoje =
+                dataReq.getFullYear() === hojeISO.getFullYear() &&
+                dataReq.getMonth() === hojeISO.getMonth() &&
+                dataReq.getDate() === hojeISO.getDate();
+
+            if (ehHoje) {
+                const minutosAgora = agora.getHours() * 60 + agora.getMinutes();
+                horarios = horarios.filter(h => {
+                    const [hh, mm] = String(h).split(':').map(Number);
+                    const minutosH = hh * 60 + mm;
+                    return minutosH > minutosAgora;
+                });
+            } else if (dataReq < hojeISO) {
+                return res.json([]);
             }
 
             const bloqueios = await BloqueioAgenda.findAll({
@@ -135,10 +152,8 @@ module.exports = {
             }
 
             return res.json(horarios);
-
         } catch (err) {
             console.log(err);
-
             return res.status(400).json({ error: err.message });
         }
     },

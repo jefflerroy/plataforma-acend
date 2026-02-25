@@ -6,7 +6,7 @@ class Configuracoes extends Model {
             {
                 unico: DataTypes.BOOLEAN,
                 bloquear_agendamentos: DataTypes.BOOLEAN,
-                chatpgt_key: DataTypes.STRING,
+                chatgpt_key: DataTypes.STRING,
                 whatsapp_agendamentos: DataTypes.STRING
             },
             {

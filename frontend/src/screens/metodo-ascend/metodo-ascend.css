@@ -246,3 +246,93 @@
         width: 100%;
     }
 }
+
+@media (max-width: 1000px) {
+    .metodo-ascend {
+        margin: 15px;
+        gap: 18px;
+    }
+
+    .metodo-ascend .topo {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .metodo-ascend .topo p {
+        width: 100%;
+    }
+
+    .metodo-ascend .conteudo {
+        width: 100%;
+        padding: 16px;
+    }
+
+    .metodo-ascend .rodape {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .metodo-ascend .rodape button {
+        width: 100%;
+    }
+
+    .metodo-ascend .proximos-passos {
+        width: 100%;
+        padding: 18px;
+        border-radius: 20px;
+    }
+
+    .metodo-ascend .proximos-passos h3 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 900px) {
+    .metodo-ascend .linha-centralizada {
+        left: 22px;
+    }
+
+    .metodo-ascend .card {
+        padding-left: 62px;
+    }
+
+    .metodo-ascend .check {
+        width: 48px;
+        height: 48px;
+        left: 22px;
+    }
+
+    .metodo-ascend .badge {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 520px) {
+    .metodo-ascend {
+        margin: 12px;
+    }
+
+    .metodo-ascend .card {
+        padding-left: 56px;
+    }
+
+    .metodo-ascend .linha-centralizada {
+        left: 20px;
+        width: 3px;
+    }
+
+    .metodo-ascend .check {
+        width: 44px;
+        height: 44px;
+        left: 20px;
+    }
+
+    .metodo-ascend .titulo {
+        align-items: flex-start;
+    }
+
+    .metodo-ascend .proximos-passos {
+        padding: 16px;
+    }
+}

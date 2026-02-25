@@ -38,6 +38,13 @@ class Usuario extends Model {
     this.hasMany(models.Post, { foreignKey: 'usuario_id', as: 'posts' });
     this.hasMany(models.PostCurtida, { foreignKey: 'usuario_id', as: 'curtidas' });
     this.hasMany(models.PostComentario, { foreignKey: 'usuario_id', as: 'comentarios' });
+
+    this.hasMany(models.BloqueioAgenda, { foreignKey: 'usuario_id', as: 'bloqueiosAgenda' });
+    this.hasMany(models.HorarioFuncionamento, { foreignKey: 'usuario_id', as: 'horariosFuncionamento' });
+
+    this.hasMany(models.Evolucao, { foreignKey: 'paciente_id', as: 'evolucoes' });
+
+    this.hasMany(models.Chat, { foreignKey: 'paciente_id', as: 'chats' });
   }
 }
 

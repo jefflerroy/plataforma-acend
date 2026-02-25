@@ -1,4 +1,4 @@
-header{
+header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -9,23 +9,29 @@ header{
     border-bottom: 1px solid var(--borda);
 }
 
-header p.nome{
+header .row {
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+header p.nome {
     font-weight: 700;
 }
 
-header div.buttons{
+header div.buttons {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 15px;
 }
 
-header div.buttons div.divisor{
+header div.buttons div.divisor {
     height: 30px;
     border-left: 1px solid var(--borda);
 }
 
-header div.buttons button{
+header div.buttons button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -43,12 +49,25 @@ header div.buttons button{
     cursor: pointer;
 }
 
-header div.buttons button:hover{
+header div.buttons button:hover {
     color: var(--primaria);
     background-color: var(--texto-menu);
 }
 
-header div.buttons .sair:hover{
+header div.buttons .sair:hover {
     color: var(--vermelho);
-    background-color: var(--vermelho-fundo);    
+    background-color: var(--vermelho-fundo);
+}
+
+header .menu-mobile {
+    cursor: pointer;
+    display: none;
+}
+
+@media (max-width: 1000px) {
+    header .menu-mobile {
+        display: block;
+        font-size: 20px;
+        margin-right: 10px;
+    }
 }

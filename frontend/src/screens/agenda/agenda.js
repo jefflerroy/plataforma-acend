@@ -320,7 +320,7 @@ export function Agenda() {
                     }))
                   ]}
                 />
-                <Input type="date" name="data" label="Data" value={form.data} onChange={handleChange} required disabled={!form.profissional_id} />
+                <Input type="date" name="data" min={new Date().toISOString().split('T')[0]} label="Data" value={form.data} onChange={handleChange} required disabled={!form.profissional_id} />
               </div>
 
 

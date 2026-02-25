@@ -167,3 +167,78 @@ div.minha-dieta div.observacao p,
 div.minha-dieta div.observacao h3 {
     color: var(--secundaria);
 }
+
+@media (max-width: 1000px) {
+    div.minha-dieta {
+        margin: 15px;
+    }
+
+    div.minha-dieta .container {
+        width: 100%;
+        max-width: 650px;
+        gap: 15px;
+    }
+
+    div.minha-dieta div#card {
+        padding: 15px;
+    }
+
+    div.minha-dieta div#card div.topo {
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    div.minha-dieta div#card div.topo div.horario {
+        flex: 0 0 auto;
+        margin-right: 0;
+    }
+
+    div.minha-dieta div#card div.refeicao {
+        flex: 1 1 100%;
+        margin-right: 0;
+    }
+
+    div.minha-dieta div#card div.refeicao p {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: initial;
+    }
+
+    div.minha-dieta div#card div.topo p.proteina,
+    div.minha-dieta div#card div.topo p.carboidrato,
+    div.minha-dieta div#card div.topo p.gordura {
+        flex: 0 0 auto;
+    }
+
+    div.minha-dieta div#card div.topo .arrow {
+        margin-left: auto;
+    }
+
+    div.minha-dieta div#card .drop {
+        padding: 12px 0px 0px;
+    }
+
+    div.minha-dieta div#card div.drop div#mini-cards {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    div.minha-dieta div#card div.drop div#mini-cards div.mini-card {
+        width: calc(50% - 5px);
+    }
+
+    div.minha-dieta div.observacao {
+        padding: 15px;
+    }
+
+    div.minha-dieta div.observacao .icon {
+        font-size: 34px;
+    }
+}
+
+@media (max-width: 520px) {
+    div.minha-dieta div#card div.drop div#mini-cards div.mini-card {
+        width: 100%;
+    }
+}

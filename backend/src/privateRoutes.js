@@ -15,6 +15,7 @@ const HorarioFuncionamentoController = require('./controllers/HorarioFuncionamen
 const BloqueioAgendaController = require('./controllers/BloqueioAgendaController');
 const ConfiguracoesController = require('./controllers/ConfiguracoesController');
 const EvolucaoController = require('./controllers/EvolucaoController');
+const ChatController = require('./controllers/ChatController');
 
 const privateRoutes = express.Router();
 
@@ -108,5 +109,8 @@ privateRoutes.post('/api/evolucoes/paciente', EvolucaoController.createPaciente)
 privateRoutes.put('/api/evolucoes/:id', auth.onlyAdmin, EvolucaoController.update);
 privateRoutes.delete('/api/evolucoes/:id', auth.onlyAdmin, EvolucaoController.delete);
 privateRoutes.post('/api/evolucoes/bioimpedancia', upload.single('file'), EvolucaoController.extrairBioimpedancia);
+
+privateRoutes.get('/api/chat', ChatController.list);
+privateRoutes.post('/api/chat/send', ChatController.send);
 
 module.exports = privateRoutes;

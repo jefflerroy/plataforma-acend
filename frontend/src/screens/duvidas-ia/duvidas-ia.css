@@ -1,10 +1,10 @@
-.duvidas-ia{
+.duvidas-ia {
     display: flex;
     justify-content: center;
-    align-items: center;    
+    align-items: center;
 }
 
-.duvidas-ia .chat{
+.duvidas-ia .chat {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -23,34 +23,38 @@
     width: fit-content;
     padding: 10px;
     border-radius: 9999px;
-    
-    background-color: var(--terciaria);    
+
+    background-color: var(--terciaria);
 }
-.duvidas-ia .chat .icon svg{
+
+.duvidas-ia .chat .icon svg {
     color: white;
 }
 
-.duvidas-ia .chat .cabecalho{
+.duvidas-ia .chat .cabecalho {
     display: flex;
     align-items: center;
     padding: 20px;
     gap: 15px;
-    
+
     background-color: var(--secundaria);
     border-top-left-radius: var(--radius);
     border-top-right-radius: var(--radius);
 }
-.duvidas-ia .chat .cabecalho .info h3{
+
+.duvidas-ia .chat .cabecalho .info h3 {
     display: flex;
     align-items: center;
     gap: 10px;
     color: white;
-    
+
 }
-.duvidas-ia .chat .cabecalho .info h3 svg{
+
+.duvidas-ia .chat .cabecalho .info h3 svg {
     color: var(--quaternaria);
 }
-.duvidas-ia .chat .cabecalho .info p{
+
+.duvidas-ia .chat .cabecalho .info p {
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
@@ -60,27 +64,47 @@
 
 .duvidas-ia .chat .mensagens {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    height: 500px;
+    overflow: auto;
 
     padding: 0px 20px;
 }
 
-.duvidas-ia .chat .mensagens .mensagem{
+.duvidas-ia .chat .mensagens .mensagem {
     display: flex;
+    flex-direction: row;
     align-items: flex-start;
+    width: 100%;
     gap: 15px;
-
-    height: 500px;
 }
-.duvidas-ia .chat .mensagens .mensagem span{    
-    width: 70%;
+
+.duvidas-ia .chat .mensagens .mensagem .perfil {
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+}
+
+.duvidas-ia .chat .mensagens .usuario span {
+    border-top-left-radius: var(--radius);
+    margin-left: auto;
+}
+
+.duvidas-ia .chat .mensagens .ia span {
+    border-top-right-radius: var(--radius);
+    margin-right: auto;
+}
+
+.duvidas-ia .chat .mensagens .mensagem span {
+    width: fit-content;
     padding: 10px;
 
     font-size: 15px;
 
     background-color: var(--borda);
-    border-top-right-radius: var(--radius);
     border-bottom-left-radius: var(--radius);
     border-bottom-right-radius: var(--radius);
 
@@ -93,11 +117,11 @@
     align-items: center;
     padding: 15px;
     gap: 10px;
-    
+
     border-top: 1px solid var(--borda);
 }
 
-.duvidas-ia .chat .inferior .enviar{
+.duvidas-ia .chat .inferior .enviar {
     display: flex;
     width: 100%;
     background-color: var(--fundo);
@@ -105,7 +129,7 @@
     border-radius: var(--radius);
 }
 
-.duvidas-ia .chat .inferior .enviar button{
+.duvidas-ia .chat .inferior .enviar button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -117,4 +141,67 @@
 .duvidas-ia .chat .inferior p {
     font-size: 12px;
     color: var(--texto-secundario);
+}
+
+@media (max-width: 1000px) {
+    .duvidas-ia {
+        align-items: flex-start;
+    }
+
+    .duvidas-ia .chat {      
+        width: 100%;        
+        margin-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-radius: 0;
+    }
+
+    .duvidas-ia .chat .cabecalho {
+        padding: 15px;
+        border-radius: 0;
+    }
+
+    .duvidas-ia .chat .mensagens {
+        height: calc(100dvh - 300px);  
+
+        padding: 0px 12px;
+        align-items: stretch;
+    }
+
+    .duvidas-ia .chat .mensagens .mensagem {
+        gap: 10px;
+    }
+
+    .duvidas-ia .chat .mensagens .mensagem .perfil {
+        width: 32px;
+        height: 32px;
+    }
+
+    .duvidas-ia .chat .mensagens .mensagem span {
+        max-width: 78%;
+        word-break: break-word;
+    }
+
+    .duvidas-ia .chat .inferior {
+        padding: 12px;
+    }
+
+    .duvidas-ia .chat .inferior .enviar input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    .duvidas-ia .chat .mensagens .mensagem span {
+        max-width: 72%;
+        font-size: 14px;
+    }
+
+    .duvidas-ia .chat .icon {
+        padding: 8px;
+    }
+
+    .duvidas-ia .chat .cabecalho {
+        gap: 10px;
+    }
 }

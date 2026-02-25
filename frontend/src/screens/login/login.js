@@ -78,7 +78,6 @@ export function Login() {
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
             />
-            <p className="link">Esqueci minha senha</p>
           </div>
 
           <button type="submit" disabled={loading}>

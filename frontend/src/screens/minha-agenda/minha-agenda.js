@@ -257,6 +257,7 @@ export function MinhaAgenda() {
 
                 <Input
                   type="date"
+                  min={new Date().toISOString().split('T')[0]}
                   label="Data"
                   name="data"
                   value={form.data}

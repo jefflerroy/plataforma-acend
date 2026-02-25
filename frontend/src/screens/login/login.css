@@ -1,4 +1,4 @@
-.login{
+.login {
     display: flex;
     width: 100%;
 }
@@ -14,7 +14,7 @@
     background-color: var(--primaria);
 }
 
-.login .esquerda .mensagem{
+.login .esquerda .mensagem {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -22,13 +22,14 @@
     align-items: center;
 }
 
-.login .esquerda p.titulo{
+.login .esquerda p.titulo {
     font-size: 100px;
     text-transform: uppercase;
     font-weight: 800;
     color: white;
 }
-.login .esquerda p.subtitulo{
+
+.login .esquerda p.subtitulo {
     font-size: 40px;
     text-transform: uppercase;
     font-weight: 500;
@@ -46,11 +47,11 @@
     background-color: white;
 }
 
-.login .direita h1{
+.login .direita h1 {
     color: var(--texto);
 }
 
-.login .direita form{
+.login .direita form {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -59,27 +60,92 @@
     gap: 20px;
 }
 
-.login .direita .input{
+.login .direita .input {
     width: 70%;
 }
-.login .direita .input label{
+
+.login .direita .input label {
     font-size: 13px;
 }
-.login .direita .input input{
+
+.login .direita .input input {
     border: 1px solid var(--borda);
 }
 
-.login .direita p.link{
+.login .direita p.link {
     margin-left: auto;
     width: fit-content;
     margin-top: 5px;
     cursor: pointer;
 }
-.login .direita p.link:hover{
+
+.login .direita p.link:hover {
     color: var(--terciaria);
     text-decoration: underline;
 }
 
 .login .direita button {
     width: 70%;
+}
+
+@media (max-width: 1000px) {
+    .login {
+        flex-direction: column;
+        height: 100dvh;
+    }
+
+    .login .esquerda {
+        width: 100%;
+        height: 38dvh;
+        min-height: 260px;
+    }
+
+    .login .esquerda .mensagem {
+        position: absolute;
+        padding: 0 16px;
+        text-align: center;
+    }
+
+    .login .esquerda p.titulo {
+        font-size: 44px;
+        line-height: 1;
+    }
+
+    .login .esquerda p.subtitulo {
+        font-size: 16px;
+        margin-top: 8px;
+        line-height: 1.2;
+    }
+
+    .login .direita {
+        width: 100%;
+        height: 62dvh;
+        padding: 20px 16px;
+        justify-content: flex-start;
+    }
+
+    .login .direita form {
+        gap: 14px;
+        margin-top: 10px;
+    }
+
+    .login .direita .input,
+    .login .direita button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    .login .esquerda {
+        height: 34dvh;
+        min-height: 230px;
+    }
+
+    .login .esquerda p.titulo {
+        font-size: 38px;
+    }
+
+    .login .direita {
+        padding: 18px 12px;
+    }
 }
