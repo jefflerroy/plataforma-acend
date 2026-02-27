@@ -62,6 +62,8 @@ module.exports = {
 
             return res.json(sanitize(usuario));
         } catch (err) {
+            console.log(err);
+            
             return res.status(400).json({ error: err.message });
         }
     },
@@ -127,10 +129,6 @@ module.exports = {
             const usuario = await Usuario.findByPk(req.params.id);
             if (!usuario) return res.status(404).json({ error: 'Usuário não encontrado' });
 
-            if (!isAdmin(req) && !isSelf(req, usuario.id)) {
-                return res.status(403).json({ error: 'Acesso negado.' });
-            }
-
             return res.json(sanitize(usuario));
         } catch (err) {
             return res.status(400).json({ error: err.message });
@@ -162,10 +160,6 @@ module.exports = {
             const usuario = await Usuario.findByPk(req.params.id);
             if (!usuario) {
                 return res.status(404).json({ error: 'Usuário não encontrado' });
-            }
-
-            if (!isAdmin(req) && !isSelf(req, usuario.id)) {
-                return res.status(403).json({ error: 'Acesso negado.' });
             }
 
             const { senha, senhaAntiga, tipo, ...rest } = req.body;

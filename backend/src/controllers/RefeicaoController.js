@@ -3,9 +3,17 @@ const Refeicao = require('../models/Refeicao');
 module.exports = {
     async create(req, res) {
         try {
-            const refeicao = await Refeicao.create(req.body);
-            req.io?.emit('refeicao:created', { id: refeicao.id, data: refeicao });
-            return res.json(refeicao);
+            const { dieta_id, horario, refeicao, descricao } = req.body;
+
+            const refeicaoCriada = await Refeicao.create({
+                dieta_id,
+                horario,
+                refeicao,
+                descricao                
+            });
+
+            req.io?.emit('refeicao:created', { id: refeicaoCriada.id, data: refeicaoCriada });
+            return res.json(refeicaoCriada);
         } catch (err) {
             return res.status(400).json({ error: err.message });
         }
@@ -39,13 +47,20 @@ module.exports = {
 
     async update(req, res) {
         try {
-            const refeicao = await Refeicao.findByPk(req.params.id);
-            if (!refeicao) return res.status(404).json({ error: 'Refeição não encontrada' });
+            const refeicaoModel = await Refeicao.findByPk(req.params.id);
+            if (!refeicaoModel) return res.status(404).json({ error: 'Refeição não encontrada' });
 
-            await refeicao.update(req.body);
-            req.io?.emit('refeicao:updated', { id: refeicao.id, data: refeicao });
+            const { dieta_id, horario, refeicao, descricao } = req.body;
 
-            return res.json(refeicao);
+            await refeicaoModel.update({
+                dieta_id,
+                horario,
+                refeicao,
+                descricao
+            });
+
+            req.io?.emit('refeicao:updated', { id: refeicaoModel.id, data: refeicaoModel });
+            return res.json(refeicaoModel);
         } catch (err) {
             return res.status(400).json({ error: err.message });
         }

@@ -7,6 +7,7 @@ const privateRoutes = require('./src/privateRoutes');
 const auth = require('./src/auth/auth');
 const cron = require("node-cron");
 const { atualizarAgendamentosConcluidos } = require("./src/controllers/AgendamentoController");
+const path = require('path');
 require('./src/database');
 
 const app = express();
@@ -47,6 +48,7 @@ if (app.get('env') === 'development') {
         allowedHeaders: ['Content-Type', 'Authorization']
     }));
 }
+app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')));
 app.use(express.json({ limit: '50mb' }));
 app.use(routes);
 app.use('*', auth.tokenValited);

@@ -2,11 +2,12 @@ import "./dietas.css";
 import { Header } from "../../components/header/header";
 import { MdDelete } from "react-icons/md";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../services/api";
 import { Modal } from "../../components/modal/modal";
 import { Input } from "../../components/input/input";
+import { TextArea } from "../../components/textarea/textarea";
 
 export function Dietas() {
   const [dietas, setDietas] = useState([]);
@@ -19,14 +20,13 @@ export function Dietas() {
   const [confirmarExclusao, setConfirmarExclusao] = useState(false);
   const [dietaParaExcluir, setDietaParaExcluir] = useState(null);
 
+  const [importandoPdf, setImportandoPdf] = useState(false);
+  const fileRef = useRef(null);
+
   const refeicaoVazia = {
     horario: "",
     refeicao: "",
-    descricao: "",
-    proteinas: 0,
-    carboidratos: 0,
-    gorduras: 0,
-    calorias: 0
+    descricao: ""
   };
 
   const [form, setForm] = useState({
@@ -52,25 +52,25 @@ export function Dietas() {
 
   function handleChange(e) {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   }
 
   function adicionarRefeicao() {
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
       refeicoes: [...prev.refeicoes, { ...refeicaoVazia }]
     }));
   }
 
   function removerRefeicao(index) {
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
       refeicoes: prev.refeicoes.filter((_, i) => i !== index)
     }));
   }
 
   function handleRefeicaoChange(index, campo, valor) {
-    setForm(prev => {
+    setForm((prev) => {
       const novas = [...prev.refeicoes];
       novas[index] = { ...novas[index], [campo]: valor };
       return { ...prev, refeicoes: novas };
@@ -80,12 +80,22 @@ export function Dietas() {
   async function handleSubmit(e) {
     e.preventDefault();
 
+    const payload = {
+      titulo: form.titulo,
+      observacao: form.observacao,
+      refeicoes: (form.refeicoes || []).map((r) => ({
+        horario: r.horario,
+        refeicao: r.refeicao,
+        descricao: r.descricao
+      }))
+    };
+
     try {
       if (editandoId) {
-        await api.put(`/dietas/${editandoId}`, form);
+        await api.put(`/dietas/${editandoId}`, payload);
         toast.success("Dieta atualizada com sucesso");
       } else {
-        await api.post("/dietas", form);
+        await api.post("/dietas", payload);
         toast.success("Dieta cadastrada com sucesso");
       }
 
@@ -109,14 +119,19 @@ export function Dietas() {
   }
 
   function toggleExpand(id) {
-    setExpanded(prev => (prev === id ? null : id));
+    setExpanded((prev) => (prev === id ? null : id));
   }
 
   function handleEditar(dieta) {
     setForm({
-      titulo: dieta.titulo,
-      observacao: dieta.observacao,
-      refeicoes: dieta.refeicoes || []
+      titulo: dieta.titulo || "",
+      observacao: dieta.observacao || "",
+      refeicoes: (dieta.refeicoes || []).map((r) => ({
+        id: r.id,
+        horario: r.horario || "",
+        refeicao: r.refeicao || "",
+        descricao: r.descricao || ""
+      }))
     });
 
     setEditandoId(dieta.id);
@@ -124,8 +139,55 @@ export function Dietas() {
     setExpanded(null);
   }
 
-  const dietasFiltradas = dietas.filter(d =>
-    d.titulo.toLowerCase().includes(busca.toLowerCase())
+  function abrirSeletorPdf(e) {
+    e.preventDefault();
+    fileRef.current?.click();
+  }
+
+  async function importarPdf(e) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      toast.error("Envie um arquivo PDF");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    setImportandoPdf(true);
+
+    try {
+      const response = await api.post("/dietas/parse-pdf", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+
+      const data = response.data || {};
+
+      setForm({
+        titulo: data.titulo || "",
+        observacao: data.observacao || "",
+        refeicoes: Array.isArray(data.refeicoes)
+          ? data.refeicoes.map((r) => ({
+            horario: r.horario || "",
+            refeicao: r.refeicao || "",
+            descricao: r.descricao || ""
+          }))
+          : []
+      });
+
+      toast.success("PDF importado. Revise os campos e salve.");
+    } catch (err) {
+      toast.error(err.response?.data?.error || "Erro ao importar PDF");
+    } finally {
+      setImportandoPdf(false);
+    }
+  }
+
+  const dietasFiltradas = dietas.filter((d) =>
+    (d.titulo || "").toLowerCase().includes(busca.toLowerCase())
   );
 
   return (
@@ -134,10 +196,35 @@ export function Dietas() {
 
       <div className="dietas">
         <div className="lista">
-
           {cadastrar ? (
             <form className="card" onSubmit={handleSubmit}>
-              <div className="row">
+              <div className="row" style={{ gap: 10, marginBottom: 10 }}>
+                <button onClick={abrirSeletorPdf} disabled={importandoPdf} type="button">
+                  {importandoPdf ? "Importando..." : "Importar PDF"}
+                </button>
+
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept="application/pdf"
+                  style={{ display: "none" }}
+                  onChange={importarPdf}
+                />
+
+                <button
+                  type="button"
+                  className="cancel"
+                  disabled={importandoPdf}
+                  onClick={() => {
+                    setForm({ titulo: "", observacao: "", refeicoes: [] });
+                    setEditandoId(null);
+                  }}
+                >
+                  Limpar
+                </button>
+              </div>
+
+              <div className="column">
                 <Input
                   label="Titulo"
                   placeholder="Titulo"
@@ -147,7 +234,7 @@ export function Dietas() {
                   required
                 />
 
-                <Input
+                <TextArea
                   label="Observações"
                   placeholder="Observações"
                   name="observacao"
@@ -161,7 +248,6 @@ export function Dietas() {
 
                 {form.refeicoes.map((refeicao, index) => (
                   <div key={index} className="refeicao-item">
-
                     <div className="row">
                       <Input
                         label="Horário"
@@ -179,64 +265,20 @@ export function Dietas() {
                         }}
                       />
 
-
                       <Input
                         label="Refeição"
                         placeholder="Refeição"
                         value={refeicao.refeicao || ""}
-                        onChange={(e) =>
-                          handleRefeicaoChange(index, "refeicao", e.target.value)
-                        }
+                        onChange={(e) => handleRefeicaoChange(index, "refeicao", e.target.value)}
                       />
                     </div>
 
-                    <Input
+                    <TextArea
                       label="Descrição"
                       placeholder="Descrição"
                       value={refeicao.descricao || ""}
-                      onChange={(e) =>
-                        handleRefeicaoChange(index, "descricao", e.target.value)
-                      }
+                      onChange={(e) => handleRefeicaoChange(index, "descricao", e.target.value)}
                     />
-
-                    <div className="row">
-                      <Input
-                        type="number"
-                        label="Proteínas"
-                        placeholder="Proteínas"
-                        value={refeicao.proteinas || ""}
-                        onChange={(e) =>
-                          handleRefeicaoChange(index, "proteinas", e.target.value)
-                        }
-                      />
-                      <Input
-                        type="number"
-                        label="Carboidratos"
-                        placeholder="Carboidratos"
-                        value={refeicao.carboidratos || ""}
-                        onChange={(e) =>
-                          handleRefeicaoChange(index, "carboidratos", e.target.value)
-                        }
-                      />
-                      <Input
-                        type="number"
-                        label="Gorduras"
-                        placeholder="Gorduras"
-                        value={refeicao.gorduras || ""}
-                        onChange={(e) =>
-                          handleRefeicaoChange(index, "gorduras", e.target.value)
-                        }
-                      />
-                      <Input
-                        type="number"
-                        label="Calorias"
-                        placeholder="Calorias"
-                        value={refeicao.calorias || ""}
-                        onChange={(e) =>
-                          handleRefeicaoChange(index, "calorias", e.target.value)
-                        }
-                      />
-                    </div>
 
                     <button
                       className="cancel"
@@ -247,7 +289,6 @@ export function Dietas() {
                     >
                       <MdDelete />
                     </button>
-
                   </div>
                 ))}
               </div>
@@ -262,12 +303,13 @@ export function Dietas() {
               </button>
 
               <div className="row">
-                <button>
+                <button disabled={importandoPdf}>
                   {editandoId ? "Atualizar Dieta" : "Salvar Dieta"}
                 </button>
 
                 <button
                   className="cancel"
+                  disabled={importandoPdf}
                   onClick={(e) => {
                     e.preventDefault();
                     setCadastrar(false);
@@ -277,12 +319,9 @@ export function Dietas() {
                   Cancelar
                 </button>
               </div>
-
             </form>
           ) : (
-            <button onClick={() => setCadastrar(true)}>
-              Cadastrar Dieta
-            </button>
+            <button onClick={() => setCadastrar(true)}>Cadastrar Dieta</button>
           )}
 
           <input
@@ -312,24 +351,29 @@ export function Dietas() {
                     >
                       <td>{dieta.titulo}</td>
                       <td>{dieta.refeicoes?.length || 0}</td>
-                      <td>
-                        {expanded === dieta.id ? <IoIosArrowUp /> : <IoIosArrowDown />}
-                      </td>
+                      <td>{expanded === dieta.id ? <IoIosArrowUp /> : <IoIosArrowDown />}</td>
                     </tr>
 
                     {expanded === dieta.id && (
                       <tr>
                         <td colSpan="3">
                           <div className="dropdown-refeicoes">
+                            {dieta.observacao ? (
+                              <div style={{ marginBottom: 10, whiteSpace: "pre-wrap" }}>
+                                {dieta.observacao}
+                              </div>
+                            ) : null}
 
                             <div className="row">
                               {dieta.refeicoes?.map((ref, index) => (
                                 <div key={index} className="refeicao-dropdown-item">
-                                  <strong>{ref.horario} - {ref.refeicao}</strong>
-                                  <small>{ref.descricao}</small>
-                                  <small>
-                                    P: {ref.proteinas} | C: {ref.carboidratos} | G: {ref.gorduras} | Kcal: {ref.calorias}
-                                  </small>
+                                  <strong>
+                                    {ref.horario} - {ref.refeicao}
+                                  </strong>
+
+                                  {ref.descricao ? (
+                                    <small style={{ whiteSpace: "pre-wrap" }}>{ref.descricao}</small>
+                                  ) : null}
                                 </div>
                               ))}
                             </div>
@@ -345,7 +389,7 @@ export function Dietas() {
                               </button>
 
                               <button
-                                className="cancel"
+                                className="delete"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setDietaParaExcluir(dieta.id);
@@ -355,7 +399,6 @@ export function Dietas() {
                                 Excluir
                               </button>
                             </div>
-
                           </div>
                         </td>
                       </tr>
@@ -365,7 +408,6 @@ export function Dietas() {
               </tbody>
             </table>
           )}
-
         </div>
       </div>
 

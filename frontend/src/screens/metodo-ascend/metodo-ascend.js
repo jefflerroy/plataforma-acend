@@ -1,7 +1,26 @@
 import "./metodo-ascend.css";
 import { Header } from "../../components/header/header";
+import { useEffect, useState } from "react";
+import api from "../../services/api";
 
 export function MetodoAscend() {
+  const [fase, setFase] = useState(null);
+
+  useEffect(() => {
+    async function loadUser() {
+      try {
+        const response = await api.get("/me");
+        setFase(Number(response.data?.fase_metodo_ascend) || 1);
+      } catch {
+        setFase(1);
+      }
+    }
+
+    loadUser();
+  }, []);
+
+  const faseAtual = fase || 1;
+
   return (
     <>
       <Header nome="Método Ascend" />
@@ -18,21 +37,40 @@ export function MetodoAscend() {
           <div className="cards">
             <div className="card">
               <div className="check">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  color="var(--quaternaria)"
-                >
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <path d="m9 12 2 2 4-4"></path>
-                </svg>
+                {faseAtual > 1 ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    color="var(--quaternaria)"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="m9 12 2 2 4-4"></path>
+                  </svg>
+                ) : faseAtual === 1 ? (
+                  <div className="pulse" />
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    color="var(--borda)"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
+                )}
               </div>
 
               <div className="conteudo">
@@ -60,15 +98,46 @@ export function MetodoAscend() {
                   </div>
                 </div>
 
-                <p>
-                  Foco na limpeza metabólica, ajuste de sono e hidratação. Preparação do terreno biológico.
-                </p>
+                <p>Foco na limpeza metabólica, ajuste de sono e hidratação. Preparação do terreno biológico.</p>
               </div>
             </div>
 
             <div className="card">
               <div className="check">
-                <div className="pulse" />
+                {faseAtual > 2 ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    color="var(--quaternaria)"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="m9 12 2 2 4-4"></path>
+                  </svg>
+                ) : faseAtual === 2 ? (
+                  <div className="pulse" />
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    color="var(--borda)"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
+                )}
               </div>
 
               <div className="conteudo">
@@ -97,50 +166,46 @@ export function MetodoAscend() {
                   </div>
                 </div>
 
-                <p>
-                  Otimização da queima de gordura e sensibilidade à insulina. Introdução de protocolos específicos.
-                </p>
-
-                <div className="rodape">
-                  <span>Fase Atual • 65% Concluído</span>
-                  <button>
-                    Ver Detalhes
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-
-                    >
-                      <path d="M5 12h14"></path>
-                      <path d="m12 5 7 7-7 7"></path>
-                    </svg>
-                  </button>
-                </div>
+                <p>Otimização da queima de gordura e sensibilidade à insulina. Introdução de protocolos específicos.</p>
               </div>
             </div>
 
             <div className="card">
               <div className="check">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  color="var(--borda)"
-                >
-                  <circle cx="12" cy="12" r="10"></circle>
-                </svg>
+                {faseAtual > 3 ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    color="var(--quaternaria)"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="m9 12 2 2 4-4"></path>
+                  </svg>
+                ) : faseAtual === 3 ? (
+                  <div className="pulse" />
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    color="var(--borda)"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
+                )}
               </div>
 
               <div className="conteudo">
@@ -168,66 +233,42 @@ export function MetodoAscend() {
                   </div>
                 </div>
 
-                <p>
-                  Foco em hipertrofia e máxima energia. Ajuste fino de suplementação avançada.
-                </p>
+                <p>Foco em hipertrofia e máxima energia. Ajuste fino de suplementação avançada.</p>
               </div>
             </div>
           </div>
         </div>
-        <div class="proximos-passos">
+
+        {/* <div className="proximos-passos">
           <h3>Próximos Passos</h3>
 
           <ul>
-            <li class="is-done">
-              <span class="icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
+            <li className="is-done">
+              <span className="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <circle cx="12" cy="12" r="10"></circle>
                   <path d="m9 12 2 2 4-4"></path>
                 </svg>
               </span>
-              <span class="text">Coleta de exames laboratoriais (Realizado)</span>
+              <span className="text">Coleta de exames laboratoriais (Realizado)</span>
             </li>
 
-            <li class="is-done">
-              <span class="icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
+            <li className="is-done">
+              <span className="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <circle cx="12" cy="12" r="10"></circle>
                   <path d="m9 12 2 2 4-4"></path>
                 </svg>
               </span>
-              <span class="text">Ajuste da dieta para Fase 2 (Realizado)</span>
+              <span className="text">Ajuste da dieta para Fase 2 (Realizado)</span>
             </li>
 
-            <li class="is-next">
-              <span class="dot" aria-hidden="true"></span>
-              <span class="text">Consulta de retorno em 15 dias</span>
+            <li className="is-next">
+              <span className="dot" aria-hidden="true"></span>
+              <span className="text">Consulta de retorno em 15 dias</span>
             </li>
           </ul>
-        </div>
-
+        </div> */}
       </div>
     </>
   );

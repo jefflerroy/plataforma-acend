@@ -19,7 +19,8 @@ class Usuario extends Model {
         bairro: DataTypes.STRING,
         cidade: DataTypes.STRING,
         estado: DataTypes.STRING,
-        foto: DataTypes.TEXT
+        foto: DataTypes.TEXT,
+        fase_metodo_ascend: DataTypes.INTEGER
       },
       {
         sequelize,

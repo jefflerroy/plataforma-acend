@@ -15,7 +15,7 @@ module.exports = {
         allowNull: false,
       },
       observacao: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       created_at: {

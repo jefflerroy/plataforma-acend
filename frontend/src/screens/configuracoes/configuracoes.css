@@ -11,7 +11,7 @@
     width: 100%;
 }
 
-.configuracoes .row{
+.configuracoes .row {
     width: 100%;
     gap: 10px;
 }
@@ -26,12 +26,38 @@
     width: 100%;
 
     background-color: white;
-    
+
     border: 1px solid var(--borda);
     border-radius: var(--radius);
 
 }
 
-.configuracoes .grid button{
+.configuracoes .grid button {
     width: 100%;
+}
+
+@media (max-width: 1000px) {
+    .configuracoes {
+        padding: 16px;
+        align-items: flex-start;
+    }
+
+    .configuracoes form {
+        width: 100%;
+    }
+
+    .configuracoes .grid {
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .configuracoes .row {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .configuracoes .grid button {
+        width: 100%;
+    }
 }

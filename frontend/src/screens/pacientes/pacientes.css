@@ -1,4 +1,4 @@
-.pacientes{
+.pacientes {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,7 +9,7 @@
     width: 100%;
 }
 
-.pacientes .lista{
+.pacientes .lista {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -17,21 +17,63 @@
     width: 100%;
     padding: 30px;
     gap: 20px;
-    
+
     background-color: white;
     border: 1px solid var(--borda);
-    border-radius: var(--radius);    
+    border-radius: var(--radius);
 }
 
-.pacientes .lista .icon{
+.pacientes .lista .icon {
     background-color: var(--terciaria);
     color: white;
     padding: 5px;
     font-size: 28px;
-    border-radius: var(--radius);    
+    border-radius: var(--radius);
     cursor: pointer;
     transition: 0.3s;
 }
-.pacientes .lista .icon:hover{
+
+.pacientes .lista .icon:hover {
     background-color: var(--secundaria);
+}
+
+@media (max-width: 1000px) {
+    .pacientes {
+        padding: 15px;
+        align-items: flex-start;
+    }
+
+    .pacientes .lista {
+        padding: 15px;
+        gap: 12px;
+    }
+
+    .pacientes .lista input {
+        width: 100%;
+    }
+
+    .pacientes .lista {
+        overflow-x: auto;
+    }
+
+    .pacientes .lista table {
+        width: 100%;
+        min-width: 520px;
+        border-collapse: collapse;
+    }
+
+    .pacientes .lista table th,
+    .pacientes .lista table td {
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 520px) {
+    .pacientes .lista table {
+        min-width: fit-content;
+    }
+
+    .pacientes .lista {
+        padding: 12px;
+    }
 }

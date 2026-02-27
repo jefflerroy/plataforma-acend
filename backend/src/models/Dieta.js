@@ -5,7 +5,7 @@ class Dieta extends Model {
     super.init(
       {
         titulo: DataTypes.STRING,
-        observacao: DataTypes.STRING
+        observacao: DataTypes.TEXT
       },
       {
         sequelize,

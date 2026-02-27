@@ -19,24 +19,36 @@ module.exports = {
         onDelete: 'CASCADE',
       },
       peso: {
-        type: Sequelize.NUMERIC(5,2),
+        type: Sequelize.NUMERIC(5, 2),
         allowNull: false,
       },
       massa_muscular: {
-        type: Sequelize.NUMERIC(5,2),
+        type: Sequelize.NUMERIC(5, 2),
         allowNull: false,
       },
       massa_gordura: {
-        type: Sequelize.NUMERIC(5,2),
+        type: Sequelize.NUMERIC(5, 2),
         allowNull: false,
       },
       percentual_gordura: {
-        type: Sequelize.NUMERIC(5,2),
+        type: Sequelize.NUMERIC(5, 2),
         allowNull: false,
       },
       imc: {
-        type: Sequelize.NUMERIC(5,2),
+        type: Sequelize.NUMERIC(5, 2),
         allowNull: false,
+      },
+      bioimpedancia_url: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      bioimpedancia_nome: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      bioimpedancia_mime: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       created_at: {
         type: Sequelize.DATE,
@@ -46,7 +58,7 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
-    });    
+    });
   },
 
   async down(queryInterface) {

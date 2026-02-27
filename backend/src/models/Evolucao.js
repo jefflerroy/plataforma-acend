@@ -10,6 +10,9 @@ class Evolucao extends Model {
         massa_gordura: DataTypes.DECIMAL(5, 2),
         percentual_gordura: DataTypes.DECIMAL(5, 2),
         imc: DataTypes.DECIMAL(5, 2),
+        bioimpedancia_url: DataTypes.STRING,
+        bioimpedancia_nome: DataTypes.STRING,
+        bioimpedancia_mime: DataTypes.STRING,
       },
       {
         sequelize,

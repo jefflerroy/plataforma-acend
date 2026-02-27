@@ -1,0 +1,65 @@
+.textarea {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.textarea label {
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.textarea .icon {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+
+  font-size: 30px;
+  background-color: var(--terciaria);
+  padding: 5px;
+  border-radius: var(--radius);
+  color: white;
+  cursor: pointer;
+}
+.textarea .icon:hover {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+
+  font-size: 30px;
+  background-color: var(--secundaria);
+  padding: 5px;
+  border-radius: var(--radius);
+  color: white;
+  cursor: pointer;
+}
+
+textarea {
+  width: 100%;
+  min-height: 120px;
+
+  border: none;
+  outline: none;
+  padding: 15px;
+
+  background-color: var(--fundo);
+
+  border-radius: var(--radius);
+
+  font-size: 14px;
+  font-weight: 600;
+
+  resize: none;
+}
+
+textarea[type=number]::-webkit-outer-spin-button,
+textarea[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+textarea[type=number] {
+  -moz-appearance: textareafield;
+}

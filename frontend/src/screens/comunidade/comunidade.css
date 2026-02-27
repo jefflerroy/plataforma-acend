@@ -5,6 +5,7 @@
 
     padding: 30px;
 }
+
 .comunidade .container {
     display: flex;
     flex-direction: column;
@@ -14,7 +15,7 @@
     gap: 25px;
 }
 
-.comunidade .publicar{
+.comunidade .publicar {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -22,22 +23,25 @@
     gap: 10px;
     width: 100%;
     padding: 20px;
-    
+
     background-color: white;
-    
+
     border: 1px solid var(--borda);
     border-radius: var(--radius);
 }
-.comunidade .publicar .row{
+
+.comunidade .publicar .row {
     width: 100%;
     gap: 10px;
 }
-.comunidade .perfil{
+
+.comunidade .perfil {
     width: 50px;
     height: 50px;
     border-radius: 9999px;
 }
-.comunidade .publicar .postar{
+
+.comunidade .publicar .postar {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,58 +53,66 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;    
+    align-items: center;
     width: 100%;
     gap: 5px;
-    
-    background-color: white;    
+
+    background-color: white;
     border: 1px solid var(--borda);
     border-radius: var(--radius);
 }
-.comunidade .post .cabecalho{
+
+.comunidade .post .cabecalho {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     padding: 20px
-    
 }
-.comunidade .post .cabecalho .info{
+
+.comunidade .post .cabecalho .info {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-.comunidade .post .cabecalho .info img{
+
+.comunidade .post .cabecalho .info img {
     width: 50px;
     height: 50px;
     border-radius: 9999px;
 }
-.comunidade .post span{
+
+.comunidade .post span {
     font-size: 14px;
     font-weight: 700;
 }
-.comunidade .post .cabecalho .opcoes{
+
+.comunidade .post .cabecalho .opcoes {
     color: var(--texto);
     cursor: pointer;
 }
-.comunidade .post img.postagem{
+
+.comunidade .post img.postagem {
     width: 100%;
 }
-.comunidade .post .acoes{
-    display: flex;    
+
+.comunidade .post .acoes {
+    display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     padding: 15px 15px 0px 15px;
-    
+
 }
-.comunidade .post .acoes .interacao{
+
+.comunidade .post .acoes .interacao {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
 }
-.comunidade .post .acoes svg{
+
+.comunidade .post .acoes svg {
     cursor: pointer;
 }
 
@@ -112,6 +124,7 @@
     padding: 0px 15px 10px 15px;
     width: 100%;
 }
+
 .comunidade .post .dados label {
     color: var(--texto-secundario);
     font-size: 11px;
@@ -125,9 +138,10 @@
     flex-direction: column;
     padding: 0px 15px 15px 15px;
     gap: 10px;
-    
+
     width: 100%;
 }
+
 .comunidade .iconDelete {
     color: var(--vermelho);
     padding: 2px;
@@ -141,26 +155,151 @@
     gap: 10px;
     width: 100%;
 }
-.comunidade .post .comentarios .comentarios-lista .comentario{
+
+.comunidade .post .comentarios .comentarios-lista .comentario {
     display: flex;
     align-items: flex-start;
     gap: 10px;
     width: 100%;
 }
-.comunidade .post .comentarios .comentarios-lista .comentario .comentario-texto{
+
+.comunidade .post .comentarios .comentarios-lista .comentario .comentario-texto {
     display: flex;
     flex-direction: column;
     justify-content: center;
     width: 100%;
 }
 
-.comunidade .post .comentarios .comentarios-lista .perfil{
+.comunidade .post .comentarios .comentarios-lista .perfil {
     width: 30px;
     height: 30px;
 }
-.comunidade .post .comentarios .comentario-form{
+
+.comunidade .post .comentarios .comentario-form {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
+}
+
+@media (max-width: 1000px) {
+    .comunidade {
+        padding: 16px;
+        align-items: flex-start;
+    }
+
+    .comunidade .container {
+        width: 100%;
+        max-width: 620px;
+        gap: 16px;
+    }
+
+    .comunidade .publicar {
+        padding: 14px;
+        gap: 10px;
+    }
+
+    .comunidade .publicar .row {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .comunidade .publicar input[type="text"] {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .comunidade .perfil {
+        width: 42px;
+        height: 42px;
+    }
+
+    .comunidade .post {
+        gap: 8px;
+    }
+
+    .comunidade .post .cabecalho {
+        padding: 14px;
+    }
+
+    .comunidade .post .cabecalho .info img {
+        width: 42px;
+        height: 42px;
+    }
+
+    .comunidade .post span {
+        font-size: 13px;
+    }
+
+    .comunidade .post img.postagem {
+        width: 100%;
+        max-height: 420px;
+        object-fit: cover;
+    }
+
+    .comunidade .post .acoes {
+        padding: 10px 14px 0px 14px;
+    }
+
+    .comunidade .post .acoes .interacao {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .comunidade .post .acoes .interacao span {
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .comunidade .post .dados {
+        padding: 0px 14px 12px 14px;
+        gap: 6px;
+    }
+
+    .comunidade .post .dados p {
+        word-break: break-word;
+    }
+
+    .comunidade .post .dados label {
+        font-size: 10px;
+    }
+
+    .comunidade .post .comentarios {
+        padding: 0px 14px 14px 14px;
+        gap: 10px;
+    }
+
+    .comunidade .post .comentarios .comentarios-lista .comentario {
+        gap: 10px;
+    }
+
+    .comunidade .post .comentarios .comentarios-lista .perfil {
+        width: 28px;
+        height: 28px;
+    }
+
+    .comunidade .post .comentarios .comentarios-lista .comentario .comentario-texto small {
+        word-break: break-word;
+    }
+
+    .comunidade .post .comentarios .comentario-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .comunidade .post .comentarios .comentario-form input {
+        width: 100%;
+    }
+
+    .comunidade .post .comentarios .comentario-form button {
+        width: 100%;
+    }
+
+    .comunidade .iconDelete {
+        font-size: 18px;
+    }
 }

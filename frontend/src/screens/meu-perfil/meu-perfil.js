@@ -184,7 +184,7 @@ export function MeuPerfil() {
       <Header nome="Meu Perfil" />
 
       <div className="meu-perfil">
-        <div className="paciente">
+        <div className="dados">
           <form className="card" onSubmit={handleSubmit}>
             <div className="grid">
 

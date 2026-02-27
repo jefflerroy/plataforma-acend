@@ -1,11 +1,70 @@
 const Exame = require('../models/Exame');
+const Usuario = require('../models/Usuario');
+const path = require('path');
+
+function sanitize(exame) {
+    const data = exame?.toJSON ? exame.toJSON() : exame;
+    if (!data) return null;
+    return data;
+}
+
+function isAdmin(req) {
+    return req.user?.tipo === 'admin';
+}
+
+function isMedico(req) {
+    return req.user?.tipo === 'medico';
+}
+
+function isSelf(req, id) {
+    return Number(req.user?.id) === Number(id);
+}
 
 module.exports = {
+    async arquivo(req, res) {
+        try {
+            const exame = await Exame.findByPk(req.params.id);
+            if (!exame) return res.status(404).json({ error: 'Exame não encontrado' });
+
+            if (!isAdmin(req) && !isMedico(req) && !isSelf(req, exame.paciente_id)) {
+                return res.status(403).json({ error: 'Acesso negado.' });
+            }
+
+            if (!exame.url) {
+                return res.status(404).json({ error: 'Arquivo não encontrado.' });
+            }
+
+            const relative = exame.url.replace(/^\/+/, '');
+            const filePath = path.resolve(process.cwd(), relative);
+
+            return res.sendFile(filePath, {
+                headers: {
+                    'Content-Type': exame.mime || 'application/octet-stream',
+                    'Content-Disposition': `inline; filename="${exame.nome_original || 'arquivo'}"`,
+                },
+            });
+        } catch (err) {
+            return res.status(400).json({ error: err.message });
+        }
+    },
+
     async create(req, res) {
         try {
-            const exame = await Exame.create(req.body);
-            req.io?.emit('exame:created', { id: exame.id, data: exame });
-            return res.json(exame);
+            const { tipo } = req.body;
+            const file = req.file;
+            const paciente_id = req.user?.id;
+
+            const exame = await Exame.create({
+                paciente_id,
+                tipo,
+                nome_original: file ? file.originalname : req.body.nome_original,
+                url: file ? `/uploads/exames/${file.filename}` : (req.body.url || null),
+                mime: file ? file.mimetype : (req.body.mime || null),
+            });
+
+            req.io?.emit('exame:created', { id: exame.id, data: sanitize(exame) });
+
+            return res.json(sanitize(exame));
         } catch (err) {
             return res.status(400).json({ error: err.message });
         }
@@ -19,10 +78,27 @@ module.exports = {
 
             const exames = await Exame.findAll({
                 where,
+                include: [{ model: Usuario, as: 'paciente', attributes: ['id', 'nome', 'email', 'tipo'] }],
                 order: [['id', 'DESC']],
             });
 
-            return res.json(exames);
+            return res.json(exames.map(sanitize));
+        } catch (err) {
+            return res.status(400).json({ error: err.message });
+        }
+    },
+
+    async meusExames(req, res) {
+        try {
+            const paciente_id = req.user?.id;
+
+            const exames = await Exame.findAll({
+                where: { paciente_id },
+                include: [{ model: Usuario, as: 'paciente', attributes: ['id', 'nome', 'email', 'tipo'] }],
+                order: [['id', 'DESC']],
+            });
+
+            return res.json(exames.map(sanitize));
         } catch (err) {
             return res.status(400).json({ error: err.message });
         }
@@ -30,9 +106,13 @@ module.exports = {
 
     async get(req, res) {
         try {
-            const exame = await Exame.findByPk(req.params.id);
+            const exame = await Exame.findByPk(req.params.id, {
+                include: [{ model: Usuario, as: 'paciente', attributes: ['id', 'nome', 'email', 'tipo'] }],
+            });
+
             if (!exame) return res.status(404).json({ error: 'Exame não encontrado' });
-            return res.json(exame);
+
+            return res.json(sanitize(exame));
         } catch (err) {
             return res.status(400).json({ error: err.message });
         }
@@ -43,10 +123,28 @@ module.exports = {
             const exame = await Exame.findByPk(req.params.id);
             if (!exame) return res.status(404).json({ error: 'Exame não encontrado' });
 
-            await exame.update(req.body);
-            req.io?.emit('exame:updated', { id: exame.id, data: exame });
+            const { paciente_id, url, nome_original, mime, ...rest } = req.body;
+            const file = req.file;
 
-            return res.json(exame);
+            const dadosAtualizacao = { ...rest };
+
+            if (paciente_id) dadosAtualizacao.paciente_id = paciente_id;
+
+            if (file) {
+                dadosAtualizacao.url = `/uploads/exames/${file.filename}`;
+                dadosAtualizacao.nome_original = file.originalname;
+                dadosAtualizacao.mime = file.mimetype;
+            } else {
+                if (url !== undefined) dadosAtualizacao.url = url;
+                if (nome_original !== undefined) dadosAtualizacao.nome_original = nome_original;
+                if (mime !== undefined) dadosAtualizacao.mime = mime;
+            }
+
+            await exame.update(dadosAtualizacao);
+
+            req.io?.emit('exame:updated', { id: exame.id, data: sanitize(exame) });
+
+            return res.json(sanitize(exame));
         } catch (err) {
             return res.status(400).json({ error: err.message });
         }
@@ -59,6 +157,7 @@ module.exports = {
 
             const id = exame.id;
             await exame.destroy();
+
             req.io?.emit('exame:deleted', { id });
 
             return res.json({ ok: true });

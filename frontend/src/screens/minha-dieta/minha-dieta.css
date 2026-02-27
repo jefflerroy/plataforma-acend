@@ -149,7 +149,6 @@ div.minha-dieta div#card div.drop div#mini-cards div.mini-card p {
 
 div.minha-dieta div.observacao {
     display: flex;
-    align-items: center;
     gap: 10px;
     width: 100%;
     padding: 20px;
@@ -166,6 +165,17 @@ div.minha-dieta div.observacao .icon {
 div.minha-dieta div.observacao p,
 div.minha-dieta div.observacao h3 {
     color: var(--secundaria);
+}
+
+div.minha-dieta .multiline {
+    white-space: pre-line;
+}
+
+div.minha-dieta .descricao-resumo {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 @media (max-width: 1000px) {

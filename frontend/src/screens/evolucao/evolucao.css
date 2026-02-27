@@ -55,3 +55,50 @@
     font-size: 13px;
     color: var(--texto);
 }
+
+.evolucao .evolucoes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.evolucao .evolucoes-list .evolucao-item {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+    width: 100%;
+
+    background-color: white;
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.evolucao .evolucoes-list .evolucao-item:hover {
+    border-color: var(--terciaria);
+}
+
+.evolucao .evolucoes-list .evolucao-item .topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.evolucao .evolucoes-list .evolucao-item .evolucao-detalhes {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.evolucao .evolucoes-list .evolucao-item .evolucao-detalhes p {
+    font-weight: 500;
+    padding: 10px;
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+}
+
+.evolucao .evolucoes-list .evolucao-item .evolucao-detalhes button {
+    width: fit-content;
+}

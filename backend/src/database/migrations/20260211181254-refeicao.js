@@ -28,23 +28,7 @@ module.exports = {
         allowNull: false,
       },
       descricao: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      proteinas: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      carboidratos: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      gorduras: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      calorias: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       created_at: {

@@ -1,32 +1,110 @@
 .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-  }
-  
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  padding: 30px;
+  border-radius: var(--radius);
+  width: fit-content;
+  max-width: 90%;
+}
+
+.modal h3 {
+  margin-bottom: 10px;
+}
+
+.modal p {
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-select {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  padding: 30px;
+  border-radius: var(--radius);
+  gap: 10px;
+  width: 40%;
+  max-width: 90%;
+}
+
+.modal-select .list {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  overflow: auto;
+  gap: 5px;
+
+}
+
+.modal-select .list .item {
+  width: 100%;
+  height: fit-content;
+  padding: 10px;
+  padding-left: 15px;
+  border: 1px solid var(--borda);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.modal-select .list .item:hover {
+  background-color: var(--primaria-fundo);
+}
+
+.modal-select .list .item#ativo {
+  background-color: var(--primaria-fundo);
+}
+
+@media (max-width: 1000px) {
   .modal {
-    background: white;
-    padding: 30px;
-    border-radius: var(--radius);
-    width: fit-content;
-    max-width: 90%;
+    width: 100%;
+    max-width: 500px;
+    padding: 22px;
   }
-  
-  .modal h3 {
-    margin-bottom: 10px;
+
+  .modal-select {
+    width: 70%;
+    padding: 22px;
   }
-  
-  .modal p {
-    margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+  .modal {
+    width: 95%;
+    padding: 18px;
+    border-radius: 16px;
   }
-  
+
   .modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+    flex-direction: column-reverse;
+    gap: 8px;
   }
-  
+
+  .modal-actions button {
+    width: 100%;
+  }
+
+  .modal-select {
+    width: 95%;
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .modal-select .list {
+    height: 180px;
+  }
+}

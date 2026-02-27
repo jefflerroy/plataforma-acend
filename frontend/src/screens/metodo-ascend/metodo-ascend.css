@@ -1,6 +1,7 @@
 .metodo-ascend {
     display: flex;
     flex-direction: column;
+    height: 100%;
     gap: 24px;
     margin: 25px;
 }
@@ -29,6 +30,7 @@
 
 .metodo-ascend .linha-temporal {
     position: relative;
+    height: 100%;
 }
 
 .metodo-ascend .linha-centralizada {
@@ -44,8 +46,10 @@
 
 .metodo-ascend .cards {
     display: flex;
+    justify-content: space-around;
     flex-direction: column;
     gap: 24px;
+    height: 100%;
 }
 
 .metodo-ascend .card {

@@ -15,12 +15,14 @@ const HorarioFuncionamentoController = require('./controllers/HorarioFuncionamen
 const BloqueioAgendaController = require('./controllers/BloqueioAgendaController');
 const ConfiguracoesController = require('./controllers/ConfiguracoesController');
 const EvolucaoController = require('./controllers/EvolucaoController');
+const uploadBioimpedancia = require('./config/uploadBioimpedancia');
+const uploadExames = require('./config/uploadExames');
 const ChatController = require('./controllers/ChatController');
 
 const privateRoutes = express.Router();
 
 privateRoutes.get('/api/usuarios', auth.onlyAdmin, UsuarioController.list);
-privateRoutes.get('/api/usuarios/:id', auth.onlyAdmin, UsuarioController.get);
+privateRoutes.get('/api/usuarios/:id', UsuarioController.get);
 privateRoutes.get('/api/me', UsuarioController.me);
 privateRoutes.get('/api/pacientes', auth.onlyAdminOrMedico, UsuarioController.listPacientes);
 privateRoutes.get('/api/profissionais', UsuarioController.listProfissionais);
@@ -32,6 +34,7 @@ privateRoutes.delete('/api/usuarios/:id', auth.onlyAdmin, UsuarioController.dele
 privateRoutes.get('/api/dietas', DietaController.list);
 privateRoutes.get('/api/dietas/:id', DietaController.get);
 privateRoutes.post('/api/dietas', DietaController.create);
+privateRoutes.post('/api/dietas/parse-pdf', upload.single('file'), DietaController.parsePdf);
 privateRoutes.put('/api/dietas/:id', DietaController.update);
 privateRoutes.delete('/api/dietas/:id', DietaController.delete);
 
@@ -47,12 +50,6 @@ privateRoutes.get('/api/minha-dieta', DietaUsuarioController.minhaDieta);
 privateRoutes.post('/api/dietas-usuarios', DietaUsuarioController.create);
 privateRoutes.put('/api/dietas-usuarios/:id', DietaUsuarioController.update);
 privateRoutes.delete('/api/dietas-usuarios/:id', DietaUsuarioController.delete);
-
-privateRoutes.get('/api/exames', ExameController.list);
-privateRoutes.get('/api/exames/:id', ExameController.get);
-privateRoutes.post('/api/exames', ExameController.create);
-privateRoutes.put('/api/exames/:id', ExameController.update);
-privateRoutes.delete('/api/exames/:id', ExameController.delete);
 
 privateRoutes.get('/api/agendamentos', AgendamentoController.list);
 privateRoutes.get('/api/agendamentos/:id', AgendamentoController.get);
@@ -101,16 +98,23 @@ privateRoutes.get('/api/configuracoes', auth.onlyAdmin, ConfiguracoesController.
 privateRoutes.get('/api/configuracoes/paciente', ConfiguracoesController.getPaciente);
 privateRoutes.put('/api/configuracoes', auth.onlyAdmin, ConfiguracoesController.update);
 
-privateRoutes.get('/api/evolucoes', auth.onlyAdmin, EvolucaoController.list);
+privateRoutes.get('/api/evolucoes', EvolucaoController.list);
 privateRoutes.get('/api/evolucoes/:id', EvolucaoController.get);
-privateRoutes.get('/api/minhas-evolucoes', EvolucaoController.listPaciente);
-privateRoutes.post('/api/evolucoes', auth.onlyAdmin, EvolucaoController.create);
-privateRoutes.post('/api/evolucoes/paciente', EvolucaoController.createPaciente);
-privateRoutes.put('/api/evolucoes/:id', auth.onlyAdmin, EvolucaoController.update);
-privateRoutes.delete('/api/evolucoes/:id', auth.onlyAdmin, EvolucaoController.delete);
-privateRoutes.post('/api/evolucoes/bioimpedancia', upload.single('file'), EvolucaoController.extrairBioimpedancia);
+privateRoutes.get('/api/minhas-evolucoes', EvolucaoController.minhasEvolucoes);
+privateRoutes.get('/api/evolucoes/:id/pdf', EvolucaoController.pdf);
+privateRoutes.post('/api/evolucoes', uploadBioimpedancia.single('bioimpedancia_pdf'), EvolucaoController.create);
+privateRoutes.put('/api/evolucoes/:id', uploadBioimpedancia.single('bioimpedancia_pdf'), EvolucaoController.update);
+privateRoutes.delete('/api/evolucoes/:id', EvolucaoController.delete);
 
 privateRoutes.get('/api/chat', ChatController.list);
 privateRoutes.post('/api/chat/send', ChatController.send);
+
+privateRoutes.get('/api/exames', ExameController.list);
+privateRoutes.get('/api/meus-exames', ExameController.meusExames);
+privateRoutes.get('/api/exames/:id', ExameController.get);
+privateRoutes.get('/api/exames/:id/arquivo', ExameController.arquivo);
+privateRoutes.post('/api/exames', uploadExames.single('arquivo'), ExameController.create);
+privateRoutes.put('/api/exames/:id', uploadExames.single('arquivo'), ExameController.update);
+privateRoutes.delete('/api/exames/:id', ExameController.delete);
 
 module.exports = privateRoutes;

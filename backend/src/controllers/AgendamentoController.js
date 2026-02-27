@@ -19,6 +19,24 @@ function gerarIntervalos(inicio, fim, duracao) {
     return horarios;
 }
 
+function toHHmm(v) {
+    if (!v) return null;
+
+    const s = String(v);
+
+    if (s.includes("T")) {
+        const d = new Date(s);
+        const hh = String(d.getHours()).padStart(2, "0");
+        const mm = String(d.getMinutes()).padStart(2, "0");
+        return `${hh}:${mm}`;
+    }
+
+    const parts = s.split(":");
+    const hh = String(Number(parts[0] ?? 0)).padStart(2, "0");
+    const mm = String(Number(parts[1] ?? 0)).padStart(2, "0");
+    return `${hh}:${mm}`;
+}
+
 module.exports = {
 
     async atualizarAgendamentosConcluidos() {
@@ -133,14 +151,14 @@ module.exports = {
 
             const agendamentos = await Agendamento.findAll({
                 where: {
-                    profissional_id,
+                    profissional_id: Number(profissional_id),
                     data
                 }
             });
 
-            const horasOcupadas = agendamentos.map(a => a.hora);
+            const horasOcupadas = new Set(agendamentos.map(a => toHHmm(a.hora)).filter(Boolean));
 
-            horarios = horarios.filter(h => !horasOcupadas.includes(h));
+            horarios = horarios.filter(h => !horasOcupadas.has(toHHmm(h)));
 
             if (bloqueios.length > 0) {
                 horarios = horarios.filter(h => {
@@ -178,7 +196,7 @@ module.exports = {
             const horario = await HorarioFuncionamento.findOne({
                 where: {
                     usuario_id: profissional_id,
-                    dia_semana: diaSemana,
+                    dia_semana: diaSemana + 1,
                     ativo: true
                 }
             });

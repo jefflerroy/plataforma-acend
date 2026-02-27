@@ -134,9 +134,6 @@
         padding-bottom: 6px;
     }
 
-    .agenda .container .board>button {
-    }
-
     .agenda .container .board .dia {
         min-width: 280px;
         flex: 0 0 auto;

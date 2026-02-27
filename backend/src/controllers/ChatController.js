@@ -40,14 +40,12 @@ function extractJson(text) {
   return null;
 }
 
-async function openaiChat({ apiKey, messages, temperature = 0.7, max_tokens }) {
+async function openaiChat({ apiKey, messages, temperature = 0.7 }) {
   const payload = {
-    model: 'gpt-4o-mini',
+    model: 'gpt-5.2',
     messages,
     temperature,
-  };
-
-  if (max_tokens) payload.max_tokens = max_tokens;
+  };  
 
   const response = await axios.post('https://api.openai.com/v1/chat/completions', payload, {
     headers: {
@@ -113,7 +111,6 @@ module.exports = {
         apiKey: config.chatgpt_key,
         messages: gateMessages,
         temperature: 0,
-        max_tokens: 60,
       });
 
       const gate = extractJson(gateText) || { needs_user_data: false };

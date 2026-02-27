@@ -99,7 +99,7 @@
 
 @media (max-width: 520px) {
     .exames .lista table {
-        min-width: 460px;
+        min-width: fit-content;
     }
 
     .exames .lista {

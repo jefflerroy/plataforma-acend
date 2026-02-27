@@ -435,11 +435,11 @@ export function Agenda() {
                           </div>
                           <div className="conteudo">
                             <p>Paciente:</p>
-                            <small>{ag.paciente?.nome}</small>
+                            <small>{ag.paciente?.nome.split(' ')[0]}</small>
                           </div>
                           <div className="conteudo">
                             <p>Profissional:</p>
-                            <small>{ag.profissional?.nome}</small>
+                            <small>{ag.profissional?.nome.split(' ')[0]}</small>
                           </div>
                           <div className="conteudo">
                             <p>Tipo:</p>

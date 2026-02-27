@@ -18,6 +18,11 @@
     width: 100%;
 }
 
+.dietas .column {
+    gap: 10px;
+    width: 100%;
+}
+
 .dietas .row {
     display: flex;
     justify-content: center;
@@ -34,7 +39,8 @@
     gap: 10px;
     width: 100%;
 }
-.dietas form button{
+
+.dietas form button {
     width: fit-content;
 }
 
@@ -115,4 +121,115 @@
 
 .dietas .lista .icon:hover {
     background-color: var(--secundaria);
+}
+
+@media (max-width: 1000px) {
+    .dietas {
+        padding: 16px;
+    }
+
+    .dietas .lista {
+        padding: 16px;
+        gap: 14px;
+    }
+
+    .dietas button {
+        width: 100%;
+    }
+
+    .dietas form {
+        gap: 12px;
+    }
+
+    .dietas .row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .dietas form button {
+        width: 100%;
+    }
+
+    .dietas form .refeicoes .refeicao-item {
+        padding: 12px;
+    }
+
+    .dietas .dropdown-refeicoes {
+        align-items: stretch;
+    }
+
+    .dietas .dropdown-refeicoes .row {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+    }
+
+    .dietas .dropdown-refeicoes .refeicao-dropdown-item {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+
+    .dietas table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .dietas table thead {
+        display: none;
+    }
+
+    .dietas table tbody tr {
+        display: block;
+        width: 100%;
+    }
+
+    .dietas table tbody tr td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 12px 10px;
+        border-bottom: 1px solid var(--borda);
+    }
+
+    .dietas table tbody tr td:nth-child(1)::before {
+        content: "Título";
+        font-weight: 700;
+        color: var(--texto);
+    }
+
+    .dietas table tbody tr td:nth-child(2)::before {
+        content: "Refeições";
+        font-weight: 700;
+        color: var(--texto);
+    }
+
+    .dietas table tbody tr td:nth-child(3)::before {
+        content: "Abrir";
+        font-weight: 700;
+        color: var(--texto);
+    }
+
+    .dietas table tbody tr td:nth-child(3) {
+        justify-content: space-between;
+    }
+
+    .dietas table tbody tr td[colspan="3"] {
+        display: block;
+        padding: 12px 10px;
+        border-bottom: 1px solid var(--borda);
+    }
+
+    .dietas .dropdown-refeicoes>div:last-child {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .dietas .dropdown-refeicoes>div:last-child button {
+        width: 100%;
+    }
 }

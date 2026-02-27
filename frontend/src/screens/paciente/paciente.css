@@ -11,7 +11,7 @@
     width: 100%;
 }
 
-.paciente .row{
+.paciente .row {
     width: 100%;
     gap: 10px;
 }
@@ -26,13 +26,13 @@
     width: 100%;
 
     background-color: white;
-    
+
     border: 1px solid var(--borda);
     border-radius: var(--radius);
 
 }
 
-.paciente .grid button{
+.paciente .grid button {
     width: 100%;
 }
 
@@ -41,6 +41,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
     gap: 10px;
     padding: 10px;
 }
@@ -55,14 +56,154 @@
 }
 
 .paciente .dieta-box .refeicao-dropdown-item {
-    flex: 0 0 230px;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    padding: 5px;
+    padding: 15px;
     gap: 5px;
+    width: 100%;
+    height: 280px;
+    overflow: auto;
 
     border: 1px solid var(--borda);
     border-radius: var(--radius);
+}
+
+.paciente .dieta-box .refeicao-dropdown-item strong,
+.paciente .dieta-box .refeicao-dropdown-item small {
+    width: 100%;
+    text-align: left;
+    word-break: break-word;
+    white-space: pre-line;
+}
+
+.paciente .evolucao-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.paciente .evolucoes-list {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.paciente .evolucoes-list .evolucao-item {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+    width: 100%;
+
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.paciente .evolucoes-list .evolucao-item:hover {
+    border-color: var(--terciaria);
+}
+
+.paciente .evolucoes-list .evolucao-item .topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.paciente .evolucoes-list .evolucao-item .evolucao-detalhes {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.paciente .evolucoes-list .evolucao-item .evolucao-detalhes p {
+    font-weight: 500;
+    padding: 10px;
+    border: 1px solid var(--borda);
+    border-radius: var(--radius);
+}
+
+.paciente .evolucoes-list .evolucao-item .evolucao-detalhes button {
+    width: fit-content;
+}
+
+@media (max-width: 1000px) {
+    .paciente {
+        padding: 15px;
+    }
+
+    .paciente .grid {
+        padding: 15px;
+        gap: 12px;
+    }
+
+    .paciente .row {
+        flex-direction: column;
+    }
+
+    .paciente .dieta-box {
+        width: 100%;
+        padding: 0;
+    }
+
+    .paciente .dieta-box .row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .paciente .dieta-box .refeicao-dropdown-item {
+        flex: 1 1 auto;
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .paciente .dieta-box .refeicao-dropdown-item strong,
+    .paciente .dieta-box .refeicao-dropdown-item small {
+        width: 100%;
+        text-align: left;
+        word-break: break-word;
+    }
+
+    .paciente .evolucao-form .row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .paciente .evolucao-form button {
+        width: 100%;
+    }
+
+    .paciente .evolucoes-list .evolucao-item .topo {
+        align-items: center;
+        gap: 5px;
+    }
+
+    .paciente .evolucoes-list .evolucao-item .evolucao-detalhes {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .paciente .evolucoes-list .evolucao-item .evolucao-detalhes p {
+        width: 100%;
+    }
+
+    .paciente .evolucoes-list .evolucao-item .evolucao-detalhes button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    .paciente {
+        padding: 12px;
+    }
+
+    .paciente .grid {
+        padding: 12px;
+    }
 }

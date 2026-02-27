@@ -466,6 +466,7 @@ export function Usuario() {
       } else {
         await api.post(`/usuarios`, payload);
         toast.success("Usuario cadastrado");
+        navigate('/usuarios')
       }
     } catch {
       toast.error("Erro ao salvar");
@@ -573,6 +574,24 @@ export function Usuario() {
               <Input label="Estado" placeholder="Estado" name="estado" value={form.estado} onChange={handleChange} />
             </div>
 
+            <div className="row">
+              <button type="button" className="cancel" disabled={salvando} onClick={() => navigate('/usuarios')}>
+                Voltar
+              </button>
+              <button type="submit" disabled={salvando}>
+                {salvando
+                  ? "Salvando..."
+                  : isEdicao
+                    ? "Atualizar"
+                    : "Cadastrar"}
+              </button>
+            </div>
+            {
+              isEdicao &&
+              <button type="button" className="delete" disabled={salvando} onClick={() => setConfirmarExclusao(true)}>
+                Excluir
+              </button>
+            }
 
             {isEdicao && form.tipo === "medico" && (
               <>
@@ -761,23 +780,6 @@ export function Usuario() {
                 <div className="divisor-horizontal" />
               </>
             )}
-
-
-            <div className="row">
-              <button type="button" className="cancel" disabled={salvando} onClick={() => navigate('/usuarios')}>
-                Voltar
-              </button>
-              <button type="submit" disabled={salvando}>
-                {salvando
-                  ? "Salvando..."
-                  : isEdicao
-                    ? "Atualizar"
-                    : "Cadastrar"}
-              </button>
-            </div>
-            <button type="button" className="delete" disabled={salvando} onClick={() => setConfirmarExclusao(true)}>
-              Excluir
-            </button>
           </div>
         </form>
       </div>

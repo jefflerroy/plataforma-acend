@@ -7,11 +7,7 @@ class Refeicao extends Model {
         dieta_id: DataTypes.INTEGER,
         horario: DataTypes.STRING,
         refeicao: DataTypes.STRING,
-        descricao: DataTypes.STRING,
-        proteinas: DataTypes.INTEGER,
-        carboidratos: DataTypes.INTEGER,
-        gorduras: DataTypes.INTEGER,
-        calorias: DataTypes.INTEGER
+        descricao: DataTypes.TEXT,
       },
       {
         sequelize,

@@ -27,24 +27,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      nome_armazenado: {
+      url: {
         type: Sequelize.STRING,
-        allowNull: false,
-      },
-      caminho: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      mime_type: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        defaultValue: 'application/pdf',
-      },
-      tamanho_bytes: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      hash_sha256: {
+        allowNull: true,
+      },      
+      mime: {
         type: Sequelize.STRING,
         allowNull: true,
       },

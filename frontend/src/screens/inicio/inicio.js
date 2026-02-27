@@ -5,9 +5,8 @@ import { ImSpoonKnife } from "react-icons/im";
 import { LuCalendar } from "react-icons/lu";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { MdOutlinePeopleAlt } from "react-icons/md";
-import { BarraSolida } from "../../components/barraSolida/barraSolida";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import api from "../../services/api";
 
 function Card({ icon, titulo, h2, info, onClick, disabled = false }) {
@@ -43,163 +42,197 @@ function SectionCard({ title, rightText, children }) {
   );
 }
 
+function formatarExpiracao(dataISO) {
+  if (!dataISO) return "";
+
+  const data = new Date(dataISO);
+
+  data.setUTCMonth(data.getUTCMonth() + 6);
+
+  const dia = String(data.getUTCDate()).padStart(2, "0");
+  const ano = data.getUTCFullYear();
+
+  const mes = data.toLocaleString("pt-BR", {
+    month: "short",
+    timeZone: "UTC"
+  });
+
+  return `${dia} de ${mes} ${ano}`;
+}
+
+function formatarDataLocal(dataISO) {
+  if (!dataISO) return "";
+
+  const [ano, mes, dia] = dataISO.split("-");
+  const data = new Date(Number(ano), Number(mes) - 1, Number(dia));
+
+  return data.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "short"
+  });
+}
+
 export function Inicio() {
   const navigate = useNavigate();
+
   const [dieta, setDieta] = useState(null);
   const [proximaRefeicao, setProximaRefeicao] = useState(null);
-  const [macronutrientes, setMacronutrientes] = useState(null);
   const [totalPosts, setTotalPosts] = useState(null);
-  const [openId, setOpenId] = useState(null);
   const [proximaConsulta, setProximaConsulta] = useState(null);
+  const [evolucoes, setEvolucoes] = useState([]);
+  const [dataExpiracao, setDataExpiracao] = useState('');
+
+  useEffect(() => {
+    async function loadUser() {
+      try {
+        const response = await api.get("/me");
+        const data = response.data;
+        setDataExpiracao(data.createdAt);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    loadUser();
+  }, []);
 
   useEffect(() => {
     async function loadDieta() {
       try {
         const response = await api.get("/minha-dieta");
-        let dieta = response.data.dieta;
-        setDieta(dieta);
-        setProximaRefeicao(proximaRefeicaoDieta(dieta))
-        setMacronutrientes(calcularTotais(dieta))
-      } catch (err) {
-        console.error(err);
-      }
+        const d = response.data?.dieta || null;
+        setDieta(d);
+        if (d?.refeicoes?.length) setProximaRefeicao(proximaRefeicaoDieta(d));
+      } catch { }
     }
-    async function totalPosts() {
+
+    async function loadTotalPosts() {
       try {
         const response = await api.get("/posts-total");
-        setTotalPosts(response.data.total)
-      } catch (err) {
-        console.error(err);
-      }
+        setTotalPosts(response.data?.total ?? null);
+      } catch { }
     }
+
     async function loadProximaConsulta() {
       try {
         const pacienteId = localStorage.getItem("id");
-
         const response = await api.get("/agendamentos-proxima", {
-          params: { paciente_id: pacienteId }
+          params: { paciente_id: pacienteId },
         });
+        setProximaConsulta(response.data || null);
+      } catch { }
+    }
 
-        setProximaConsulta(response.data);
-
-      } catch (err) {
-        console.error(err);
+    async function loadEvolucoes() {
+      try {
+        const response = await api.get("/minhas-evolucoes");
+        setEvolucoes(Array.isArray(response.data) ? response.data : []);
+      } catch {
+        setEvolucoes([]);
       }
     }
 
     loadDieta();
-    totalPosts();
+    loadTotalPosts();
     loadProximaConsulta();
+    loadEvolucoes();
   }, []);
 
-  function proximaRefeicaoDieta(dieta) {
+  function proximaRefeicaoDieta(d) {
     const agora = new Date();
     const horaAtual = agora.getHours();
     const minutoAtual = agora.getMinutes();
 
-    const refeicoesOrdenadas = dieta.refeicoes
+    const refeicoesOrdenadas = (d.refeicoes || [])
       .slice()
       .sort((a, b) => {
-        const [hA, mA] = a.horario.split(':').map(Number);
-        const [hB, mB] = b.horario.split(':').map(Number);
+        const [hA, mA] = a.horario.split(":").map(Number);
+        const [hB, mB] = b.horario.split(":").map(Number);
         return hA - hB || mA - mB;
       });
 
     for (const refeicao of refeicoesOrdenadas) {
-      const [h, m] = refeicao.horario.split(':').map(Number);
-      if (horaAtual < h || (horaAtual === h && minutoAtual < m)) {
-        return refeicao;
-      }
+      const [h, m] = refeicao.horario.split(":").map(Number);
+      if (horaAtual < h || (horaAtual === h && minutoAtual < m)) return refeicao;
     }
 
-    return refeicoesOrdenadas[0];
+    return refeicoesOrdenadas[0] || null;
   }
 
-  function calcularTotais(dieta) {
-    const agora = new Date();
-    const horaAtual = agora.getHours();
-    const minutoAtual = agora.getMinutes();
+  const massaMagraCard = useMemo(() => {
+    const list = [...evolucoes].sort((a, b) => {
+      const da = new Date(a.created_at || a.createdAt).getTime();
+      const db = new Date(b.created_at || b.createdAt).getTime();
+      return da - db;
+    });
 
-    let totalProteinas = 0;
-    let totalCarboidratos = 0;
-    let totalGorduras = 0;
-    let totalCalorias = 0;
-
-    let consumidoProteinas = 0;
-    let consumidoCarboidratos = 0;
-    let consumidoGorduras = 0;
-    let consumidoCalorias = 0;
-
-    for (const refeicao of dieta.refeicoes) {
-      totalProteinas += refeicao.proteinas;
-      totalCarboidratos += refeicao.carboidratos;
-      totalGorduras += refeicao.gorduras;
-      totalCalorias += refeicao.calorias;
-
-      const [h, m] = refeicao.horario.split(':').map(Number);
-      if (horaAtual > h || (horaAtual === h && minutoAtual >= m)) {
-        consumidoProteinas += refeicao.proteinas;
-        consumidoCarboidratos += refeicao.carboidratos;
-        consumidoGorduras += refeicao.gorduras;
-        consumidoCalorias += refeicao.calorias;
-      }
+    if (list.length < 2) {
+      return { h2: "—", info: "Sem dados suficientes", disabled: true };
     }
 
-    return {
-      total: {
-        proteinas: totalProteinas,
-        carboidratos: totalCarboidratos,
-        gorduras: totalGorduras,
-        calorias: totalCalorias
-      },
-      consumido: {
-        proteinas: consumidoProteinas,
-        carboidratos: consumidoCarboidratos,
-        gorduras: consumidoGorduras,
-        calorias: consumidoCalorias
-      }
+    const toNum = (v) => {
+      if (v === null || v === undefined || v === "") return null;
+      const n = Number(String(v).replace(",", "."));
+      return Number.isFinite(n) ? n : null;
     };
-  }
+
+    const first = toNum(list[0].massa_muscular);
+    const last = toNum(list[list.length - 1].massa_muscular);
+
+    if (first == null || last == null) {
+      return { h2: "—", info: "Sem dados suficientes", disabled: true };
+    }
+
+    const diff = last - first;
+    const sign = diff > 0 ? "+" : diff < 0 ? "-" : "";
+    const h2 = `${sign}${Math.abs(diff).toFixed(1)}kg`;
+
+    const info = `Desde ${new Date(list[0].created_at || list[0].createdAt).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "short",
+    })}`;
+
+    return { h2, info, disabled: false };
+  }, [evolucoes]);
 
   const cardsTopo = [
     {
       id: "refeicao",
       icon: <ImSpoonKnife className="icon" style={{ color: "var(--laranja)" }} />,
       titulo: "PRÓXIMA REFEIÇÃO",
-      h2: proximaRefeicao?.refeicao,
-      info: `${proximaRefeicao?.horario} - ${proximaRefeicao?.calorias}kcal`,
-      onClick: () => navigate('/minha-dieta'),
+      h2: proximaRefeicao?.refeicao || "—",
+      info: proximaRefeicao?.horario ? `${proximaRefeicao.horario}` : "Sem dieta ativa",
+      onClick: () => navigate("/minha-dieta"),
+      disabled: !proximaRefeicao,
     },
     {
       id: "consulta",
       icon: <LuCalendar className="icon" style={{ color: "var(--azul)" }} />,
       titulo: "PRÓXIMA CONSULTA",
       h2: proximaConsulta
-        ? new Date(proximaConsulta.data).toLocaleDateString("pt-BR", {
-          day: "2-digit",
-          month: "short"
-        })
+        ? formatarDataLocal(proximaConsulta.data)
         : "Nenhuma",
       info: proximaConsulta
         ? `${proximaConsulta.hora.slice(0, 5)} - ${proximaConsulta.profissional?.nome}`
         : "Nenhuma consulta marcada",
-      onClick: () => navigate('/minha-agenda'),
+      onClick: () => navigate("/minha-agenda"),
     },
     {
       id: "massa",
       icon: <FaArrowTrendUp className="icon" style={{ color: "var(--terciaria)" }} />,
       titulo: "MASSA MAGRA",
-      h2: "+1.2kg",
-      info: "Últimos 30 dias",
-      onClick: () => console.log("massa"),
+      h2: massaMagraCard.h2,
+      info: massaMagraCard.info,
+      onClick: () => navigate("/evolucao"),
+      disabled: massaMagraCard.disabled,
     },
     {
       id: "comunidade",
       icon: <MdOutlinePeopleAlt className="icon" style={{ color: "var(--roxo)" }} />,
       titulo: "COMUNIDADE",
-      h2: totalPosts,
+      h2: totalPosts ?? "—",
       info: "Novos posts hoje",
-      onClick: () => navigate('/comunidade'),
+      onClick: () => navigate("/comunidade"),
     },
   ];
 
@@ -212,11 +245,11 @@ export function Inicio() {
       <div className="inicio">
         <section className="hero">
           <div className="hero__content">
-            <h1 className="hero__title">Bem-vindo, {localStorage.getItem('nome')}</h1>
+            <h1 className="hero__title">Bem-vindo, {localStorage.getItem("nome")}</h1>
             <p className="hero__text">
-              Seu progresso no Método Ascend está excelente. Faltam apenas 3kg para sua meta de fase 1.
+              Seu progresso no Método Ascend está excelente.
             </p>
-            <button className="hero__btn" type="button" onClick={() => navigate('/metodo-ascend')}>
+            <button className="hero__btn" type="button" onClick={() => navigate("/metodo-ascend")}>
               Ver Minha Jornada
             </button>
           </div>
@@ -229,23 +262,22 @@ export function Inicio() {
           ))}
         </section>
 
-        <section className="grid grid--2cols">
-          <SectionCard title="Resumo de Macronutrientes" rightText="Hoje">
-            <div className="stack">
-              <BarraSolida atual={macronutrientes?.consumido.proteinas} max={macronutrientes?.total.proteinas} label="Proteínas" />
-              <BarraSolida atual={macronutrientes?.consumido.carboidratos} max={macronutrientes?.total.carboidratos} label="Carboidratos" color="var(--azul)" />
-              <BarraSolida atual={macronutrientes?.consumido.gorduras} max={macronutrientes?.total.gorduras} label="Gorduras" color="var(--laranja)" />
-              <BarraSolida atual={macronutrientes?.consumido.calorias} max={macronutrientes?.total.calorias} label="Calorias" color="var(--roxo)" />
-            </div>
-          </SectionCard>
-
-          <SectionCard title="Dica do Dia (IA)">
-            <p className="tip">{dica}</p>
-            <button className="linkBtn" type="button" onClick={() => console.log("nutroia")}>
-              Falar com a NutroIA
-            </button>
-          </SectionCard>
-        </section>
+        <div className="row">
+          <section className="grid grid--2cols" style={{width: "100%"}}>
+            <SectionCard title="Dica do Dia (IA)">
+              <p className="tip">{dica}</p>
+              <button className="linkBtn" type="button" onClick={() => navigate("/duvidas-ia")}>
+                Falar com a AscendIA
+              </button>
+            </SectionCard>
+          </section>
+          <Card
+            className="expiracao"
+            icon={<LuCalendar className="icon" style={{ color: "var(--vermelho)" }} />}
+            titulo="DATA DE EXPIRAÇÃO"
+            h2={formatarExpiracao(dataExpiracao)}
+          />
+        </div>
       </div>
     </>
   );

@@ -1,7 +1,6 @@
 import "./configuracoes.css";
 import { Header } from "../../components/header/header";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../services/api";
 import { Input } from "../../components/input/input";
@@ -44,7 +43,7 @@ export function Configuracoes() {
 
   const [form, setForm] = useState({
     bloquear_agendamentos: false,
-    chatpgt_key: "",
+    chatgpt_key: "",
     whatsapp_agendamentos: "",
   });
 
@@ -66,7 +65,7 @@ export function Configuracoes() {
       const { data } = await api.get("/configuracoes");
       setForm({
         bloquear_agendamentos: !!data.bloquear_agendamentos,
-        chatpgt_key: data.chatpgt_key || "",
+        chatgpt_key: data.chatgpt_key || "",
         whatsapp_agendamentos: e164ParaMascaraBR(data.whatsapp_agendamentos || ""),
       });
     } catch (err) {
@@ -81,9 +80,10 @@ export function Configuracoes() {
     e.preventDefault();
     try {
       setSalvando(true);
+
       const payload = {
         bloquear_agendamentos: !!form.bloquear_agendamentos,
-        chatpgt_key: form.chatpgt_key?.trim() || null,
+        chatgpt_key: form.chatgpt_key?.trim() || null,
         whatsapp_agendamentos: telefoneParaE164BR(form.whatsapp_agendamentos),
       };
 
@@ -105,7 +105,7 @@ export function Configuracoes() {
     const onUpdated = (data) => {
       setForm({
         bloquear_agendamentos: !!data.bloquear_agendamentos,
-        chatpgt_key: data.chatpgt_key || "",
+        chatgpt_key: data.chatgpt_key || "",
         whatsapp_agendamentos: e164ParaMascaraBR(data.whatsapp_agendamentos || ""),
       });
     };
@@ -129,9 +129,7 @@ export function Configuracoes() {
               <Select
                 label="Bloquear agendamentos"
                 value={form.bloquear_agendamentos ? "true" : "false"}
-                onChange={(v) =>
-                  handleChange("bloquear_agendamentos", v === "true")
-                }
+                onChange={(v) => handleChange("bloquear_agendamentos", v === "true")}
                 options={[
                   { label: "Não", value: "false" },
                   { label: "Sim", value: "true" },
@@ -151,17 +149,13 @@ export function Configuracoes() {
               <Input
                 label="ChatGPT Key"
                 placeholder="sk-..."
-                name="chatpgt_key"
-                value={form.chatpgt_key}
-                onChange={(e) => handleChange("chatpgt_key", e.target.value)}
+                name="chatgpt_key"
+                value={form.chatgpt_key}
+                onChange={(e) => handleChange("chatgpt_key", e.target.value)}
               />
             </div>
 
-            <button
-              type="submit"
-              className="btn"
-              disabled={loading || salvando}
-            >
+            <button type="submit" className="btn" disabled={loading || salvando}>
               {salvando ? "Salvando..." : loading ? "Carregando..." : "Salvar"}
             </button>
           </div>

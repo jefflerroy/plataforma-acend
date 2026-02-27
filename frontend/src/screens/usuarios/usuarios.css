@@ -1,4 +1,4 @@
-.usuarios{
+.usuarios {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,7 +9,7 @@
     width: 100%;
 }
 
-.usuarios .lista{
+.usuarios .lista {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -17,21 +17,63 @@
     width: 100%;
     padding: 30px;
     gap: 20px;
-    
+
     background-color: white;
     border: 1px solid var(--borda);
-    border-radius: var(--radius);    
+    border-radius: var(--radius);
 }
 
-.usuarios .lista .icon{
+.usuarios .lista .icon {
     background-color: var(--terciaria);
     color: white;
     padding: 5px;
     font-size: 28px;
-    border-radius: var(--radius);    
+    border-radius: var(--radius);
     cursor: pointer;
     transition: 0.3s;
 }
-.usuarios .lista .icon:hover{
+
+.usuarios .lista .icon:hover {
     background-color: var(--secundaria);
+}
+
+@media (max-width: 1000px) {
+    .usuarios {
+        padding: 15px;
+        align-items: flex-start;
+    }
+
+    .usuarios .lista {
+        padding: 15px;
+        gap: 12px;
+    }
+
+    .usuarios .lista input {
+        width: 100%;
+    }
+
+    .usuarios .lista {
+        overflow-x: auto;
+    }
+
+    .usuarios .lista table {
+        width: 100%;
+        min-width: 520px;
+        border-collapse: collapse;
+    }
+
+    .usuarios .lista table th,
+    .usuarios .lista table td {
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 520px) {
+    .usuarios .lista table {
+        min-width: fit-content;
+    }
+
+    .usuarios .lista {
+        padding: 12px;
+    }
 }

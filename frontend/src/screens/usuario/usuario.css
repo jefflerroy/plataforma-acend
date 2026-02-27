@@ -110,7 +110,8 @@
     width: 100%;
 }
 
-.usuario .horarios .horario, .usuario .horarios .bloqueio {
+.usuario .horarios .horario,
+.usuario .horarios .bloqueio {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -127,11 +128,68 @@
     width: 100%;
 }
 
-.usuario .horarios .horario .row, .usuario .horarios .bloqueio .row{
+.usuario .horarios .horario .row,
+.usuario .horarios .bloqueio .row {
     width: fit-content;
 }
 
-.usuario .horarios .horario button, .usuario .horarios .bloqueio button {
+.usuario .horarios .horario button,
+.usuario .horarios .bloqueio button {
     padding: 10px;
     width: 100px;
+}
+
+@media (max-width: 1000px) {
+    .usuario {
+        padding: 15px;
+    }
+
+    .usuario .grid {
+        padding: 15px;
+        gap: 12px;
+    }
+
+    .usuario .row {
+        flex-direction: column;
+    }
+
+    .usuario .modal {
+        width: 100%;
+    }
+
+    .usuario .horarios .horario,
+    .usuario .horarios .bloqueio {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .usuario .horarios .horario .row,
+    .usuario .horarios .bloqueio .row {
+        width: 100%;
+        display: flex;
+        gap: 10px;
+    }
+
+    .usuario .horarios .horario button,
+    .usuario .horarios .bloqueio button {
+        width: 100%;
+    }
+
+    .usuario .dieta-box .refeicao-dropdown-item {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    .usuario {
+        padding: 12px;
+    }
+
+    .usuario .grid {
+        padding: 12px;
+    }
 }

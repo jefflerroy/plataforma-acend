@@ -169,8 +169,8 @@ export function MenuLateral() {
                 <div className='row' id='inferior'>
                     <img alt='perfil' className='perfil' src={foto || anonimo} />
                     <div className='column' id='logo-titulo'>
-                        <p className='logo-titulo'>{nome}</p>
-                        <p className='logo-subtitulo'>{tipo?.toUpperCase()}</p>
+                        <p className='logo-titulo'>{nome.split(' ')[0]}</p>
+                        <p className='logo-subtitulo'>{tipo === 'medico' ? 'MÉDICO/NUTRICIONISTA' : tipo.toUpperCase()}</p>
                     </div>
                 </div>
             </div>
