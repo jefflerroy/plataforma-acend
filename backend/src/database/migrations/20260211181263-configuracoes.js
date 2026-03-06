@@ -48,7 +48,7 @@ module.exports = {
       {
         unico: true,
         bloquear_agendamentos: false,
-        chatpgt_key: null,
+        chatgpt_key: null,
         whatsapp_agendamentos: null,
         created_at: new Date(),
         updated_at: new Date(),
