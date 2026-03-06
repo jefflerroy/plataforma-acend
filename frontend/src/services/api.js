@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: window.location.host.includes('ascend')
-        ? 'https://www.ascend.com/api'
+    baseURL: window.location.host.includes('metodoacend')
+        ? 'http://metodoacend.online/api'
         : 'http://192.168.100.46:3333/api'
 });
 
