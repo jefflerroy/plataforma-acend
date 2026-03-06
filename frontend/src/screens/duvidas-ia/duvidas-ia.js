@@ -111,7 +111,7 @@ export function DuvidasIa() {
               </svg>
             </div>
             <div className="info">
-              <h3>NutroIA</h3>
+              <h3>AscendIA</h3>
               <p>Assistente Inteligente</p>
             </div>
           </div>
