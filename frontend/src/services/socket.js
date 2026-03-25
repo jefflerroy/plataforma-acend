@@ -1,8 +1,8 @@
 import { io } from 'socket.io-client';
 
 const URL = window.location.host.includes('metodoacend')
-    ? 'http://metodoacend.online/api'
-    : 'http://192.168.100.46:3333/api';
+    ? 'https://metodoacend.online/api'
+    : 'https://192.168.100.46:3333/api';
 
 export const socket = io(URL, {
     path: '/api/seacher',
