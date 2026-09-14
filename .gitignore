@@ -1,3 +1,7 @@
 backend/node_modules
 frontend/node_modules
+app/node_modules
+app/android
+app/.expo
 acenda-model
+ascend-913f3-firebase-adminsdk-fbsvc-dd24e126b5.json

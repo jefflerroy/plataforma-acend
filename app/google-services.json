@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "547530067314",
+    "project_id": "ascend-913f3",
+    "storage_bucket": "ascend-913f3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:547530067314:android:cf2d0fa8f6d8919bad61eb",
+        "android_client_info": {
+          "package_name": "com.ztaurus.ascend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1PES8QKC_DySy-PMK-MxKvk64i3Bv6hs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

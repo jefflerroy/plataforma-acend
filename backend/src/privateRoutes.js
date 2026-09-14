@@ -18,6 +18,7 @@ const EvolucaoController = require('./controllers/EvolucaoController');
 const uploadBioimpedancia = require('./config/uploadBioimpedancia');
 const uploadExames = require('./config/uploadExames');
 const ChatController = require('./controllers/ChatController');
+const PushTokenController = require('./controllers/PushTokenController');
 
 const privateRoutes = express.Router();
 
@@ -116,5 +117,9 @@ privateRoutes.get('/api/exames/:id/arquivo', ExameController.arquivo);
 privateRoutes.post('/api/exames', uploadExames.single('arquivo'), ExameController.create);
 privateRoutes.put('/api/exames/:id', uploadExames.single('arquivo'), ExameController.update);
 privateRoutes.delete('/api/exames/:id', ExameController.delete);
+
+privateRoutes.post('/api/push/register', PushTokenController.register);
+privateRoutes.post('/api/push/notificacao', PushTokenController.enviarNotificacaoUsuario);
+privateRoutes.delete('/api/push/unregister', PushTokenController.unregister);
 
 module.exports = privateRoutes;

@@ -11,6 +11,24 @@ export function Header(props) {
         window.dispatchEvent(new CustomEvent('toggle-menu'));
     }
 
+    function logout() {
+        if (window.ReactNativeWebView) {
+            window.ReactNativeWebView.postMessage(
+                JSON.stringify({
+                    type: 'LOGOUT',
+                    token: localStorage.getItem("token"),
+                })
+            );
+        }
+        
+        localStorage.removeItem("token");
+        localStorage.removeItem("id");
+        localStorage.removeItem("tipo");
+        localStorage.removeItem("email");
+        localStorage.removeItem("nome");
+        navigate('/');
+    }
+
     return (
         <header>
             <div className='row'>
@@ -24,7 +42,7 @@ export function Header(props) {
                     <IoPersonCircleOutline />
                     Meu Perfil
                 </button>
-                <button className='sair' onClick={() => navigate('/')}>
+                <button className='sair' onClick={() => logout()}>
                     <IoMdExit />
                     Sair
                 </button>

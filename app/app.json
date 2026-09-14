@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "Ascend",
+    "slug": "ascend",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+
+    "icon": "./assets/logo_fundo_preto.jpeg",
+
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ztaurus.ascend",
+      "buildNumber": "1"
+    },
+
+    "android": {
+      "package": "com.ztaurus.ascend",
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 1,
+
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#022c22"
+      }
+    },
+
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/logo.png",
+          "color": "#022c22",
+          "defaultChannel": "default"
+        }
+      ]
+    ],
+
+    "extra": {
+      "siteUrl": "http://192.168.100.46:3000/",
+      "apiUrl": "http://192.168.100.46:3333/api",
+      "eas": {
+        "projectId": "4677711d-e1db-4a12-ab35-c282ff85c977"
+      }
+    },
+
+    "owner": "ztaurus"
+  }
+}

@@ -15,6 +15,7 @@ const BloqueioAgenda = require('../models/BloqueioAgenda');
 const Configuracoes = require('../models/Configuracoes');
 const Evolucao = require('../models/Evolucao');
 const Chat = require('../models/Chat');
+const PushToken = require('../models/PushToken');
 
 const connection = new Sequelize(dbConfig);
 
@@ -32,6 +33,7 @@ BloqueioAgenda.init(connection);
 Configuracoes.init(connection);
 Evolucao.init(connection);
 Chat.init(connection);
+PushToken.init(connection);
 
 Usuario.associate(connection.models);
 Dieta.associate(connection.models);
@@ -47,5 +49,6 @@ BloqueioAgenda.associate(connection.models);
 Configuracoes.associate(connection.models);
 Evolucao.associate(connection.models);
 Chat.associate(connection.models);
+PushToken.associate(connection.models);
 
 module.exports = connection;

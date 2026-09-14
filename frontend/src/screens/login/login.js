@@ -37,7 +37,14 @@ export function Login() {
         window.socket.connect();
       }
 
-
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            type: 'LOGIN',
+            token: token,
+          })
+        );
+      }
 
       navigate(`/${usuario.tipo === 'paciente' ? 'inicio' : 'agenda'}`);
     } catch (err) {

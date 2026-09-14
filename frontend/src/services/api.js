@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: window.location.host.includes('metodoacend')
-        ? 'https://metodoacend.online/api'
-        : 'https://192.168.100.46:3333/api'
+    baseURL: window.location.host.includes('ascendexperience')
+        ? 'https://ascendexperience.app/api'
+        : 'http://192.168.100.46:3333/api'
 });
 
 api.interceptors.request.use((config) => {
