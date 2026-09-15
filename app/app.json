@@ -37,8 +37,8 @@
     ],
 
     "extra": {
-      "siteUrl": "http://192.168.100.46:3000/",
-      "apiUrl": "http://192.168.100.46:3333/api",
+      "siteUrl": "https://ascendexperience.app/",
+      "apiUrl": "https://ascendexperience.app/api",
       "eas": {
         "projectId": "4677711d-e1db-4a12-ab35-c282ff85c977"
       }

@@ -18,6 +18,7 @@ import { Usuarios } from './screens/usuarios/usuarios';
 import { Usuario } from './screens/usuario/usuario';
 import { Configuracoes } from './screens/configuracoes/configuracoes';
 import { Agenda } from './screens/agenda/agenda';
+import PoliticaPrivacidade from './screens/politica-privacidade/politica-privacidade';
 
 function LayoutComMenu() {
   return (
@@ -43,6 +44,7 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/politica-privacidade" element={<PoliticaPrivacidade />} />
 
         <Route element={<LayoutComMenu />}>
           <Route path="/inicio" element={<Inicio />} />
